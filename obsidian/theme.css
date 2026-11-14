@@ -3217,3 +3217,19 @@ body.is-mobile .suggestion-item {
   min-height: 40px;
   padding: 8px 12px;
 }
+
+/* Folhas que sobem de baixo encostam no fim da tela: a borda fica em cima e
+   nas laterais. Embaixo ela desenharia uma linha reta contra o canto
+   arredondado do aparelho. Modais comuns, que flutuam, mantêm a borda inteira. */
+body.is-phone .modal-container.mod-confirmation .modal,
+body.is-phone .modal.mod-lg,
+body.is-phone .modal.mod-sidebar-layout,
+body.is-phone .prompt {
+  border-bottom-width: 0;
+}
+
+/* Grupo sem itens (cofre sem plugins da comunidade): sem ele, a borda do
+   grupo vazio vira um traço solto no fim das configurações */
+.vertical-tab-header-group-items:empty {
+  display: none;
+}
