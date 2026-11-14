@@ -1,0 +1,5 @@
+/* Ardentia: desliga o brilho (esfumaçado do abismo e halos dos pontos de luz).
+   Ative em Configurações, Aparência, Fragmentos CSS para comparar com o tema puro. */
+body {
+  --ardentia-brilho: 0;
+}

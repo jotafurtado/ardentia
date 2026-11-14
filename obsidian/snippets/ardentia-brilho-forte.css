@@ -1,0 +1,5 @@
+/* Ardentia: dobra a intensidade do brilho, para enxergar com folga onde ele atua.
+   O desenho original é 1. Não ative junto com ardentia-sem-brilho. */
+body {
+  --ardentia-brilho: 2;
+}

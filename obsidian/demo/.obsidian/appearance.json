@@ -1,0 +1,8 @@
+{
+  "cssTheme": "Ardentia",
+  "theme": "obsidian",
+  "enabledCssSnippets": [
+    "ardentia-fontes"
+  ],
+  "showRibbon": true
+}

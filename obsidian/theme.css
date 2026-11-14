@@ -1,0 +1,3087 @@
+/*
+ * Ardentia, tema escuro para Obsidian.
+ *
+ * O brilho que o mar acende à noite: fundo de abismo e cor só onde existe sinal.
+ *
+ * Sumário
+ *   1. Paleta e medidas
+ *   2. Variáveis do Obsidian
+ *   3. Tipografia
+ *   4. Layout em ilhas (padrão)
+ *   5. Barra superior, abas e faixa de ícones
+ *   6. Barras laterais
+ *   7. Cabeçalho e propriedades da nota
+ *   8. Elementos da nota
+ *   9. Modais, menus e controles
+ *  10. Rolagem, seleção e foco de teclado
+ *  11. Layout contínuo (.ardentia-continuo)
+ *  12. Layout foco (.ardentia-foco)
+ *  13. Brilho
+ */
+
+/* @settings
+
+name: Ardentia
+id: ardentia
+settings:
+  -
+    id: ardentia-layout
+    title: Estilo de layout
+    description: Troca a estrutura inteira. As cores não mudam.
+    type: class-select
+    allowEmpty: false
+    default: ardentia-ilhas
+    options:
+      -
+        label: Ilhas
+        value: ardentia-ilhas
+      -
+        label: Contínuo
+        value: ardentia-continuo
+      -
+        label: Foco
+        value: ardentia-foco
+  -
+    id: ardentia-brilho
+    title: Brilho
+    description: Intensidade do esfumaçado atrás das ilhas e do halo nos pontos de luz. 0 desliga, 1 é o desenho original.
+    type: variable-number-slider
+    default: 1
+    min: 0
+    max: 2
+    step: 0.25
+  -
+    id: ardentia-gap
+    title: Respiro entre as ilhas
+    type: variable-number-slider
+    default: 8
+    min: 4
+    max: 16
+    step: 1
+    format: px
+  -
+    id: ardentia-raio
+    title: Raio das ilhas e dos modais
+    type: variable-number-slider
+    default: 14
+    min: 0
+    max: 24
+    step: 1
+    format: px
+
+*/
+
+/* ==========================================================================
+   1. Paleta e medidas
+   ========================================================================== */
+
+body {
+  /* Profundidades */
+  --ardentia-abismo: #0b0d1a;
+  --ardentia-fundo: #101326;
+  --ardentia-nota: #161a30;
+  --ardentia-relevo: #1d2240;
+  --ardentia-borda: #272d52;
+  --ardentia-borda-forte: #3a4273;
+  --ardentia-sombra-rgb: 4, 5, 12;
+
+  /* Texto */
+  --ardentia-texto: #dde2fa;
+  --ardentia-suave: #a8b0db;
+  --ardentia-tenue: #8791c2;
+
+  /* Luzes */
+  --ardentia-ardentia: #4de8d8;
+  --ardentia-ardentia-clara: #8ff5ea;
+  --ardentia-agua-viva: #ff7ac6;
+  --ardentia-anemona: #b9a0ff;
+  --ardentia-mare: #7cb2ff;
+  --ardentia-mare-clara: #a9ccff;
+  --ardentia-sargaco: #b4ee7c;
+  --ardentia-lanterna: #ffcc70;
+  --ardentia-lanterna-clara: #ffe2a8;
+  --ardentia-estrela: #ffa26b;
+  --ardentia-coral: #ff7383;
+
+  --ardentia-ardentia-rgb: 77, 232, 216;
+  --ardentia-agua-viva-rgb: 255, 122, 198;
+  --ardentia-anemona-rgb: 185, 160, 255;
+  --ardentia-mare-rgb: 124, 178, 255;
+  --ardentia-sargaco-rgb: 180, 238, 124;
+  --ardentia-lanterna-rgb: 255, 204, 112;
+  --ardentia-estrela-rgb: 255, 162, 107;
+  --ardentia-coral-rgb: 255, 115, 131;
+
+  /* Acento: segue a cor escolhida em Configurações, Aparência. O padrão é Ardentia. */
+  --accent-h: 173.8;
+  --accent-s: 77.1%;
+  --accent-l: 60.6%;
+  --ardentia-acento: hsl(var(--accent-h), var(--accent-s), var(--accent-l));
+  --ardentia-acento-claro: hsl(
+    var(--accent-h),
+    calc(var(--accent-s) * 1.08),
+    calc(var(--accent-l) * 1.25)
+  );
+  --ardentia-acento-08: color-mix(in srgb, var(--ardentia-acento) 8%, transparent);
+  --ardentia-acento-12: color-mix(in srgb, var(--ardentia-acento) 12%, transparent);
+  --ardentia-acento-24: color-mix(in srgb, var(--ardentia-acento) 24%, transparent);
+  --ardentia-acento-28: color-mix(in srgb, var(--ardentia-acento) 28%, transparent);
+  --ardentia-acento-45: color-mix(in srgb, var(--ardentia-acento) 45%, transparent);
+
+  /* Medidas */
+  --ardentia-gap: 8px;
+  --ardentia-raio: 14px;
+  --ardentia-barra-superior: 46px;
+  --ardentia-cabecalho-nota: 40px;
+
+  /* Brilho: 0 desliga, 1 é o desenho original. Ver seção 13. */
+  --ardentia-brilho: 1;
+
+  /* Sombras */
+  --ardentia-sombra-ilha: 0 12px 40px rgba(var(--ardentia-sombra-rgb), 0.5);
+  --ardentia-sombra-capsula: 0 6px 20px rgba(var(--ardentia-sombra-rgb), 0.6);
+  --ardentia-sombra-modal: 0 16px 48px rgba(var(--ardentia-sombra-rgb), 0.7);
+
+  /* Anel de foco de teclado */
+  --ardentia-anel-foco: 0 0 0 2px var(--ardentia-abismo), 0 0 0 4px var(--ardentia-acento);
+
+  /* Fontes */
+  --ardentia-fonte-titulos: "Bricolage Grotesque", "Geist", "Inter", var(--font-default);
+
+  /* Ícones embutidos (máscaras) */
+  --ardentia-icone-chevron: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>');
+  --ardentia-icone-check: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>');
+  --ardentia-icone-adiada: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>');
+  --ardentia-icone-importante: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10M12 20h.01"/></svg>');
+  --ardentia-icone-duvida: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9a4 4 0 1 1 5.5 3.7c-1 .5-1.5 1.1-1.5 2.3M12 20h.01"/></svg>');
+  --ardentia-icone-cancelada: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>');
+  --ardentia-icone-link-externo: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%237CB2FF" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>');
+}
+
+/* ==========================================================================
+   2. Variáveis do Obsidian
+   O tema é só escuro: a mesma paleta vale para os dois esquemas de cor.
+   ========================================================================== */
+
+.theme-dark,
+.theme-light {
+  color-scheme: dark;
+  --highlight-mix-blend-mode: lighten;
+  --mono-0: black;
+  --mono-100: white;
+  --mono-rgb-0: 0, 0, 0;
+  --mono-rgb-100: 255, 255, 255;
+
+  --color-red: var(--ardentia-coral);
+  --color-orange: var(--ardentia-estrela);
+  --color-yellow: var(--ardentia-lanterna);
+  --color-green: var(--ardentia-sargaco);
+  --color-cyan: var(--ardentia-ardentia);
+  --color-blue: var(--ardentia-mare);
+  --color-purple: var(--ardentia-anemona);
+  --color-pink: var(--ardentia-agua-viva);
+
+  --color-red-rgb: var(--ardentia-coral-rgb);
+  --color-orange-rgb: var(--ardentia-estrela-rgb);
+  --color-yellow-rgb: var(--ardentia-lanterna-rgb);
+  --color-green-rgb: var(--ardentia-sargaco-rgb);
+  --color-cyan-rgb: var(--ardentia-ardentia-rgb);
+  --color-blue-rgb: var(--ardentia-mare-rgb);
+  --color-purple-rgb: var(--ardentia-anemona-rgb);
+  --color-pink-rgb: var(--ardentia-agua-viva-rgb);
+
+  --color-base-00: var(--ardentia-nota);
+  --color-base-05: #13172b;
+  --color-base-10: var(--ardentia-relevo);
+  --color-base-20: var(--ardentia-fundo);
+  --color-base-25: var(--ardentia-relevo);
+  --color-base-30: var(--ardentia-borda);
+  --color-base-35: var(--ardentia-borda-forte);
+  --color-base-40: #4a5388;
+  --color-base-50: var(--ardentia-tenue);
+  --color-base-60: #98a1cf;
+  --color-base-70: var(--ardentia-suave);
+  --color-base-100: var(--ardentia-texto);
+
+  --color-accent: var(--ardentia-acento);
+  --color-accent-1: var(--ardentia-acento);
+  --color-accent-2: var(--ardentia-acento-claro);
+
+  --background-primary: var(--ardentia-nota);
+  --background-primary-alt: var(--ardentia-relevo);
+  --background-secondary: var(--ardentia-fundo);
+  --background-secondary-alt: var(--ardentia-abismo);
+
+  --background-modifier-hover: var(--ardentia-relevo);
+  --background-modifier-active-hover: var(--ardentia-acento-12);
+  --background-modifier-border: var(--ardentia-borda);
+  --background-modifier-border-hover: var(--ardentia-borda-forte);
+  --background-modifier-border-focus: var(--ardentia-acento);
+  --background-modifier-error: var(--ardentia-coral);
+  --background-modifier-error-hover: var(--ardentia-coral);
+  --background-modifier-error-rgb: var(--ardentia-coral-rgb);
+  --background-modifier-warning: var(--ardentia-estrela);
+  --background-modifier-warning-hover: var(--ardentia-estrela);
+  --background-modifier-success: var(--ardentia-sargaco);
+  --background-modifier-success-rgb: var(--ardentia-sargaco-rgb);
+  --background-modifier-message: var(--ardentia-abismo);
+  --background-modifier-form-field: var(--ardentia-fundo);
+  --background-modifier-form-field-hover: var(--ardentia-fundo);
+  --background-modifier-box-shadow: rgba(var(--ardentia-sombra-rgb), 0.5);
+  --background-modifier-cover: rgba(var(--ardentia-sombra-rgb), 0.6);
+
+  --text-normal: var(--ardentia-texto);
+  --text-muted: var(--ardentia-suave);
+  --text-faint: var(--ardentia-tenue);
+  --text-on-accent: var(--ardentia-abismo);
+  --text-on-accent-inverted: var(--ardentia-texto);
+  --text-error: var(--ardentia-coral);
+  --text-warning: var(--ardentia-estrela);
+  --text-success: var(--ardentia-sargaco);
+  --text-accent: var(--ardentia-acento);
+  --text-accent-hover: var(--ardentia-acento-claro);
+  --text-selection: var(--ardentia-acento-24);
+  --text-highlight-bg: rgba(var(--ardentia-lanterna-rgb), 0.22);
+
+  --interactive-normal: var(--ardentia-relevo);
+  --interactive-hover: var(--ardentia-borda);
+  --interactive-accent: var(--ardentia-acento);
+  --interactive-accent-hover: var(--ardentia-acento-claro);
+
+  --shadow-s: var(--ardentia-sombra-capsula);
+  --shadow-l: var(--ardentia-sombra-modal);
+  --input-shadow: none;
+  --input-shadow-hover: none;
+}
+
+body {
+  /* Raios */
+  --radius-s: 7px;
+  --radius-m: 10px;
+  --radius-l: 12px;
+  --radius-xl: var(--ardentia-raio);
+  --clickable-icon-radius: 8px;
+  --input-radius: 8px;
+  --button-radius: 8px;
+
+  /* Ícones: traço de 1.75 px */
+  --icon-s-stroke-width: 1.75px;
+  --icon-m-stroke-width: 1.75px;
+  --icon-l-stroke-width: 1.75px;
+  --icon-color: var(--ardentia-tenue);
+  --icon-color-hover: var(--ardentia-texto);
+  --icon-color-active: var(--ardentia-acento);
+  --icon-color-focused: var(--ardentia-texto);
+  --icon-opacity: 1;
+
+  /* Estrutura */
+  --header-height: var(--ardentia-barra-superior);
+  --ribbon-width: 44px;
+  --ribbon-background: transparent;
+  --ribbon-background-collapsed: transparent;
+  --titlebar-background: transparent;
+  --titlebar-background-focused: transparent;
+  --titlebar-text-color: var(--ardentia-tenue);
+  --titlebar-text-color-focused: var(--ardentia-suave);
+  --divider-color: var(--ardentia-borda);
+  --divider-color-hover: var(--ardentia-acento);
+  --file-line-width: 700px;
+  --file-margins: 24px 32px 0;
+  --file-header-font-size: 12.5px;
+  --file-header-background: transparent;
+  --file-header-background-focused: transparent;
+
+  /* Leitura */
+  --line-height-normal: 1.6;
+  --p-spacing: 1rem;
+  --heading-spacing: 22px;
+  --caret-color: var(--ardentia-acento);
+
+  /* Ênfase */
+  --bold-color: var(--ardentia-lanterna);
+  --bold-modifier: 300;
+  --bold-weight: 700;
+  --italic-color: var(--ardentia-anemona);
+
+  /* Links */
+  --link-color: var(--ardentia-acento);
+  --link-color-hover: var(--ardentia-acento-claro);
+  --link-decoration: underline;
+  --link-decoration-hover: underline;
+  --link-external-color: var(--ardentia-mare);
+  --link-external-color-hover: var(--ardentia-mare-clara);
+  --link-unresolved-color: var(--ardentia-tenue);
+  --link-unresolved-opacity: 1;
+  --link-unresolved-decoration-style: dashed;
+  --link-unresolved-decoration-color: var(--ardentia-borda-forte);
+
+  /* Tags */
+  --tag-size: 0.85em;
+  --tag-color: var(--ardentia-agua-viva);
+  --tag-color-hover: var(--ardentia-agua-viva);
+  --tag-background: rgba(var(--ardentia-agua-viva-rgb), 0.14);
+  --tag-background-hover: rgba(var(--ardentia-agua-viva-rgb), 0.24);
+  --tag-border-width: 0px;
+  --tag-padding-x: 10px;
+  --tag-padding-y: 1px;
+  --tag-radius: 999px;
+
+  /* Listas e tarefas */
+  --list-marker-color: var(--ardentia-acento);
+  --list-marker-color-hover: var(--ardentia-acento-claro);
+  --list-marker-color-collapsed: var(--ardentia-agua-viva);
+  --list-bullet-size: 0.34em;
+  --list-spacing: 1px;
+  --indentation-guide-color: var(--ardentia-borda);
+  --indentation-guide-color-active: var(--ardentia-borda-forte);
+  --checkbox-size: 16px;
+  --checkbox-radius: 5px;
+  --checkbox-color: var(--ardentia-acento);
+  --checkbox-color-hover: var(--ardentia-acento-claro);
+  --checkbox-border-color: var(--ardentia-borda-forte);
+  --checkbox-border-color-hover: var(--ardentia-tenue);
+  --checkbox-marker-color: var(--ardentia-abismo);
+  --checklist-done-color: var(--ardentia-tenue);
+  --checklist-done-decoration: line-through;
+
+  /* Callouts: fundo a 8% e contorno a 28% da própria cor, sem barra lateral */
+  --callout-border-width: 1px;
+  --callout-border-opacity: 0.28;
+  --callout-padding: 12px 16px;
+  --callout-radius: var(--radius-m);
+  --callout-title-weight: 700;
+  --callout-blend-mode: normal;
+  --callout-default: var(--ardentia-mare);
+  --callout-info: var(--ardentia-mare);
+  --callout-todo: var(--ardentia-mare);
+  --callout-summary: var(--ardentia-ardentia);
+  --callout-tip: var(--ardentia-ardentia);
+  --callout-important: var(--ardentia-ardentia);
+  --callout-success: var(--ardentia-sargaco);
+  --callout-question: var(--ardentia-lanterna);
+  --callout-warning: var(--ardentia-estrela);
+  --callout-fail: var(--ardentia-coral);
+  --callout-error: var(--ardentia-coral);
+  --callout-bug: var(--ardentia-coral);
+  --callout-example: var(--ardentia-anemona);
+  --callout-quote: var(--ardentia-suave);
+
+  /* Citação */
+  --blockquote-border-thickness: 2px;
+  --blockquote-border-color: var(--ardentia-anemona);
+  --blockquote-color: var(--ardentia-suave);
+  --blockquote-font-style: italic;
+
+  /* Código */
+  --code-size: 0.85em;
+  --code-background: var(--ardentia-fundo);
+  --code-border-width: 1px;
+  --code-border-color: var(--ardentia-borda);
+  --code-radius: var(--radius-m);
+  --code-normal: var(--ardentia-texto);
+  --code-comment: var(--ardentia-tenue);
+  --code-function: var(--ardentia-mare);
+  --code-important: var(--ardentia-lanterna);
+  --code-keyword: var(--ardentia-agua-viva);
+  --code-operator: var(--ardentia-anemona);
+  --code-property: var(--ardentia-ardentia);
+  --code-punctuation: var(--ardentia-suave);
+  --code-string: var(--ardentia-sargaco);
+  --code-tag: var(--ardentia-coral);
+  --code-value: var(--ardentia-estrela);
+
+  /* Tabela */
+  --table-border-color: var(--ardentia-borda);
+  --table-text-size: 0.9em;
+  --table-header-background: var(--ardentia-relevo);
+  --table-header-background-hover: var(--ardentia-relevo);
+  --table-header-font: var(--font-interface);
+  --table-header-size: var(--font-ui-smaller);
+  --table-header-weight: 600;
+  --table-header-color: var(--ardentia-suave);
+  --table-row-alt-background: rgba(29, 34, 64, 0.45);
+  --table-row-alt-background-hover: rgba(29, 34, 64, 0.45);
+  --table-selection: var(--ardentia-acento-12);
+  --table-selection-border-color: var(--ardentia-acento);
+
+  /* Nota incorporada */
+  --embed-background: var(--ardentia-relevo);
+  --embed-border-start: 1px solid var(--ardentia-borda);
+  --embed-border-end: 1px solid var(--ardentia-borda);
+  --embed-border-top: 1px solid var(--ardentia-borda);
+  --embed-border-bottom: 1px solid var(--ardentia-borda);
+  --embed-padding: 12px 16px;
+
+  /* Linha horizontal */
+  --hr-color: var(--ardentia-borda);
+  --hr-thickness: 1px;
+
+  /* Propriedades */
+  --metadata-padding: 6px 0;
+  --metadata-gap: 2px;
+  --metadata-label-width: 96px;
+  --metadata-label-font-size: var(--font-ui-small);
+  --metadata-label-text-color: var(--ardentia-tenue);
+  --metadata-label-text-color-hover: var(--ardentia-suave);
+  --metadata-input-font-size: var(--font-ui-small);
+  --metadata-input-text-color: var(--ardentia-suave);
+  --metadata-input-height: 26px;
+  --metadata-property-radius: 7px;
+  --metadata-property-radius-hover: 7px;
+  --metadata-property-radius-focus: 7px;
+  --metadata-property-box-shadow-hover: none;
+  --metadata-property-background-hover: transparent;
+  --metadata-divider-width: 0;
+  --pill-color: var(--ardentia-suave);
+  --pill-color-hover: var(--ardentia-texto);
+  --pill-color-remove: var(--ardentia-tenue);
+  --pill-color-remove-hover: var(--ardentia-coral);
+  --pill-background: var(--ardentia-relevo);
+  --pill-background-hover: var(--ardentia-borda);
+  --pill-border-width: 0px;
+  --pill-padding-x: 9px;
+  --pill-padding-y: 1px;
+  --pill-radius: 999px;
+
+  /* Navegação lateral */
+  --nav-item-size: var(--font-ui-small);
+  --nav-item-radius: var(--radius-s);
+  --nav-item-color: var(--ardentia-suave);
+  --nav-item-color-hover: var(--ardentia-texto);
+  --nav-item-color-active: var(--ardentia-texto);
+  --nav-item-padding: 0 8px 0 28px;
+  --nav-item-color-selected: var(--ardentia-texto);
+  --nav-item-color-highlighted: var(--ardentia-acento);
+  --nav-item-background-hover: var(--ardentia-relevo);
+  --nav-item-background-active: var(--ardentia-acento-12);
+  --nav-item-background-selected: var(--ardentia-relevo);
+  --nav-item-weight-active: 500;
+  --nav-item-margin-bottom: 2px;
+  --nav-item-children-margin-start: 14px;
+  --nav-item-children-padding-start: 8px;
+  --nav-indentation-guide-color: var(--ardentia-borda);
+  --nav-collapse-icon-color: var(--ardentia-tenue);
+  --nav-collapse-icon-color-collapsed: var(--ardentia-tenue);
+  --nav-heading-color: var(--ardentia-tenue);
+  --nav-heading-color-hover: var(--ardentia-suave);
+  --nav-heading-color-collapsed: var(--ardentia-tenue);
+  --nav-heading-color-collapsed-hover: var(--ardentia-suave);
+  --nav-heading-weight: 600;
+  --nav-heading-weight-hover: 600;
+  --collapse-icon-color: var(--ardentia-tenue);
+  --collapse-icon-color-collapsed: var(--ardentia-tenue);
+  --flair-background: var(--ardentia-relevo);
+  --flair-color: var(--ardentia-suave);
+  --vault-profile-color: var(--ardentia-suave);
+  --vault-profile-color-hover: var(--ardentia-texto);
+  --vault-profile-font-weight: 400;
+  --search-result-background: transparent;
+
+  /* Abas em pílula */
+  --tab-container-background: transparent;
+  --sidebar-tab-container-background: transparent;
+  --tab-background-active: transparent;
+  --tab-outline-width: 0px;
+  --tab-outline-color: transparent;
+  --tab-divider-color: transparent;
+  --tab-curve: 0px;
+  --tab-radius: 9px;
+  --tab-radius-active: 9px;
+  --tab-inner-border-width: 1px;
+  --tab-inner-border-color: transparent;
+  --tab-inner-border-color-hover: transparent;
+  --tab-inner-border-color-active: var(--ardentia-borda);
+  --tab-inner-background: transparent;
+  --tab-inner-background-hover: var(--ardentia-relevo);
+  --tab-inner-background-active: var(--ardentia-nota);
+  --tab-text-color: var(--ardentia-tenue);
+  --tab-text-color-active: var(--ardentia-texto);
+  --tab-text-color-focused: var(--ardentia-tenue);
+  --tab-text-color-focused-active: var(--ardentia-texto);
+  --tab-text-color-focused-highlighted: var(--ardentia-acento);
+  --tab-text-color-focused-active-current: var(--ardentia-texto);
+  --tab-max-width: 240px;
+  --tab-stacked-header-width: 40px;
+
+  /* Barra de status em cápsula */
+  --status-bar-background: var(--ardentia-relevo);
+  --status-bar-border-color: var(--ardentia-borda);
+  --status-bar-border-width: 1px;
+  --status-bar-radius: 999px;
+  --status-bar-font-size: var(--font-ui-smaller);
+  --status-bar-text-color: var(--ardentia-suave);
+
+  /* Modais, paleta de comandos e menus */
+  --modal-background: var(--ardentia-nota);
+  --modal-border-color: var(--ardentia-borda-forte);
+  --modal-radius: var(--ardentia-raio);
+  --modal-shadow: var(--ardentia-sombra-modal);
+  --prompt-background: var(--ardentia-nota);
+  --prompt-border-color: var(--ardentia-borda-forte);
+  --prompt-input-height: 44px;
+  --suggestion-background: var(--ardentia-nota);
+  --menu-background: var(--ardentia-nota);
+  --menu-border-color: var(--ardentia-borda-forte);
+  --menu-radius: var(--radius-m);
+  --menu-shadow: var(--ardentia-sombra-modal);
+  --hotkey-radius: 5px;
+  --hotkey-font: var(--font-monospace);
+  --hotkey-font-size: 11px;
+  --hotkey-background: var(--ardentia-abismo);
+  --tooltip-background: var(--ardentia-abismo);
+  --tooltip-color: var(--ardentia-texto);
+  --tooltip-radius: var(--radius-s);
+  --notice-background: var(--ardentia-relevo);
+  --notice-color: var(--ardentia-texto);
+  --notice-border: 1px solid var(--ardentia-borda-forte);
+  --notice-shadow: var(--ardentia-sombra-capsula);
+  --setting-items-background: var(--ardentia-fundo);
+  --setting-items-border-width: 1px;
+  --setting-items-border-color: var(--ardentia-borda);
+  --setting-items-divider-color: var(--ardentia-relevo);
+  --dropdown-background: var(--ardentia-relevo);
+  --dropdown-background-hover: var(--ardentia-borda);
+  --toggle-thumb-color: var(--ardentia-texto);
+  --slider-thumb-background: var(--ardentia-texto);
+  --slider-thumb-background-hover: var(--ardentia-texto);
+  --slider-track-background: var(--ardentia-borda);
+
+  /* Rolagem: trilho e polegar de 6 px */
+  --scrollbar-width: 12px;
+  --scrollbar-height: 12px;
+  --scrollbar-border-width: 3px;
+  --scrollbar-radius: 6px;
+  --scrollbar-bg: var(--ardentia-borda);
+  --scrollbar-thumb-bg: var(--ardentia-borda-forte);
+  --scrollbar-active-thumb-bg: var(--ardentia-tenue);
+
+  /* Grafo */
+  --graph-text: var(--ardentia-suave);
+  --graph-line: var(--ardentia-borda-forte);
+  --graph-node: var(--ardentia-anemona);
+  --graph-node-unresolved: var(--ardentia-borda-forte);
+  --graph-node-focused: var(--ardentia-acento);
+  --graph-node-tag: var(--ardentia-agua-viva);
+  --graph-node-attachment: var(--ardentia-lanterna);
+
+  /* Canvas, Mermaid e afins herdam das cores base */
+  --canvas-background: var(--ardentia-nota);
+  --canvas-dot-pattern: var(--ardentia-borda);
+  --canvas-color-1: var(--ardentia-coral);
+  --canvas-color-2: var(--ardentia-estrela);
+  --canvas-color-3: var(--ardentia-lanterna);
+  --canvas-color-4: var(--ardentia-sargaco);
+  --canvas-color-5: var(--ardentia-ardentia);
+  --canvas-color-6: var(--ardentia-anemona);
+  --drag-ghost-background: var(--ardentia-relevo);
+  --drag-ghost-text-color: var(--ardentia-texto);
+}
+
+/* ==========================================================================
+   3. Tipografia
+   Quatro famílias livres, uma para cada trabalho. Precisam estar instaladas
+   no sistema: o tema chama cada uma pelo nome e não baixa nada da rede.
+   ========================================================================== */
+
+body {
+  --font-interface-theme: "Geist", "Inter";
+  --font-text-theme: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", "Inter";
+  --font-monospace-theme: "Cascadia Code", "Cascadia Mono";
+
+  --font-ui-smaller: 12px;
+  --font-ui-small: 13px;
+  --font-ui-medium: 15px;
+
+  --h1-font: var(--ardentia-fonte-titulos);
+  --h2-font: var(--ardentia-fonte-titulos);
+  --h3-font: var(--ardentia-fonte-titulos);
+  --h4-font: var(--ardentia-fonte-titulos);
+  --h5-font: var(--ardentia-fonte-titulos);
+  --h6-font: var(--ardentia-fonte-titulos);
+
+  --h1-size: 1.6em;
+  --h2-size: 1.35em;
+  --h3-size: 1.18em;
+  --h4-size: 1.06em;
+  --h5-size: 1em;
+  --h6-size: 0.85em;
+
+  --h1-weight: 600;
+  --h2-weight: 600;
+  --h3-weight: 600;
+  --h4-weight: 600;
+  --h5-weight: 600;
+  --h6-weight: 600;
+
+  --h1-line-height: 1.2;
+  --h2-line-height: 1.2;
+  --h3-line-height: 1.25;
+  --h4-line-height: 1.25;
+  --h5-line-height: 1.25;
+  --h6-line-height: 1.25;
+
+  --h1-letter-spacing: -0.02em;
+  --h2-letter-spacing: -0.01em;
+  --h3-letter-spacing: 0em;
+  --h4-letter-spacing: 0em;
+  --h5-letter-spacing: 0em;
+  --h6-letter-spacing: 0.06em;
+
+  /* Cada nível de título desce um passo no espectro */
+  --h1-color: var(--ardentia-agua-viva);
+  --h2-color: var(--ardentia-anemona);
+  --h3-color: var(--ardentia-mare);
+  --h4-color: var(--ardentia-ardentia);
+  --h5-color: var(--ardentia-sargaco);
+  --h6-color: var(--ardentia-lanterna);
+
+  --inline-title-font: var(--ardentia-fonte-titulos);
+  --inline-title-size: 1.8em;
+  --inline-title-weight: 600;
+  --inline-title-line-height: 1.2;
+  --inline-title-color: var(--ardentia-agua-viva);
+  --inline-title-margin-bottom: 14px;
+}
+
+.inline-title,
+.inline-title:not([data-level]) {
+  letter-spacing: -0.02em;
+}
+
+/* Eixo óptico da Bricolage ligado nos títulos */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.inline-title,
+.HyperMD-header,
+.markdown-embed-title {
+  font-optical-sizing: auto;
+}
+
+/* H6 em caixa alta */
+.markdown-rendered h6,
+.HyperMD-header-6 .cm-header-6 {
+  text-transform: uppercase;
+}
+
+.HyperMD-header-6 .cm-formatting-header {
+  text-transform: none;
+}
+
+/* Título: 22 px acima (20 px do H3 em diante) e 8 px até o parágrafo seguinte */
+.markdown-rendered :is(h1, h2, h3, h4, h5, h6) {
+  margin-block-end: 8px;
+}
+
+.markdown-rendered div + div > :is(h1, h2),
+.markdown-rendered * + :is(h1, h2) {
+  margin-block-start: 22px;
+}
+
+.markdown-rendered div + div > :is(h3, h4, h5, h6),
+.markdown-rendered * + :is(h3, h4, h5, h6) {
+  margin-block-start: 20px;
+}
+
+.markdown-source-view.mod-cm6 .HyperMD-header {
+  padding-bottom: 8px;
+}
+
+/* Ligaduras e algarismos */
+code,
+pre,
+kbd,
+.cm-inline-code,
+.HyperMD-codeblock,
+.cm-s-obsidian .cm-hmd-frontmatter {
+  font-variant-ligatures: contextual common-ligatures;
+  font-feature-settings: "calt" 1, "liga" 1;
+}
+
+.status-bar,
+.tree-item-flair,
+.nav-file-tag,
+ol > li::marker,
+.cm-formatting-list-ol,
+.metadata-input-number {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   4. Layout em ilhas (padrão)
+   Painéis arredondados flutuando sobre o abismo, com --ardentia-gap entre eles.
+   ========================================================================== */
+
+body {
+  background-color: var(--ardentia-abismo);
+}
+
+/* O abismo: fica atrás de tudo. O esfumaçado é uma camada à parte (seção 13). */
+.app-container {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--ardentia-abismo);
+}
+
+.horizontal-main-container,
+.workspace,
+.workspace-split,
+.workspace-split.mod-root,
+.workspace-tabs,
+.workspace-tabs .workspace-leaf,
+.mod-root .workspace-tabs .workspace-leaf,
+.workspace-split.mod-root .view-content,
+.workspace-leaf-content,
+.workspace-sidedock-vault-profile {
+  background-color: transparent;
+}
+
+/* Janela translúcida (Configurações, Aparência): só o abismo deixa o fundo passar.
+   O Obsidian zera o background-color de vários painéis com !important; as ilhas
+   usam a própria cor e o rodapé do cofre é pintado por imagem. */
+body.is-translucent:not(.is-fullscreen) {
+  --workspace-background-translucent: color-mix(in srgb, var(--ardentia-abismo) 82%, transparent);
+  background-color: transparent;
+}
+
+.is-translucent:not(.is-fullscreen) .workspace-sidedock-vault-profile {
+  background-image: linear-gradient(var(--ardentia-fundo), var(--ardentia-fundo));
+}
+
+body:not(.ardentia-continuo) .workspace {
+  padding: 0 var(--ardentia-gap) var(--ardentia-gap) 0;
+}
+
+body:not(.ardentia-continuo):not(.show-ribbon) .workspace {
+  padding-inline-start: var(--ardentia-gap);
+}
+
+/* Cada grupo de abas vira uma ilha; a sombra precisa escapar do grupo */
+body:not(.ardentia-continuo) .workspace-tabs {
+  overflow: visible;
+}
+
+body:not(.ardentia-continuo) .workspace-tab-container {
+  box-sizing: border-box;
+  border: 1px solid var(--ardentia-relevo);
+  border-radius: var(--ardentia-raio);
+  background-color: var(--ardentia-fundo);
+  overflow: hidden;
+}
+
+body:not(.ardentia-continuo) .mod-root .workspace-tab-container {
+  border-color: var(--ardentia-borda);
+  background-color: var(--ardentia-nota);
+  box-shadow: var(--ardentia-sombra-ilha);
+}
+
+/* Respiro entre ilhas vizinhas. Vai como padding do grupo para que a alça de
+   redimensionar continue dentro dele, no vão. */
+body:not(.ardentia-continuo) .workspace-split.mod-vertical > :not(:last-child):not(hr) {
+  padding-inline-end: var(--ardentia-gap);
+}
+
+body:not(.ardentia-continuo) .workspace-split.mod-horizontal > .workspace-tabs:not(:last-child),
+body:not(.ardentia-continuo) .workspace-split.mod-horizontal > .workspace-split:not(:last-child) {
+  padding-bottom: var(--ardentia-gap);
+}
+
+body:not(.ardentia-continuo) .workspace-ribbon.mod-primary {
+  margin-inline-end: var(--ardentia-gap);
+}
+
+body:not(.ardentia-continuo) .workspace-split.mod-primary-split:not(.is-sidedock-collapsed) {
+  padding-inline-end: var(--ardentia-gap);
+}
+
+body:not(.ardentia-continuo) .workspace-split.mod-secondary-split:not(.is-sidedock-collapsed) {
+  padding-inline-start: var(--ardentia-gap);
+}
+
+/* Divisores: invisíveis até o mouse chegar, dentro do vão */
+body:not(.ardentia-continuo) .workspace-leaf-resize-handle {
+  border-color: transparent;
+}
+
+body:not(.ardentia-continuo) .workspace-split.mod-vertical > * > .workspace-leaf-resize-handle,
+body:not(.ardentia-continuo) .workspace-split.mod-primary-split > .workspace-leaf-resize-handle,
+body:not(.ardentia-continuo) .workspace-split.mod-secondary-split > .workspace-leaf-resize-handle {
+  width: var(--ardentia-gap);
+  border-width: 0;
+  border-radius: 999px;
+  background-clip: content-box;
+  padding: var(--ardentia-raio) 3px;
+  box-sizing: border-box;
+}
+
+body:not(.ardentia-continuo) .workspace-split.mod-horizontal > * > .workspace-leaf-resize-handle {
+  height: var(--ardentia-gap);
+  border-width: 0;
+  border-radius: 999px;
+  background-clip: content-box;
+  padding: 3px var(--ardentia-raio);
+  box-sizing: border-box;
+}
+
+body:not(.ardentia-continuo) .workspace-leaf-resize-handle:hover {
+  background-color: var(--ardentia-borda-forte);
+}
+
+body:not(.ardentia-continuo) .workspace-leaf-resize-handle.is-active {
+  background-color: var(--ardentia-acento);
+}
+
+/* ==========================================================================
+   5. Barra superior, abas e faixa de ícones
+   ========================================================================== */
+
+.workspace-tab-header-container {
+  border-bottom: 0;
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+  gap: 4px;
+}
+
+.titlebar,
+.is-hidden-frameless:not(.is-fullscreen) .titlebar-button-container.mod-right,
+.is-hidden-frameless:not(.is-fullscreen).is-focused .titlebar-button-container.mod-right {
+  background-color: transparent;
+}
+
+.titlebar-button {
+  color: var(--ardentia-tenue);
+}
+
+.titlebar-button:hover {
+  color: var(--ardentia-texto);
+}
+
+/* Abas da área principal: pílulas de 30 px */
+.workspace .mod-root .workspace-tab-header-container-inner {
+  margin: 0;
+  padding: 0;
+  gap: 4px;
+  align-items: center;
+}
+
+.workspace .mod-root .workspace-tab-header {
+  container-type: normal;
+  flex: 0 1 auto;
+  width: auto;
+  min-width: 44px;
+  max-width: var(--tab-max-width);
+  height: 30px;
+  padding: 0;
+  box-shadow: none;
+  border-radius: var(--tab-radius);
+}
+
+.workspace-tab-header-container .workspace-tab-header::before,
+.workspace-tab-header-container .workspace-tab-header::after,
+.workspace .mod-root .workspace-tab-header-inner::after {
+  display: none;
+}
+
+.workspace-tab-header-container .workspace-tab-header.is-active,
+.workspace-tab-header-container .workspace-tab-header:not(.is-active):hover {
+  box-shadow: none;
+}
+
+.workspace .mod-root .workspace-tab-header-inner {
+  box-sizing: border-box;
+  height: 30px;
+  padding: 0 12px;
+  gap: 8px;
+  border-radius: var(--tab-radius);
+}
+
+.workspace .mod-root .workspace-tab-header.is-active .workspace-tab-header-inner {
+  padding-inline-end: 8px;
+  font-weight: 500;
+}
+
+.workspace .mod-root .workspace-tab-header:not(.is-active):hover .workspace-tab-header-inner {
+  color: var(--ardentia-texto);
+}
+
+.workspace .mod-root .workspace-tab-header-inner-title {
+  width: auto;
+  font-weight: inherit;
+}
+
+/* Ponto de luz da aba ativa (o halo fica na seção 13) */
+.workspace .mod-root .workspace-tab-header.is-active .workspace-tab-header-inner::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--ardentia-borda-forte);
+}
+
+.workspace .mod-root .mod-active .workspace-tab-header.is-active .workspace-tab-header-inner::before {
+  background-color: var(--ardentia-acento);
+}
+
+.workspace-tab-header-inner-close-button {
+  padding: 2px;
+  border-radius: 5px;
+  color: var(--ardentia-tenue);
+  --icon-size: 13px;
+  --icon-stroke: 2px;
+}
+
+.mod-root .workspace-tab-header-inner-close-button {
+  --icon-size: 13px;
+  --icon-stroke: 2px;
+}
+
+.workspace-tab-header.is-active .workspace-tab-header-inner-close-button,
+.workspace-tab-header:hover .workspace-tab-header-inner-close-button {
+  color: var(--ardentia-tenue);
+}
+
+.workspace-tab-header.is-active .workspace-tab-header-inner-close-button:hover {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-texto);
+}
+
+/* Botões da barra superior: 30 x 30, raio 8 */
+.workspace-tab-header-new-tab,
+.workspace-tab-header-tab-list {
+  padding: 0;
+  margin: 0;
+}
+
+.workspace-tab-header-new-tab .clickable-icon,
+.workspace-tab-header-tab-list .clickable-icon,
+.sidebar-toggle-button .clickable-icon {
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: var(--ardentia-tenue);
+}
+
+.workspace-tab-header-new-tab .clickable-icon,
+.workspace-tab-header-tab-list .clickable-icon {
+  --icon-size: 16px;
+}
+
+.sidebar-toggle-button {
+  height: var(--header-height);
+  padding: 0;
+  align-items: center;
+  --icon-size: 17px;
+}
+
+.sidebar-toggle-button.mod-right {
+  margin-inline-end: 4px;
+}
+
+/* Abas das barras laterais: ícones de 30 x 30 */
+.mod-primary-split .workspace-tab-header-container .workspace-tab-header-container-inner,
+.mod-secondary-split .workspace-tab-header-container .workspace-tab-header-container-inner {
+  margin: 0;
+  padding: 0 4px;
+  gap: 4px;
+  align-items: center;
+}
+
+.mod-primary-split .workspace-tab-header-container .workspace-tab-header,
+.mod-secondary-split .workspace-tab-header-container .workspace-tab-header {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  color: var(--ardentia-tenue);
+}
+
+.mod-primary-split .workspace-tab-header-inner,
+.mod-secondary-split .workspace-tab-header-inner {
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+}
+
+.mod-primary-split .workspace-tab-header-container .workspace-tab-header.is-active,
+.mod-secondary-split .workspace-tab-header-container .workspace-tab-header.is-active,
+.mod-primary-split .workspace-tab-header-container .workspace-tab-header.has-active-menu,
+.mod-secondary-split .workspace-tab-header-container .workspace-tab-header.has-active-menu {
+  background-color: var(--ardentia-relevo);
+}
+
+.mod-primary-split .workspace-tab-header-container .workspace-tab-header.is-active .workspace-tab-header-inner-icon,
+.mod-secondary-split .workspace-tab-header-container .workspace-tab-header.is-active .workspace-tab-header-inner-icon {
+  color: var(--ardentia-acento);
+}
+
+.mod-primary-split .workspace-tab-header-inner-icon .svg-icon,
+.mod-secondary-split .workspace-tab-header-inner-icon .svg-icon {
+  --icon-size: 17px;
+}
+
+/* Faixa de ícones: 44 px, botões de 32 x 32 com raio 9 */
+.workspace-ribbon {
+  border-inline-end: 0;
+  padding: 4px 0 4px 8px;
+  gap: 4px;
+  color: var(--ardentia-tenue);
+}
+
+.workspace-ribbon.mod-primary::before {
+  border-bottom: 0;
+  background-color: transparent;
+}
+
+.workspace-ribbon.mod-primary.is-collapsed,
+.workspace-ribbon.is-collapsed {
+  background-color: transparent;
+}
+
+.side-dock-actions,
+.side-dock-settings {
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.side-dock-actions .side-dock-ribbon-action,
+.side-dock-settings .side-dock-ribbon-action {
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  color: var(--ardentia-tenue);
+}
+
+.clickable-icon.side-dock-ribbon-action .svg-icon {
+  --icon-size: 18px;
+  --icon-stroke: 1.75px;
+}
+
+.side-dock-ribbon-action:hover {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-texto);
+}
+
+.side-dock-ribbon-action.is-active,
+.side-dock-ribbon-action.has-active-menu {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-acento);
+}
+
+/* Barra de status: cápsula flutuante no canto */
+body:not(.ardentia-continuo) .status-bar {
+  inset-inline-end: 18px;
+  bottom: 18px;
+  box-sizing: border-box;
+  height: 26px;
+  min-height: 26px;
+  padding: 0 12px;
+  gap: 12px;
+  align-items: center;
+  border-width: 1px;
+  box-shadow: var(--ardentia-sombra-capsula);
+}
+
+.status-bar-item {
+  padding: 0;
+  border-radius: 999px;
+  gap: 12px;
+}
+
+.status-bar-item.plugin-editor-status,
+.status-bar-item.plugin-sync {
+  padding: 0;
+}
+
+.status-bar-item.mod-clickable:hover {
+  background-color: transparent;
+  color: var(--ardentia-texto);
+}
+
+/* Pontinho separador entre os itens */
+.status-bar-item:not(:empty) ~ .status-bar-item:not(:empty)::before,
+.status-bar-item-segment + .status-bar-item-segment::before {
+  content: "";
+  flex: none;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: var(--ardentia-borda-forte);
+}
+
+.status-bar-item-segment {
+  margin-inline-end: 0;
+  gap: 12px;
+}
+
+.status-bar-item.plugin-word-count {
+  gap: 12px;
+}
+
+.status-bar-item .status-bar-item-icon {
+  --icon-size: 14px;
+}
+
+/* O último item fica em ardentia */
+.status-bar-item:nth-last-child(1 of :not(:empty)),
+.status-bar-item:nth-last-child(1 of :not(:empty)) .status-bar-item-segment:last-child {
+  color: var(--ardentia-acento);
+}
+
+/* ==========================================================================
+   6. Barras laterais
+   ========================================================================== */
+
+.mod-sidedock .workspace-leaf-content {
+  position: relative;
+}
+
+/* Rótulo da seção, em caixa alta. O Obsidian não expõe o nome da vista dentro
+   do painel, então o texto vem de variáveis, com versão em português e em inglês. */
+body {
+  --ardentia-rotulo-arquivos: "Vault";
+  --ardentia-rotulo-sumario: "Outline";
+  --ardentia-rotulo-grafo: "Local graph";
+  --ardentia-rotulo-tags: "Tags";
+  --ardentia-rotulo-favoritos: "Bookmarks";
+  --ardentia-rotulo-propriedades: "Properties";
+  --ardentia-rotulo-copiar: "Copy";
+}
+
+:root:lang(pt) body {
+  --ardentia-rotulo-arquivos: "Cofre";
+  --ardentia-rotulo-sumario: "Sumário";
+  --ardentia-rotulo-grafo: "Grafo local";
+  --ardentia-rotulo-tags: "Tags";
+  --ardentia-rotulo-favoritos: "Favoritos";
+  --ardentia-rotulo-propriedades: "Propriedades";
+  --ardentia-rotulo-copiar: "Copiar";
+}
+
+.mod-sidedock .workspace-leaf-content[data-type="file-explorer"] {
+  --ardentia-rotulo: var(--ardentia-rotulo-arquivos);
+}
+
+.mod-sidedock .workspace-leaf-content[data-type="outline"] {
+  --ardentia-rotulo: var(--ardentia-rotulo-sumario);
+}
+
+.mod-sidedock .workspace-leaf-content[data-type="localgraph"] {
+  --ardentia-rotulo: var(--ardentia-rotulo-grafo);
+}
+
+.mod-sidedock .workspace-leaf-content[data-type="tag"] {
+  --ardentia-rotulo: var(--ardentia-rotulo-tags);
+}
+
+.mod-sidedock .workspace-leaf-content[data-type="bookmarks"] {
+  --ardentia-rotulo: var(--ardentia-rotulo-favoritos);
+}
+
+.mod-sidedock .workspace-leaf-content:is([data-type="all-properties"], [data-type="file-properties"]) {
+  --ardentia-rotulo: var(--ardentia-rotulo-propriedades);
+}
+
+.mod-sidedock .workspace-leaf-content:is([data-type="file-explorer"], [data-type="outline"], [data-type="localgraph"], [data-type="tag"], [data-type="bookmarks"], [data-type="all-properties"], [data-type="file-properties"])::before {
+  content: var(--ardentia-rotulo);
+  flex: none;
+  box-sizing: border-box;
+  height: 40px;
+  padding: 14px 16px 0;
+  overflow: hidden;
+  font-family: var(--font-interface);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--ardentia-tenue);
+}
+
+.mod-sidedock .workspace-leaf-content:is([data-type="backlink"], [data-type="outgoing-link"]) > .view-content {
+  padding-top: 12px;
+}
+
+/* Botões da vista: sobem para a linha do rótulo e só aparecem com o mouse */
+.mod-sidedock .workspace-leaf-content:is([data-type="file-explorer"], [data-type="outline"], [data-type="localgraph"], [data-type="tag"], [data-type="bookmarks"], [data-type="all-properties"], [data-type="file-properties"], [data-type="backlink"], [data-type="outgoing-link"]) .nav-header {
+  padding: 0;
+}
+
+.mod-sidedock .workspace-leaf-content:is([data-type="file-explorer"], [data-type="outline"], [data-type="localgraph"], [data-type="tag"], [data-type="bookmarks"], [data-type="all-properties"], [data-type="file-properties"], [data-type="backlink"], [data-type="outgoing-link"]) .nav-buttons-container {
+  position: absolute;
+  top: 6px;
+  inset-inline-end: 8px;
+  z-index: 2;
+  height: 28px;
+  padding: 0 0 0 20px;
+  gap: 2px;
+  align-items: center;
+  justify-content: flex-end;
+  background: linear-gradient(to right, transparent, var(--ardentia-fundo) 20px);
+  opacity: 0;
+  transition: opacity 0.14s ease-in-out;
+}
+
+.mod-sidedock .workspace-leaf-content:hover .nav-buttons-container,
+.mod-sidedock .workspace-leaf-content:focus-within .nav-buttons-container,
+.mod-sidedock .nav-buttons-container:has(.is-active, .has-active-menu) {
+  opacity: 1;
+}
+
+.mod-sidedock .workspace-leaf-content:is([data-type="backlink"], [data-type="outgoing-link"]) .nav-buttons-container {
+  top: 8px;
+}
+
+.nav-buttons-container .clickable-icon {
+  box-sizing: border-box;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 7px;
+  --icon-size: 15px;
+}
+
+.nav-header .search-input-container {
+  margin: 0 8px 8px;
+  width: auto;
+}
+
+/* Lista de itens: 28 px de altura, raio 7, 2 px entre linhas */
+.mod-sidedock .nav-files-container,
+.mod-sidedock .view-content > .tree-item,
+.mod-sidedock .outline,
+.mod-sidedock .tag-container,
+.mod-sidedock .bookmark-container,
+.mod-sidedock .backlink-pane,
+.mod-sidedock .outgoing-link-pane,
+.mod-sidedock .search-result-container {
+  padding-inline: 8px;
+}
+
+.mod-sidedock .nav-files-container {
+  padding-top: 0;
+  padding-bottom: 12px;
+}
+
+.tree-item-self {
+  box-sizing: border-box;
+  min-height: 28px;
+  align-items: center;
+  border-radius: var(--radius-s);
+}
+
+.nav-file-title,
+.nav-folder-title,
+.tree-item-self {
+  line-height: 1.3;
+}
+
+.tree-item-self.is-clickable:hover,
+.nav-file-title:hover,
+.nav-folder-title:hover {
+  color: var(--ardentia-texto);
+}
+
+/* O Obsidian estica cada item até a borda do painel com margem negativa inline.
+   O recorte devolve o fundo ao lugar do desenho: depois da guia de recuo. */
+.tree-item-self[style*="margin-inline-start"] {
+  --ardentia-recuo: calc(var(--nav-item-children-margin-start) + var(--nav-item-children-padding-start) + 1px);
+  clip-path: inset(0 0 0 calc(var(--ardentia-nivel, 0) * var(--ardentia-recuo)) round var(--radius-s));
+}
+
+.tree-item-children .tree-item-self { --ardentia-nivel: 1; }
+.tree-item-children .tree-item-children .tree-item-self { --ardentia-nivel: 2; }
+.tree-item-children .tree-item-children .tree-item-children .tree-item-self { --ardentia-nivel: 3; }
+.tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-self { --ardentia-nivel: 4; }
+.tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-self { --ardentia-nivel: 5; }
+.tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-self { --ardentia-nivel: 6; }
+.tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-self { --ardentia-nivel: 7; }
+.tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-children .tree-item-self { --ardentia-nivel: 8; }
+
+/* Arquivos dentro de pastas encostam na guia, a 10 px */
+.tree-item-children .nav-file-title[style*="margin-inline-start"] > .tree-item-inner {
+  margin-inline-start: -18px;
+}
+
+.tree-item-icon.collapse-icon {
+  width: 14px;
+}
+
+/* Pastas abertas ganham a cor do texto */
+.nav-folder:not(.is-collapsed) > .nav-folder-title,
+.tree-item:not(.is-collapsed) > .tree-item-self.mod-collapsible {
+  color: var(--ardentia-texto);
+}
+
+/* Item ativo: 12% de ardentia, texto em ardentia, peso 500 */
+.nav-file-title.is-active,
+.nav-folder-title.is-active,
+.tree-item-self.is-active,
+body:not(.is-grabbing) .nav-file-title.is-active:hover,
+body:not(.is-grabbing) .nav-folder-title.is-active:hover,
+body:not(.is-grabbing) .tree-item-self.is-active:hover {
+  background-color: var(--ardentia-acento-12);
+  color: var(--ardentia-acento);
+  font-weight: 500;
+}
+
+.nav-file-title.is-selected,
+.nav-folder-title.is-selected {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-texto);
+}
+
+.nav-file-title.is-being-dragged,
+.nav-folder-title.is-being-dragged,
+.tree-item-self.is-being-dragged {
+  background-color: var(--ardentia-acento);
+  color: var(--ardentia-abismo);
+}
+
+/* Seta de recolher: chevron de 14 px, traço 2 */
+.tree-item-icon.collapse-icon,
+.collapse-indicator.collapse-icon {
+  color: var(--ardentia-tenue);
+}
+
+.tree-item-icon.collapse-icon > svg,
+.collapse-indicator.collapse-icon > svg {
+  display: none;
+}
+
+.tree-item-icon.collapse-icon::before,
+.collapse-indicator.collapse-icon::before {
+  content: "";
+  display: block;
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  -webkit-mask: var(--ardentia-icone-chevron) center / 14px no-repeat;
+  mask: var(--ardentia-icone-chevron) center / 14px no-repeat;
+  transform: rotate(90deg);
+  transition: transform 0.1s ease-in-out;
+}
+
+.tree-item-icon.collapse-icon.is-collapsed::before,
+.collapse-indicator.collapse-icon.is-collapsed::before,
+.is-collapsed > .collapse-indicator.collapse-icon::before,
+.metadata-container.is-collapsed .collapse-indicator.collapse-icon::before {
+  transform: none;
+}
+
+/* Guia de recuo */
+.tree-item-children {
+  border-inline-start-color: var(--ardentia-borda);
+}
+
+/* Contadores em cápsula */
+.tree-item-flair {
+  padding: 0 7px;
+  border-radius: 999px;
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-suave);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 18px;
+  text-transform: none;
+}
+
+.nav-file-tag {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-tenue);
+  border-radius: 5px;
+}
+
+/* Títulos de seção dentro das vistas (links de entrada, menções etc.) */
+.backlink-pane > .tree-item-self,
+.outgoing-link-pane > .tree-item-self,
+.mod-sidedock .search-results-info,
+.embedded-backlinks .backlink-pane > .tree-item-self {
+  padding: 6px 8px 8px;
+  font-family: var(--font-interface);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ardentia-tenue);
+}
+
+.backlink-pane > .tree-item-self:not(:first-child),
+.outgoing-link-pane > .tree-item-self:not(:first-child) {
+  margin-top: 12px;
+}
+
+.backlink-pane > .tree-item-self:hover,
+.outgoing-link-pane > .tree-item-self:hover {
+  background-color: transparent;
+  color: var(--ardentia-suave);
+}
+
+.backlink-pane > .tree-item-self .tree-item-inner,
+.outgoing-link-pane > .tree-item-self .tree-item-inner {
+  font-weight: 600;
+}
+
+/* Resultados: título em texto, contexto em 12 px tênue, sem caixa */
+.search-result-file-title {
+  color: var(--ardentia-texto);
+}
+
+.search-result-file-matches {
+  margin: 0 0 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ardentia-tenue);
+}
+
+.search-result-file-match {
+  padding: 2px 10px 4px;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: transparent;
+  box-shadow: none;
+  color: var(--ardentia-tenue);
+}
+
+.search-result-file-match:not(:first-child) {
+  margin-top: 0;
+  border-top: 0;
+}
+
+.search-result-file-match:hover {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-suave);
+}
+
+.search-result-file-matched-text {
+  padding: 0 2px;
+  border-radius: 3px;
+  background-color: rgba(var(--ardentia-lanterna-rgb), 0.22);
+  color: var(--ardentia-lanterna-clara);
+}
+
+/* Rodapé do cofre: dentro da ilha esquerda, com divisor em relevo */
+body:not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile {
+  box-sizing: border-box;
+  height: 36px;
+  min-height: 36px;
+  padding: 4px 8px;
+  border-top: 1px solid var(--ardentia-relevo);
+  font-size: var(--font-ui-small);
+}
+
+body:not(.ardentia-continuo):not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile {
+  height: 44px;
+  padding: 6px 8px 8px;
+  border: 1px solid var(--ardentia-relevo);
+  border-radius: 0 0 var(--ardentia-raio) var(--ardentia-raio);
+  background-color: var(--ardentia-fundo);
+}
+
+body:not(.ardentia-continuo) .mod-left-split > .workspace-tabs:last-child > .workspace-tab-container {
+  border-bottom: 0;
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.workspace-drawer-vault-switcher {
+  flex: 1 1 auto;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding: 0 8px;
+  height: 28px;
+  border-radius: var(--radius-s);
+  color: var(--ardentia-suave);
+}
+
+.workspace-drawer-vault-switcher:hover {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-texto);
+}
+
+.workspace-drawer-vault-switcher-icon {
+  color: var(--ardentia-tenue);
+  --icon-size: 14px;
+  --icon-stroke: 2px;
+}
+
+.workspace-drawer-vault-name {
+  font-weight: 400;
+}
+
+.workspace-drawer-vault-actions .clickable-icon {
+  --icon-size: 16px;
+}
+
+/* ==========================================================================
+   7. Cabeçalho e propriedades da nota
+   ========================================================================== */
+
+.workspace-split.mod-root .view-header {
+  flex: 0 0 auto;
+  height: var(--ardentia-cabecalho-nota);
+  padding: 0 14px;
+  gap: 6px;
+  border-bottom: 0;
+  color: var(--ardentia-tenue);
+}
+
+/* Voltar e avançar sempre à vista, à esquerda da trilha de pastas */
+.mod-root .view-header-left {
+  order: 0;
+  margin-inline-start: -6px;
+}
+
+.mod-root .view-header-left .view-header-nav-buttons {
+  gap: 2px;
+}
+
+.mod-root .view-header-left .clickable-icon {
+  --icon-size: 16px;
+  color: var(--ardentia-tenue);
+}
+
+.mod-root .view-header-left .clickable-icon:hover {
+  color: var(--ardentia-texto);
+}
+
+.mod-root .view-header-title-container {
+  order: 1;
+  gap: 0;
+}
+
+.mod-root .view-actions {
+  order: 3;
+  gap: 4px;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.mod-root .view-actions::before,
+.mod-root .view-actions::after {
+  display: none;
+}
+
+.view-header-title-parent,
+.view-header-title,
+.view-header-title-parent .view-header-breadcrumb {
+  color: var(--ardentia-tenue);
+}
+
+.view-header-title-parent .view-header-breadcrumb {
+  padding: 2px 3px;
+  border-radius: 5px;
+}
+
+.view-header-title-parent .view-header-breadcrumb:hover {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-texto);
+}
+
+.view-header-title-parent .view-header-breadcrumb-separator {
+  padding: 2px 3px;
+  color: var(--ardentia-borda-forte);
+}
+
+.view-header-title {
+  padding-inline-start: 3px;
+}
+
+.mod-root .view-header-title,
+.is-focused .mod-root .workspace-leaf.mod-active .view-header-title {
+  color: var(--ardentia-texto);
+}
+
+.view-header .clickable-icon {
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 8px;
+  color: var(--ardentia-tenue);
+  --icon-size: 16px;
+  --icon-stroke: 1.75px;
+}
+
+.clickable-icon:hover,
+.clickable-icon.is-active,
+.clickable-icon.has-active-menu {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-texto);
+}
+
+.clickable-icon.is-active {
+  color: var(--ardentia-acento);
+}
+
+/* Propriedades: faixa entre duas linhas, sem título nem ícones em repouso */
+.metadata-container {
+  margin-block: 0 18px;
+  border-top: 1px solid var(--ardentia-borda);
+  border-bottom: 1px solid var(--ardentia-borda);
+  font-family: var(--font-interface);
+}
+
+.markdown-source-view .metadata-container {
+  margin-block-end: 18px;
+}
+
+.metadata-container:not(.is-collapsed) .metadata-properties-heading {
+  display: none;
+}
+
+.metadata-properties-heading {
+  margin: 0;
+  padding: 0;
+  min-height: 26px;
+  gap: 6px;
+}
+
+.metadata-properties-title {
+  font-family: var(--font-interface);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ardentia-tenue);
+}
+
+.metadata-content {
+  padding: 0;
+}
+
+.metadata-property {
+  position: relative;
+  min-height: 26px;
+  align-items: center;
+}
+
+.metadata-property-key {
+  min-height: 26px;
+  align-items: center;
+}
+
+input.metadata-property-key-input {
+  height: 26px;
+  padding-inline-start: 0;
+  color: var(--ardentia-tenue);
+}
+
+/* O ícone do tipo mora na margem e só aparece com o mouse na linha */
+.metadata-property-icon {
+  position: absolute;
+  inset-inline-start: -24px;
+  top: 3px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.14s ease-in-out;
+  --icon-size: 14px;
+}
+
+.metadata-property:hover .metadata-property-icon,
+.metadata-property:focus-within .metadata-property-icon,
+.metadata-property-icon.has-active-menu {
+  opacity: 1;
+}
+
+.metadata-property-value {
+  min-height: 26px;
+  align-items: center;
+  color: var(--ardentia-suave);
+}
+
+.metadata-input-longtext,
+.metadata-property-value .metadata-input-text,
+.metadata-property-value .metadata-input-number {
+  padding-inline-start: 0;
+  color: var(--ardentia-suave);
+}
+
+.metadata-property-value .multi-select-container {
+  min-height: 26px;
+  padding-block: 2px;
+  padding-inline-start: 0;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Data em monoespaçada; o seletor de calendário vai para depois do valor */
+.metadata-property-value input.mod-date,
+.metadata-property-value input.mod-datetime {
+  padding-inline: 0 24px;
+  font-family: var(--font-monospace);
+  font-size: 12.5px;
+}
+
+.metadata-property-value input.mod-date::-webkit-calendar-picker-indicator,
+.metadata-property-value input.mod-datetime::-webkit-calendar-picker-indicator {
+  left: auto;
+  right: 4px;
+  opacity: 0;
+}
+
+.metadata-property:hover input.mod-date::-webkit-calendar-picker-indicator,
+.metadata-property:hover input.mod-datetime::-webkit-calendar-picker-indicator {
+  opacity: 0.6;
+}
+
+.metadata-property-value > .clickable-icon {
+  opacity: 0;
+}
+
+.metadata-property:hover .metadata-property-value > .clickable-icon,
+.metadata-property:focus-within .metadata-property-value > .clickable-icon {
+  opacity: 1;
+}
+
+/* Tags das propriedades: as mesmas pílulas da nota */
+.metadata-property[data-property-key="tags"] .multi-select-pill {
+  background-color: rgba(var(--ardentia-agua-viva-rgb), 0.14);
+  color: var(--ardentia-agua-viva);
+}
+
+.metadata-property[data-property-key="tags"] .multi-select-pill:hover {
+  background-color: rgba(var(--ardentia-agua-viva-rgb), 0.24);
+}
+
+.multi-select-pill,
+.metadata-property-value .multi-select-pill,
+.metadata-property-value[data-property-type] .multi-select-pill {
+  min-height: 0;
+  padding: 1px 9px;
+  line-height: 20px;
+  font-size: var(--font-ui-small);
+}
+
+.multi-select-pill-content {
+  margin-inline-start: 0;
+  line-height: inherit;
+}
+
+/* O x de remover só aparece com o mouse, sem empurrar o texto */
+.multi-select-pill-remove-button {
+  width: 0;
+  margin: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: width 0.1s ease-in-out, opacity 0.1s ease-in-out;
+}
+
+.multi-select-pill:hover .multi-select-pill-remove-button,
+.multi-select-pill:focus-within .multi-select-pill-remove-button {
+  width: 14px;
+  margin-inline-start: 2px;
+  opacity: 1;
+}
+
+/* Adicionar propriedade: surge quando o mouse entra na faixa */
+.metadata-container .metadata-add-button {
+  display: flex;
+  width: fit-content;
+  max-height: 0;
+  margin: 0;
+  padding-block: 0;
+  overflow: hidden;
+  opacity: 0;
+  color: var(--ardentia-tenue);
+  font-size: var(--font-ui-small);
+  transition: max-height 0.14s ease-in-out 0.25s, opacity 0.14s ease-in-out 0.25s, margin 0.14s ease-in-out 0.25s;
+}
+
+.metadata-container:hover .metadata-add-button,
+.metadata-container:focus-within .metadata-add-button,
+.metadata-container[data-property-count="0"] .metadata-add-button {
+  max-height: 28px;
+  margin-top: 2px;
+  opacity: 1;
+}
+
+/* ==========================================================================
+   8. Elementos da nota
+   ========================================================================== */
+
+.markdown-rendered,
+.markdown-source-view.mod-cm6 .cm-scroller {
+  text-wrap: pretty;
+}
+
+/* Links */
+a,
+.cm-hmd-internal-link .cm-underline,
+.cm-link .cm-underline,
+.cm-url .cm-underline {
+  text-underline-offset: 3px;
+}
+
+.markdown-rendered .internal-link,
+.cm-s-obsidian span.cm-hmd-internal-link,
+.cm-s-obsidian span.cm-hmd-internal-link .cm-underline {
+  text-decoration-color: var(--ardentia-acento-45);
+}
+
+.markdown-rendered .internal-link:hover,
+.cm-s-obsidian span.cm-hmd-internal-link:hover .cm-underline {
+  text-decoration-color: currentColor;
+}
+
+.markdown-rendered .external-link,
+.cm-s-obsidian span.cm-link,
+.cm-s-obsidian span.cm-link .cm-underline,
+.cm-s-obsidian span.cm-url,
+.cm-s-obsidian span.cm-url .cm-underline {
+  text-decoration-color: rgba(var(--ardentia-mare-rgb), 0.45);
+}
+
+.markdown-rendered .internal-link.is-unresolved,
+.cm-s-obsidian span.cm-hmd-internal-link .is-unresolved,
+.cm-s-obsidian span.cm-hmd-internal-link .is-unresolved .cm-underline {
+  text-decoration-style: dashed;
+  text-decoration-color: var(--ardentia-borda-forte);
+}
+
+/* Link externo: seta de 12 px em maré */
+.external-link {
+  padding-inline-end: 15px;
+  background-image: var(--ardentia-icone-link-externo);
+  background-size: 12px;
+  background-position: center right;
+  background-repeat: no-repeat;
+  filter: none;
+}
+
+/* Negrito e itálico juntos ficam em lanterna */
+.markdown-rendered strong em,
+.markdown-rendered em strong,
+.cm-s-obsidian span.cm-strong.cm-em {
+  color: var(--ardentia-lanterna);
+}
+
+/* Riscado */
+.markdown-rendered del,
+.markdown-rendered s,
+.cm-s-obsidian span.cm-strikethrough {
+  color: var(--ardentia-tenue);
+  text-decoration-color: var(--ardentia-borda-forte);
+}
+
+/* Marcação */
+.markdown-rendered mark,
+.cm-s-obsidian span.cm-highlight {
+  padding: 0 3px;
+  border-radius: 4px;
+  background-color: rgba(var(--ardentia-lanterna-rgb), 0.22);
+  color: var(--ardentia-lanterna-clara);
+  mix-blend-mode: normal;
+}
+
+.cm-s-obsidian span.cm-formatting-highlight {
+  padding: 0;
+  background-color: transparent;
+  color: var(--ardentia-tenue);
+}
+
+/* Código em linha: relevo com texto em coral */
+.markdown-rendered :not(pre) > code,
+.cm-s-obsidian span.cm-inline-code:not(.cm-formatting) {
+  padding: 2px 6px;
+  border: 0;
+  border-radius: 5px;
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-coral);
+  font-size: var(--code-size);
+}
+
+.cm-s-obsidian span.cm-inline-code.cm-formatting {
+  background-color: transparent;
+  color: var(--ardentia-tenue);
+  border: 0;
+}
+
+/* Teclas */
+kbd {
+  padding: 1px 7px;
+  border: 1px solid var(--ardentia-borda-forte);
+  border-radius: 5px;
+  background-color: var(--ardentia-abismo);
+  color: var(--ardentia-suave);
+  font-family: var(--font-monospace);
+  font-size: 0.78em;
+  box-shadow: none;
+}
+
+/* Nota de rodapé */
+.footnote-ref,
+.footnote-link,
+.cm-s-obsidian span.cm-footref,
+sup a {
+  color: var(--ardentia-acento);
+  text-decoration: none;
+}
+
+/* Tags */
+a.tag,
+.cm-s-obsidian span.cm-hashtag {
+  font-family: var(--font-interface);
+  line-height: 1.45;
+}
+
+.cm-s-obsidian span.cm-hashtag {
+  padding-block: 1px;
+}
+
+/* Listas: marcador em ardentia, números em anêmona */
+.markdown-rendered ol > li::marker,
+.cm-s-obsidian span.cm-formatting-list-ol {
+  color: var(--ardentia-anemona);
+}
+
+.markdown-rendered ul > li::marker {
+  color: var(--ardentia-acento);
+}
+
+/* Tarefas */
+input[type="checkbox"],
+.markdown-rendered input[type="checkbox"],
+.markdown-source-view.mod-cm6 input[type="checkbox"] {
+  border-width: 1.5px;
+  border-radius: var(--checkbox-radius);
+}
+
+input[type="checkbox"]:checked::after {
+  -webkit-mask-image: var(--ardentia-icone-check);
+  mask-image: var(--ardentia-icone-check);
+  -webkit-mask-size: 11px;
+  mask-size: 11px;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.markdown-rendered .task-list-item.is-checked,
+.markdown-source-view.mod-cm6 .HyperMD-task-line[data-task]:not([data-task=" "]) {
+  text-decoration-color: var(--ardentia-borda-forte);
+}
+
+/* [/] Em andamento: metade cheia em lanterna */
+input[type="checkbox"][data-task="/"],
+li[data-task="/"] > input[type="checkbox"],
+li[data-task="/"] > p > input[type="checkbox"] {
+  border-color: var(--ardentia-lanterna);
+  background-color: transparent;
+  background-image: linear-gradient(90deg, var(--ardentia-lanterna) 50%, transparent 50%);
+}
+
+input[type="checkbox"][data-task="/"]::after,
+li[data-task="/"] > input[type="checkbox"]::after,
+li[data-task="/"] > p > input[type="checkbox"]::after {
+  display: none;
+}
+
+/* [>] Adiada: maré */
+input[type="checkbox"][data-task=">"],
+li[data-task=">"] > input[type="checkbox"],
+li[data-task=">"] > p > input[type="checkbox"] {
+  border-color: var(--ardentia-mare);
+  background-color: var(--ardentia-mare);
+}
+
+input[type="checkbox"][data-task=">"]::after,
+li[data-task=">"] > input[type="checkbox"]::after,
+li[data-task=">"] > p > input[type="checkbox"]::after {
+  -webkit-mask-image: var(--ardentia-icone-adiada);
+  mask-image: var(--ardentia-icone-adiada);
+}
+
+/* [!] Importante: coral, com o texto junto */
+input[type="checkbox"][data-task="!"],
+li[data-task="!"] > input[type="checkbox"],
+li[data-task="!"] > p > input[type="checkbox"] {
+  border-color: var(--ardentia-coral);
+  background-color: var(--ardentia-coral);
+}
+
+input[type="checkbox"][data-task="!"]::after,
+li[data-task="!"] > input[type="checkbox"]::after,
+li[data-task="!"] > p > input[type="checkbox"]::after {
+  -webkit-mask-image: var(--ardentia-icone-importante);
+  mask-image: var(--ardentia-icone-importante);
+}
+
+/* [?] Dúvida: anêmona */
+input[type="checkbox"][data-task="?"],
+li[data-task="?"] > input[type="checkbox"],
+li[data-task="?"] > p > input[type="checkbox"] {
+  border-color: var(--ardentia-anemona);
+  background-color: var(--ardentia-anemona);
+}
+
+input[type="checkbox"][data-task="?"]::after,
+li[data-task="?"] > input[type="checkbox"]::after,
+li[data-task="?"] > p > input[type="checkbox"]::after {
+  -webkit-mask-image: var(--ardentia-icone-duvida);
+  mask-image: var(--ardentia-icone-duvida);
+}
+
+/* [-] Cancelada: borda forte, traço claro */
+input[type="checkbox"][data-task="-"],
+li[data-task="-"] > input[type="checkbox"],
+li[data-task="-"] > p > input[type="checkbox"] {
+  border-color: var(--ardentia-borda-forte);
+  background-color: var(--ardentia-borda-forte);
+}
+
+input[type="checkbox"][data-task="-"]::after,
+li[data-task="-"] > input[type="checkbox"]::after,
+li[data-task="-"] > p > input[type="checkbox"]::after {
+  -webkit-mask-image: var(--ardentia-icone-cancelada);
+  mask-image: var(--ardentia-icone-cancelada);
+  background-color: var(--ardentia-texto);
+}
+
+/* Cancelada: tênue e riscada, como a feita */
+.markdown-rendered .task-list-item[data-task="-"],
+.markdown-source-view.mod-cm6 .HyperMD-task-line[data-task="-"] {
+  color: var(--ardentia-tenue);
+  text-decoration: line-through;
+  text-decoration-color: var(--ardentia-borda-forte);
+}
+
+/* Só as tarefas feitas e canceladas ficam riscadas */
+.markdown-rendered .task-list-item.is-checked:is([data-task="/"], [data-task=">"], [data-task="!"], [data-task="?"]),
+.markdown-source-view.mod-cm6 .HyperMD-task-line:is([data-task="/"], [data-task=">"], [data-task="!"], [data-task="?"]) {
+  color: var(--ardentia-texto);
+  text-decoration: none;
+}
+
+.markdown-rendered .task-list-item.is-checked[data-task="!"],
+.markdown-source-view.mod-cm6 .HyperMD-task-line[data-task="!"] {
+  color: var(--ardentia-coral);
+}
+
+/* Callouts */
+.callout {
+  background-color: color-mix(in srgb, var(--callout-color) 8%, transparent);
+  border-color: color-mix(in srgb, var(--callout-color) 28%, transparent);
+}
+
+.callout[data-callout="tip"],
+.callout[data-callout="hint"] {
+  --callout-icon: lucide-lightbulb;
+}
+
+.callout[data-callout="success"],
+.callout[data-callout="check"],
+.callout[data-callout="done"] {
+  --callout-icon: lucide-check-circle-2;
+}
+
+.callout-title {
+  gap: 8px;
+  align-items: center;
+  line-height: 1.45;
+}
+
+.callout-icon .svg-icon {
+  --icon-size: 17px;
+  --icon-stroke: 2px;
+}
+
+.callout-content {
+  margin-top: 4px;
+  color: var(--ardentia-texto);
+}
+
+.callout-content > :first-child {
+  margin-block-start: 0;
+}
+
+.callout-content > :last-child {
+  margin-block-end: 0;
+}
+
+/* Citação */
+.markdown-rendered blockquote {
+  margin-inline: 0;
+  padding: 2px 0 2px 16px;
+}
+
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-quote:not(.HyperMD-callout) {
+  color: var(--ardentia-suave);
+  font-style: italic;
+}
+
+/* Tabela: moldura arredondada, sem linhas verticais */
+.markdown-rendered table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--ardentia-borda);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+}
+
+.markdown-rendered table,
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper,
+.markdown-source-view.mod-cm6 .cm-table-widget table {
+  width: 100%;
+}
+
+.markdown-rendered th,
+.markdown-rendered td {
+  border: 0;
+  text-align: start;
+}
+
+.markdown-rendered th {
+  padding: 7px 12px;
+  font-family: var(--font-interface);
+}
+
+.markdown-rendered td {
+  padding: 6px 12px;
+  border-top: 1px solid var(--ardentia-borda);
+}
+
+.markdown-rendered tbody tr:nth-child(even) > td {
+  background-color: var(--table-row-alt-background);
+}
+
+/* Bloco de código */
+.markdown-rendered pre {
+  position: relative;
+  padding: 42px 14px 12px;
+  border: 1px solid var(--ardentia-borda);
+  border-radius: var(--radius-m);
+  background-color: var(--ardentia-fundo);
+  line-height: 1.65;
+}
+
+.markdown-rendered pre > code {
+  line-height: 1.65;
+}
+
+/* Cabeçalho do bloco: 30 px, linguagem à esquerda, copiar à direita */
+.markdown-rendered pre::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  box-sizing: border-box;
+  height: 30px;
+  border-bottom: 1px solid var(--ardentia-relevo);
+  pointer-events: none;
+}
+
+.markdown-rendered pre::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline-start: 14px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-interface);
+  font-size: 12px;
+  line-height: 1;
+  color: var(--ardentia-tenue);
+  pointer-events: none;
+}
+
+/* O CSS não lê o nome da linguagem a partir da classe: uma regra por linguagem */
+.markdown-rendered pre.language-bash::after { content: "bash"; }
+.markdown-rendered pre.language-c::after { content: "c"; }
+.markdown-rendered pre.language-cpp::after { content: "cpp"; }
+.markdown-rendered pre.language-cs::after { content: "cs"; }
+.markdown-rendered pre.language-csharp::after { content: "csharp"; }
+.markdown-rendered pre.language-css::after { content: "css"; }
+.markdown-rendered pre.language-dart::after { content: "dart"; }
+.markdown-rendered pre.language-dataview::after { content: "dataview"; }
+.markdown-rendered pre.language-dataviewjs::after { content: "dataviewjs"; }
+.markdown-rendered pre.language-diff::after { content: "diff"; }
+.markdown-rendered pre.language-docker::after { content: "docker"; }
+.markdown-rendered pre.language-dockerfile::after { content: "dockerfile"; }
+.markdown-rendered pre.language-env::after { content: "env"; }
+.markdown-rendered pre.language-go::after { content: "go"; }
+.markdown-rendered pre.language-graphql::after { content: "graphql"; }
+.markdown-rendered pre.language-html::after { content: "html"; }
+.markdown-rendered pre.language-ini::after { content: "ini"; }
+.markdown-rendered pre.language-java::after { content: "java"; }
+.markdown-rendered pre.language-javascript::after { content: "javascript"; }
+.markdown-rendered pre.language-js::after { content: "js"; }
+.markdown-rendered pre.language-json::after { content: "json"; }
+.markdown-rendered pre.language-jsx::after { content: "jsx"; }
+.markdown-rendered pre.language-kotlin::after { content: "kotlin"; }
+.markdown-rendered pre.language-latex::after { content: "latex"; }
+.markdown-rendered pre.language-lua::after { content: "lua"; }
+.markdown-rendered pre.language-makefile::after { content: "makefile"; }
+.markdown-rendered pre.language-markdown::after { content: "markdown"; }
+.markdown-rendered pre.language-md::after { content: "md"; }
+.markdown-rendered pre.language-nginx::after { content: "nginx"; }
+.markdown-rendered pre.language-perl::after { content: "perl"; }
+.markdown-rendered pre.language-php::after { content: "php"; }
+.markdown-rendered pre.language-plaintext::after { content: "plaintext"; }
+.markdown-rendered pre.language-powershell::after { content: "powershell"; }
+.markdown-rendered pre.language-py::after { content: "py"; }
+.markdown-rendered pre.language-python::after { content: "python"; }
+.markdown-rendered pre.language-r::after { content: "r"; }
+.markdown-rendered pre.language-rb::after { content: "rb"; }
+.markdown-rendered pre.language-ruby::after { content: "ruby"; }
+.markdown-rendered pre.language-rs::after { content: "rs"; }
+.markdown-rendered pre.language-rust::after { content: "rust"; }
+.markdown-rendered pre.language-scss::after { content: "scss"; }
+.markdown-rendered pre.language-sh::after { content: "sh"; }
+.markdown-rendered pre.language-shell::after { content: "shell"; }
+.markdown-rendered pre.language-sql::after { content: "sql"; }
+.markdown-rendered pre.language-svelte::after { content: "svelte"; }
+.markdown-rendered pre.language-swift::after { content: "swift"; }
+.markdown-rendered pre.language-tex::after { content: "tex"; }
+.markdown-rendered pre.language-text::after { content: "text"; }
+.markdown-rendered pre.language-toml::after { content: "toml"; }
+.markdown-rendered pre.language-ts::after { content: "ts"; }
+.markdown-rendered pre.language-tsx::after { content: "tsx"; }
+.markdown-rendered pre.language-typescript::after { content: "typescript"; }
+.markdown-rendered pre.language-vue::after { content: "vue"; }
+.markdown-rendered pre.language-xml::after { content: "xml"; }
+.markdown-rendered pre.language-yaml::after { content: "yaml"; }
+.markdown-rendered pre.language-yml::after { content: "yml"; }
+.markdown-rendered pre.language-zsh::after { content: "zsh"; }
+
+.markdown-rendered pre > button.copy-code-button,
+.markdown-rendered pre:not(:hover) > button.copy-code-button {
+  position: absolute;
+  top: 4px;
+  inset-inline-end: 8px;
+  bottom: auto;
+  height: 22px;
+  margin: 0;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  border-radius: 6px;
+  background-color: transparent;
+  box-shadow: none;
+  color: var(--ardentia-suave);
+  font-family: var(--font-interface);
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 1;
+  --icon-size: 13px;
+}
+
+.markdown-rendered pre > button.copy-code-button > svg.lucide-copy {
+  display: none;
+}
+
+.markdown-rendered pre > button.copy-code-button::after {
+  content: var(--ardentia-rotulo-copiar);
+}
+
+.markdown-rendered pre > button.copy-code-button:hover {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-texto);
+}
+
+/* Edição: o bloco é montado linha a linha */
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
+  line-height: 1.65;
+}
+
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(.HyperMD-list-line) {
+  padding-inline: 14px;
+}
+
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-begin {
+  min-height: 30px;
+  padding-block: 4px;
+  box-shadow: inset 0 -1px 0 var(--ardentia-relevo);
+  font-family: var(--font-interface);
+  font-size: 12px;
+  color: var(--ardentia-tenue);
+}
+
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-begin + .cm-line.HyperMD-codeblock {
+  padding-top: 12px;
+}
+
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-end {
+  color: var(--ardentia-tenue);
+}
+
+/* O selo nativo vira o cabeçalho: linguagem à esquerda, copiar à direita.
+   Só o "Copiar" recebe o clique, para a linha da cerca continuar editável. */
+.markdown-source-view.mod-cm6 .code-block-flair {
+  top: 0;
+  left: 14px;
+  right: 8px;
+  height: 30px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0;
+  font-family: var(--font-interface);
+  font-size: 12px;
+  text-transform: lowercase;
+  color: var(--ardentia-tenue);
+  pointer-events: none;
+  /* O selo ocupa a largura toda: sem isto a dica nativa abre no meio do bloco */
+  --no-tooltip: true;
+}
+
+/* O hover nativo pinta o selo inteiro. O realce fica só no "Copiar". */
+.markdown-source-view.mod-cm6 .code-block-flair:hover {
+  background-color: transparent;
+}
+
+.markdown-source-view.mod-cm6 .code-block-flair::after {
+  content: var(--ardentia-rotulo-copiar);
+  height: 22px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  text-transform: none;
+  color: var(--ardentia-suave);
+  pointer-events: auto;
+  cursor: var(--cursor);
+}
+
+.markdown-source-view.mod-cm6 .code-block-flair:hover::after {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-texto);
+}
+
+/* Sintaxe: palavra-chave e comentário em itálico cursivo */
+.token.keyword,
+.token.atrule,
+.cm-s-obsidian .cm-keyword,
+.cm-s-obsidian span.cm-hmd-codeblock.cm-keyword,
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata,
+.cm-s-obsidian .cm-comment,
+.cm-s-obsidian span.cm-hmd-codeblock.cm-comment {
+  font-style: italic;
+}
+
+/* Nota incorporada */
+.markdown-embed,
+.file-embed {
+  border-radius: var(--radius-m);
+}
+
+.markdown-embed .markdown-embed-content,
+.markdown-embed .markdown-preview-view {
+  color: var(--ardentia-suave);
+}
+
+.markdown-embed-title {
+  height: auto;
+  margin: 0 0 2px;
+  padding: 0;
+  font-family: var(--ardentia-fonte-titulos);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: start;
+  color: var(--ardentia-acento);
+}
+
+.markdown-embed .inline-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.3;
+  color: var(--ardentia-acento);
+  margin-bottom: 2px;
+}
+
+.markdown-embed-link,
+.file-embed-link {
+  color: var(--ardentia-tenue);
+}
+
+/* Linha horizontal: do ardentia à água-viva, sumindo nas pontas */
+.markdown-rendered hr,
+.markdown-source-view.mod-cm6 .cm-line.hr hr,
+.markdown-source-view.mod-cm6 .hr hr {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--ardentia-ardentia-rgb), 0),
+    var(--ardentia-ardentia) 22%,
+    var(--ardentia-anemona) 50%,
+    var(--ardentia-agua-viva) 78%,
+    rgba(var(--ardentia-agua-viva-rgb), 0)
+  );
+}
+
+/* Imagens e fórmulas */
+.markdown-rendered img,
+.image-embed img {
+  border-radius: var(--radius-m);
+}
+
+/* Marcas de formatação no modo de edição */
+.cm-s-obsidian span.cm-formatting {
+  color: var(--ardentia-tenue);
+}
+
+.cm-s-obsidian span.cm-formatting-link,
+.cm-s-obsidian span.cm-formatting-link-string {
+  color: var(--ardentia-tenue);
+}
+
+.markdown-source-view.mod-cm6 .cm-active.cm-line {
+  caret-color: var(--ardentia-acento);
+}
+
+/* ==========================================================================
+   9. Modais, menus e controles
+   ========================================================================== */
+
+/* Modais sobem um degrau de superfície e ganham borda forte */
+.modal,
+.prompt,
+.menu,
+.suggestion-container,
+.popover {
+  border: 1px solid var(--ardentia-borda-forte);
+  box-shadow: var(--ardentia-sombra-modal);
+}
+
+.modal {
+  border-radius: var(--ardentia-raio);
+}
+
+.modal-bg {
+  background-color: rgba(var(--ardentia-sombra-rgb), 0.6);
+  opacity: 1 !important;
+}
+
+.popover.hover-popover {
+  border-radius: var(--ardentia-raio);
+  background-color: var(--ardentia-nota);
+}
+
+/* Paleta de comandos e seletores rápidos */
+.prompt {
+  border-radius: var(--radius-l);
+  background-color: var(--ardentia-nota);
+  overflow: hidden;
+}
+
+.prompt-input-container {
+  position: relative;
+  box-sizing: border-box;
+  height: 44px;
+  border-bottom: 1px solid var(--ardentia-borda);
+}
+
+.prompt-input-container::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  inset-inline-start: 14px;
+  width: 15px;
+  height: 15px;
+  margin-top: -7.5px;
+  background-color: var(--ardentia-tenue);
+  -webkit-mask: var(--ardentia-icone-chevron) center / 15px no-repeat;
+  mask: var(--ardentia-icone-chevron) center / 15px no-repeat;
+  pointer-events: none;
+}
+
+input.prompt-input {
+  height: 44px;
+  padding: 0 44px 0 39px;
+  border: 0;
+  background: transparent;
+  font-size: 15px;
+  color: var(--ardentia-texto);
+  caret-color: var(--ardentia-acento);
+}
+
+input.prompt-input:focus,
+input.prompt-input:hover,
+input.prompt-input:active {
+  border: 0;
+  box-shadow: none;
+}
+
+.prompt-results {
+  padding: 6px;
+}
+
+.prompt .suggestion-item {
+  font-size: 14px;
+}
+
+.suggestion-item {
+  box-sizing: border-box;
+  min-height: 34px;
+  margin-bottom: 2px;
+  padding: 6px 10px;
+  align-items: center;
+  border-radius: 8px;
+  color: var(--ardentia-suave);
+}
+
+.suggestion-item:last-child {
+  margin-bottom: 0;
+}
+
+.suggestion-item.is-selected {
+  background-color: var(--ardentia-acento-12);
+  color: var(--ardentia-texto);
+}
+
+.suggestion-highlight {
+  color: var(--ardentia-texto);
+  font-weight: 600;
+}
+
+.suggestion-item.is-selected .suggestion-highlight {
+  color: var(--ardentia-acento);
+}
+
+.suggestion-note,
+.suggestion-item .suggestion-flair,
+.suggestion-prefix {
+  color: var(--ardentia-tenue);
+}
+
+.suggestion-aux {
+  gap: 4px;
+}
+
+kbd.suggestion-hotkey,
+.suggestion-hotkey,
+.setting-hotkey,
+.setting-command-hotkeys .setting-hotkey {
+  padding: 1px 6px;
+  border: 1px solid var(--ardentia-borda-forte);
+  border-radius: 5px;
+  background-color: var(--ardentia-abismo);
+  color: var(--ardentia-suave);
+  font-family: var(--font-monospace);
+  font-size: 11px;
+  line-height: 1.45;
+  margin-inline-start: 4px;
+}
+
+.prompt-instructions {
+  padding: 8px 14px;
+  border-top: 1px solid var(--ardentia-borda);
+  color: var(--ardentia-tenue);
+  font-size: 12px;
+}
+
+.prompt-instruction-command {
+  font-family: var(--font-monospace);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ardentia-suave);
+}
+
+/* Aba vazia: as ações falam a língua da paleta de comandos.
+   Linha sem contorno em repouso, acento só quando o mouse chega. */
+.empty-state-action-list {
+  gap: 2px;
+  min-width: min(300px, 80cqi);
+}
+
+.empty-state-action-list > .text-icon-button.mod-pill {
+  box-sizing: border-box;
+  min-height: 34px;
+  padding: 6px 10px;
+  gap: 10px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--ardentia-suave);
+  opacity: 1;
+}
+
+.empty-state-action-list > .text-icon-button.mod-pill .text-button-icon {
+  color: var(--ardentia-tenue);
+}
+
+.empty-state-action-list > .text-icon-button.mod-pill:hover {
+  background-color: var(--ardentia-acento-12);
+  color: var(--ardentia-texto);
+}
+
+.empty-state-action-list > .text-icon-button.mod-pill:hover .text-button-icon {
+  color: var(--ardentia-acento);
+}
+
+.empty-state-hotkey {
+  padding: 1px 6px;
+  border: 1px solid var(--ardentia-borda-forte);
+  border-radius: 5px;
+  background-color: var(--ardentia-abismo);
+  color: var(--ardentia-suave);
+  font-family: var(--font-monospace);
+  font-size: 11px;
+  line-height: 1.45;
+  margin-inline-end: 0;
+}
+
+/* Menus */
+.menu {
+  padding: 6px;
+  background-color: var(--ardentia-nota);
+}
+
+.menu-item {
+  border-radius: 7px;
+  color: var(--ardentia-suave);
+}
+
+.menu-item.selected:not(.is-disabled):not(.is-label),
+.menu-item:hover:not(.is-disabled):not(.is-label) {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-texto);
+}
+
+.menu-item.is-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ardentia-tenue);
+}
+
+.menu-separator {
+  border-bottom-color: var(--ardentia-borda);
+}
+
+.menu-item.is-warning,
+.menu-item.is-warning .menu-item-icon {
+  color: var(--ardentia-coral);
+}
+
+/* Botões: 30 px de altura, raio 8 */
+button:not(.clickable-icon) {
+  border: 1px solid var(--ardentia-borda);
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-texto);
+  font-weight: 500;
+  box-shadow: none;
+}
+
+button:not(.clickable-icon):hover {
+  background-color: var(--ardentia-borda);
+  box-shadow: none;
+}
+
+button.mod-cta {
+  padding-inline: 14px;
+  border-color: transparent;
+  background-color: var(--ardentia-acento);
+  color: var(--ardentia-abismo);
+  font-weight: 600;
+}
+
+button.mod-cta:hover {
+  background-color: var(--ardentia-acento-claro);
+}
+
+button.mod-warning,
+button.mod-destructive {
+  border-color: transparent;
+  background-color: var(--ardentia-coral);
+  color: var(--ardentia-abismo);
+  font-weight: 600;
+}
+
+/* Campos */
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select.dropdown {
+  border-color: var(--ardentia-borda);
+}
+
+.search-input-container input {
+  background-color: var(--ardentia-abismo);
+}
+
+/* Campo em foco: borda de 1 px em acento e anel suave, no lugar do contorno cheio de 3 px */
+:is(textarea, input[type="text"], input[type="search"], input[type="email"], input[type="password"], input[type="number"]):is(:focus, :focus-visible, :active) {
+  box-shadow: 0 0 0 3px var(--ardentia-acento-24);
+}
+
+/* Configurações: a navegação usa o mesmo item ativo das barras laterais */
+.vertical-tab-header {
+  background-color: var(--ardentia-fundo);
+  border-inline-end: 1px solid var(--ardentia-relevo);
+}
+
+.vertical-tab-header-group-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ardentia-tenue);
+}
+
+.vertical-tab-nav-item {
+  box-sizing: border-box;
+  min-height: 28px;
+  align-items: center;
+  border-radius: var(--radius-s);
+  color: var(--ardentia-suave);
+}
+
+/* Título de grupo na fonte de títulos, como na nota */
+.setting-group .setting-item-heading .setting-item-name,
+.modal-title {
+  font-family: var(--ardentia-fonte-titulos);
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+}
+
+/* Link dentro das configurações segue a regra do tema: link é ardentia */
+.setting-item-description a,
+.setting-item-name a {
+  color: var(--ardentia-acento);
+  text-decoration-color: var(--ardentia-acento-45);
+}
+
+.setting-item-description a:hover,
+.setting-item-name a:hover {
+  color: var(--ardentia-acento-claro);
+}
+
+.vertical-tab-nav-item:hover {
+  background-color: var(--ardentia-relevo);
+  color: var(--ardentia-texto);
+}
+
+.vertical-tab-nav-item.is-active .vertical-tab-nav-item-icon {
+  color: var(--ardentia-acento);
+}
+
+.vertical-tab-nav-item.is-active,
+body:not(.is-phone) .vertical-tab-nav-item.is-active,
+body:not(.is-phone) .horizontal-tab-nav-item.is-active {
+  background-color: var(--ardentia-acento-12);
+  color: var(--ardentia-acento);
+  font-weight: 500;
+}
+
+/* Interruptor */
+.checkbox-container {
+  background-color: var(--ardentia-borda);
+}
+
+.checkbox-container.is-enabled {
+  background-color: var(--ardentia-acento);
+}
+
+.checkbox-container.is-enabled::after {
+  background-color: var(--ardentia-abismo);
+}
+
+/* Dica e aviso */
+.tooltip {
+  border: 1px solid var(--ardentia-borda-forte);
+  font-size: 12px;
+}
+
+.tooltip .tooltip-arrow {
+  display: none;
+}
+
+.notice {
+  border-radius: var(--radius-m);
+}
+
+/* Grafo */
+.graph-view.color-fill {
+  color: var(--ardentia-anemona);
+}
+
+.graph-view.color-fill-focused,
+.graph-view.color-fill-highlight,
+.graph-view.color-line-highlight {
+  color: var(--ardentia-acento);
+}
+
+.graph-view.color-fill-tag {
+  color: var(--ardentia-agua-viva);
+}
+
+.graph-view.color-fill-attachment {
+  color: var(--ardentia-lanterna);
+}
+
+.graph-view.color-fill-unresolved {
+  color: var(--ardentia-borda-forte);
+  opacity: 1;
+}
+
+.graph-view.color-line,
+.graph-view.color-arrow {
+  color: var(--ardentia-borda-forte);
+}
+
+.graph-view.color-text {
+  color: var(--ardentia-suave);
+}
+
+.graph-view.color-circle {
+  color: var(--ardentia-acento);
+}
+
+.graph-controls {
+  border: 1px solid var(--ardentia-borda);
+  border-radius: var(--radius-m);
+  background-color: var(--ardentia-relevo);
+}
+
+/* ==========================================================================
+   10. Rolagem, seleção e foco de teclado
+   ========================================================================== */
+
+body.styled-scrollbars ::-webkit-scrollbar-track {
+  border: 3px solid transparent;
+  border-radius: 6px;
+  background-color: var(--scrollbar-bg);
+  background-clip: padding-box;
+}
+
+body.styled-scrollbars ::-webkit-scrollbar-thumb {
+  border-width: 3px;
+  border-radius: 6px;
+  min-height: 40px;
+}
+
+::selection {
+  background-color: var(--ardentia-acento-24);
+}
+
+/* Foco de teclado: anel duplo, abismo por dentro e ardentia por fora */
+:is(button, .clickable-icon, .workspace-tab-header, .tree-item-self, .side-dock-ribbon-action, .suggestion-item, .vertical-tab-nav-item, .menu-item, a.tag):focus-visible {
+  outline: none;
+  box-shadow: var(--ardentia-anel-foco);
+}
+
+.workspace .mod-root .workspace-tab-header:focus-visible {
+  box-shadow: var(--ardentia-anel-foco);
+}
+
+/* ==========================================================================
+   11. Layout contínuo (.ardentia-continuo)
+   A estrutura nativa do Obsidian: painéis colados e divisores de 1 px.
+   ========================================================================== */
+
+body.ardentia-continuo {
+  --header-height: 40px;
+  --ardentia-barra-superior: 40px;
+  --tab-outline-width: 1px;
+  --tab-outline-color: var(--ardentia-borda);
+  --status-bar-radius: 8px 0 0 0;
+  --status-bar-border-width: 1px 0 0 1px;
+}
+
+body.ardentia-continuo .workspace-tab-header-container {
+  border-bottom: 1px solid var(--ardentia-borda);
+}
+
+body.ardentia-continuo .workspace-ribbon {
+  border-inline-end: 1px solid var(--ardentia-borda);
+  padding: 4px 6px;
+}
+
+body.ardentia-continuo .workspace-ribbon.mod-primary::before {
+  border-bottom: 1px solid var(--ardentia-borda);
+}
+
+body.ardentia-continuo .workspace-tab-container {
+  border: 0;
+  border-radius: 0;
+  background-color: var(--ardentia-fundo);
+}
+
+body.ardentia-continuo .mod-root .workspace-tab-container {
+  background-color: var(--ardentia-nota);
+}
+
+body.ardentia-continuo .workspace-split.mod-primary-split {
+  border-inline-end: 1px solid var(--ardentia-borda);
+}
+
+body.ardentia-continuo .workspace-split.mod-secondary-split {
+  border-inline-start: 1px solid var(--ardentia-borda);
+}
+
+body.ardentia-continuo .workspace-split.mod-vertical > .workspace-tabs:not(:last-child) > .workspace-tab-container,
+body.ardentia-continuo .workspace-split.mod-vertical > .workspace-split:not(:last-child) {
+  border-inline-end: 1px solid var(--ardentia-borda);
+}
+
+body.ardentia-continuo .workspace-split.mod-horizontal > .workspace-tabs:not(:first-of-type) > .workspace-tab-header-container {
+  border-top: 1px solid var(--ardentia-borda);
+}
+
+body.ardentia-continuo .workspace-leaf-resize-handle {
+  border-color: transparent;
+}
+
+body.ardentia-continuo .workspace-leaf-resize-handle:hover {
+  background-color: var(--ardentia-acento);
+}
+
+/* Abas com topo arredondado, coladas na nota */
+body.ardentia-continuo .workspace .mod-root .workspace-tab-header-container-inner {
+  align-items: flex-end;
+  padding-inline-start: 8px;
+}
+
+body.ardentia-continuo .workspace .mod-root .workspace-tab-header,
+body.ardentia-continuo .workspace .mod-root .workspace-tab-header-inner {
+  height: 32px;
+  border-radius: 6px 6px 0 0;
+}
+
+body.ardentia-continuo .workspace .mod-root .workspace-tab-header-inner {
+  border-bottom: 0;
+}
+
+body.ardentia-continuo .workspace .mod-root .workspace-tab-header.is-active {
+  margin-bottom: -1px;
+}
+
+body.ardentia-continuo .workspace .mod-root .workspace-tab-header.is-active .workspace-tab-header-inner {
+  height: 33px;
+}
+
+body.ardentia-continuo:not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile {
+  background-color: var(--ardentia-fundo);
+  border-top-color: var(--ardentia-borda);
+}
+
+body.ardentia-continuo .status-bar {
+  box-shadow: none;
+  padding: 4px 12px;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   12. Layout foco (.ardentia-foco)
+   Faixa de ícones, abas, cabeçalho da nota e barra de status apagam até o
+   mouse chegar perto. Com as laterais recolhidas, fica só a coluna de texto.
+   ========================================================================== */
+
+body.ardentia-foco .workspace-ribbon,
+body.ardentia-foco .workspace-tab-header-container,
+body.ardentia-foco .mod-root .view-header,
+body.ardentia-foco .status-bar,
+body.ardentia-foco .titlebar-button-container {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out 0.3s;
+}
+
+body.ardentia-foco .workspace-ribbon:hover,
+body.ardentia-foco .workspace-ribbon:focus-within,
+body.ardentia-foco .workspace-tab-header-container:hover,
+body.ardentia-foco .workspace-tab-header-container:focus-within,
+body.ardentia-foco .mod-root .view-header:hover,
+body.ardentia-foco .mod-root .view-header:focus-within,
+body.ardentia-foco .status-bar:hover,
+body.ardentia-foco .titlebar-button-container:hover,
+body.ardentia-foco .workspace-ribbon:has(.has-active-menu),
+body.ardentia-foco .workspace-tab-header-container:has(.has-active-menu),
+body.ardentia-foco .mod-root .view-header:has(.has-active-menu) {
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+/* Laterais recolhidas: a nota ocupa a janela inteira, sem moldura */
+body.ardentia-foco .app-container:has(.workspace:not(.is-left-sidedock-open):not(.is-right-sidedock-open)) {
+  background-color: var(--ardentia-nota);
+}
+
+body.ardentia-foco .workspace:not(.is-left-sidedock-open):not(.is-right-sidedock-open) .mod-root .workspace-tab-container {
+  border-color: transparent;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+/* ==========================================================================
+   13. Brilho
+   Tudo o que é halo ou esfumaçado passa por --ardentia-brilho:
+   0 desliga, 1 é o desenho original, até 2 para intensificar.
+   A classe .ardentia-sem-brilho no body equivale a 0.
+   ========================================================================== */
+
+body.ardentia-sem-brilho {
+  --ardentia-brilho: 0;
+}
+
+body {
+  --ardentia-halo-forte: color-mix(in srgb, var(--ardentia-acento) min(100%, calc(90% * var(--ardentia-brilho))), transparent);
+  --ardentia-halo: color-mix(in srgb, var(--ardentia-acento) min(100%, calc(80% * var(--ardentia-brilho))), transparent);
+  --ardentia-nevoa-acento: color-mix(in srgb, var(--ardentia-acento) min(100%, calc(10% * var(--ardentia-brilho))), transparent);
+  --ardentia-nevoa-anemona: color-mix(in srgb, var(--ardentia-anemona) min(100%, calc(10% * var(--ardentia-brilho))), transparent);
+}
+
+/* Esfumaçado do abismo: ardentia no alto à direita, anêmona embaixo à esquerda */
+body:not(.ardentia-continuo) .app-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 380px at 78% -8%, var(--ardentia-nevoa-acento), transparent 70%),
+    radial-gradient(700px 420px at 6% 108%, var(--ardentia-nevoa-anemona), transparent 70%);
+}
+
+body.ardentia-foco .app-container:has(.workspace:not(.is-left-sidedock-open):not(.is-right-sidedock-open))::before {
+  display: none;
+}
+
+/* Halo do ponto da aba ativa */
+.workspace .mod-root .mod-active .workspace-tab-header.is-active .workspace-tab-header-inner::before {
+  box-shadow: 0 0 8px var(--ardentia-halo-forte);
+}
+
+/* Halo do cursor, quando o editor desenha o próprio cursor */
+.cm-cursorLayer .cm-cursor,
+.markdown-source-view.mod-cm6 .cm-cursor {
+  border-inline-start: 2px solid var(--ardentia-acento);
+  box-shadow: 0 0 8px var(--ardentia-halo);
+}

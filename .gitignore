@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+
+# estado local do cofre de demonstração
+obsidian/demo/.obsidian/workspace*.json
+obsidian/demo/.obsidian/plugins/
+obsidian/demo/.obsidian/community-plugins.json
+obsidian/demo/.trash/
