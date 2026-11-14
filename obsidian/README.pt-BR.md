@@ -65,6 +65,14 @@ Os avisos de copyright das quatro famílias estão em [`snippets/FONTS.md`](snip
 - Com a janela translúcida ligada, só o abismo deixa o fundo passar. As ilhas continuam opacas.
 - As setas de voltar e avançar ficam sempre visíveis à esquerda do cabeçalho da nota, antes do caminho.
 
+## Desenvolver ao lado do tema publicado
+
+```bash
+./obsidian/install.sh --dev "/caminho/do/cofre"
+```
+
+Com `--dev` a cópia de trabalho é instalada como "Ardentia (Dev)", em pasta própria. Assim ela convive com o Ardentia instalado pelo diretório da comunidade e nunca é sobrescrita por uma atualização. Escolha uma das duas em Configurações, Aparência, Temas.
+
 ## Publicação
 
 Uma tag no formato `x.y.z`, igual à `version` do `manifest.json` da raiz, dispara [o workflow de release](../.github/workflows/release-obsidian.yml), que anexa `manifest.json` e `theme.css` a um release do GitHub. O Obsidian baixa o tema desse release. Tags de outros aplicativos levam prefixo, como `zed-1.0.0`.

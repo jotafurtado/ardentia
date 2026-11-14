@@ -65,6 +65,14 @@ Copyright notices for the four families are in [`snippets/FONTS.md`](snippets/FO
 - With the translucent window on, only the abyss lets the desktop through. The islands stay opaque.
 - The back and forward arrows stay visible at the left of the note header, before the breadcrumb.
 
+## Developing next to the published theme
+
+```bash
+./obsidian/install.sh --dev "/path/to/your/vault"
+```
+
+With `--dev` the working copy is installed as "Ardentia (Dev)", in its own folder, so it sits next to the Ardentia installed from the community directory and is never overwritten by an update. Pick either one in Settings, Appearance, Themes.
+
 ## Releasing
 
 A tag in the form `x.y.z` that matches `version` in the root `manifest.json` triggers [the release workflow](../.github/workflows/release-obsidian.yml), which attaches `manifest.json` and `theme.css` to a GitHub release. Obsidian downloads the theme from that release. Tags for other apps carry a prefix, such as `zed-1.0.0`.
