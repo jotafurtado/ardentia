@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" alt="Ardentia. O brilho que o mar acende à noite, quando o plâncton se agita." width="100%">
+  <img src="assets/banner.pt-BR.png" alt="Ardentia. O brilho que o mar acende à noite, quando o plâncton se agita." width="100%">
 </p>
 
 <p align="center">
@@ -22,7 +22,7 @@ Ardentia é o brilho que o mar acende à noite, quando o plâncton se agita na �
 
 ## Obsidian
 
-![Ardentia no Obsidian, layout em ilhas](obsidian/screenshots/ilhas.png)
+![Ardentia no Obsidian, layout em ilhas](obsidian/screenshots/islands.pt-BR.png)
 
 Tema escuro para o Obsidian 1.6 ou mais novo. Não é uma troca de cores: painéis, abas, barra de status, propriedades, callouts, blocos de código, menus e a janela de configurações foram redesenhados.
 
@@ -62,7 +62,7 @@ Uma classe no `body` troca a estrutura inteira. As cores não mudam.
 
 | Contínuo | Foco |
 | --- | --- |
-| ![Layout contínuo](obsidian/screenshots/continuo.png) | ![Layout foco](obsidian/screenshots/foco.png) |
+| ![Layout contínuo](obsidian/screenshots/continuous.pt-BR.png) | ![Layout foco](obsidian/screenshots/focus.pt-BR.png) |
 
 O Obsidian não tem controle nativo para classes do `body`. Com o plugin [Style Settings](https://github.com/mgmeyers/obsidian-style-settings) instalado, a seção Ardentia traz o seletor de layout, o brilho, o respiro entre as ilhas e o raio dos cantos.
 
@@ -70,7 +70,7 @@ O Obsidian não tem controle nativo para classes do `body`. Com o plugin [Style 
 
 Tudo o que é halo ou esfumaçado passa por uma variável só, `--ardentia-brilho`: `0` desliga, `1` é o desenho original, `2` dobra. Ela controla o esfumaçado do abismo (ardentia no alto à direita, anêmona embaixo à esquerda), o halo do ponto de luz da aba ativa e o halo do cursor, quando o editor desenha o próprio cursor.
 
-![Brilho em 0, 1 e 2](obsidian/screenshots/brilho-0-1-2.png)
+![Brilho em 0, 1 e 2](obsidian/screenshots/glow-0-1-2.pt-BR.png)
 
 Para comparar sem plugin, ative um dos snippets de [`obsidian/snippets/`](obsidian/snippets/): `ardentia-sem-brilho` deixa em 0, `ardentia-brilho-forte` em 2.
 
@@ -107,7 +107,7 @@ Variáveis, medidas, o cofre de demonstração e as notas de implementação est
 
 O mar à noite: seis profundidades, três níveis de texto e oito luzes. Os contrastes foram medidos sobre o fundo da nota.
 
-![Paleta do Ardentia](assets/palette.png)
+![Paleta do Ardentia](assets/palette.pt-BR.png)
 
 <details>
 <summary>Valores em hexadecimal, prontos para copiar</summary>
@@ -144,7 +144,7 @@ O mar à noite: seis profundidades, três níveis de texto e oito luzes. Os cont
 
 Quatro famílias livres, todas sob a licença SIL Open Font e disponíveis no Google Fonts. Cada uma tem um trabalho só.
 
-![Tipografia do Ardentia](assets/typography.png)
+![Tipografia do Ardentia](assets/typography.pt-BR.png)
 
 ## Princípios
 

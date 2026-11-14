@@ -11,7 +11,7 @@ Reference for the Obsidian port. For the overview, screenshots and install steps
 | `theme.css` | The theme. Thirteen sections, from palette to glow, with a Style Settings block at the top |
 | `snippets/` | Optional CSS snippets: glow off, glow doubled and the embedded fonts |
 | `screenshots/` | Images used by the README and by the community directory |
-| `demo/` | A demo vault with one note per design board |
+| `demo-en/`, `demo/` | Demo vaults with one note per design board, in English and in Portuguese |
 | `scripts/` | The script that rebuilds the font snippet |
 | `install.sh` | Copies the theme and the snippets into a vault |
 
@@ -53,9 +53,9 @@ Copyright notices for the four families are in [`snippets/FONTS.md`](snippets/FO
 
 `--ardentia-brilho` goes from `0` to `2`, with `1` as the original drawing. Two limits come from Obsidian itself: the regular editor cursor is the browser's native caret, which takes a color but not a shadow, and the graph is drawn on a canvas, which takes no CSS halo either.
 
-## Demo vault
+## Demo vaults
 
-`demo/` is a vault with the notes from the design boards (Ardentia, Paleta, Tipografia, Layout, Elementos) and the theme wired in through symbolic links. Open the folder as a vault to see every element and to edit `theme.css` with immediate results. The notes are in Portuguese. On Windows, clone with symlinks enabled or use `install.sh` instead.
+`demo-en/` is a vault with the notes from the design boards (Ardentia, Palette, Typography, Layout, Elements) and the theme wired in through symbolic links. Open the folder as a vault to see every element and to edit `theme.css` with immediate results. `demo/` is the same vault in Portuguese. On Windows, clone with symlinks enabled or use `install.sh` instead.
 
 ## Implementation notes
 

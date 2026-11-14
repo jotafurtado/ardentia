@@ -11,7 +11,7 @@ Referência da versão para o Obsidian. A visão geral, as capturas e a instala�
 | `theme.css` | O tema. Treze seções, da paleta ao brilho, com o bloco do Style Settings no topo |
 | `snippets/` | Snippets CSS opcionais: sem brilho, brilho dobrado e as fontes embutidas |
 | `screenshots/` | Imagens usadas pelo README e pelo diretório da comunidade |
-| `demo/` | Cofre de demonstração com uma nota para cada quadro do design |
+| `demo/`, `demo-en/` | Cofres de demonstração com uma nota para cada quadro do design, em português e em inglês |
 | `scripts/` | O script que gera o snippet de fontes |
 | `install.sh` | Copia o tema e os snippets para um cofre |
 
@@ -53,9 +53,9 @@ Os avisos de copyright das quatro famílias estão em [`snippets/FONTS.md`](snip
 
 `--ardentia-brilho` vai de `0` a `2`, com `1` como o desenho original. Dois limites vêm do próprio Obsidian: o cursor comum do editor é o nativo do navegador e aceita cor, mas não sombra, e o grafo é desenhado em canvas e também não aceita halo por CSS.
 
-## Cofre de demonstração
+## Cofres de demonstração
 
-`demo/` é um cofre com as notas dos quadros do design (Ardentia, Paleta, Tipografia, Layout, Elementos) e o tema ligado por links simbólicos. Abra a pasta como cofre para ver cada elemento e editar o `theme.css` com resultado imediato. No Windows, clone com links simbólicos habilitados ou use o `install.sh`.
+`demo/` é um cofre com as notas dos quadros do design (Ardentia, Paleta, Tipografia, Layout, Elementos) e o tema ligado por links simbólicos. Abra a pasta como cofre para ver cada elemento e editar o `theme.css` com resultado imediato. `demo-en/` é o mesmo cofre em inglês. No Windows, clone com links simbólicos habilitados ou use o `install.sh`.
 
 ## Notas de implementação
 

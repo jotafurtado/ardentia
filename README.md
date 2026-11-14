@@ -22,7 +22,7 @@ It is one palette, four typefaces and a handful of shapes, ported app by app.
 
 ## Obsidian
 
-![Ardentia in Obsidian, islands layout](obsidian/screenshots/ilhas.png)
+![Ardentia in Obsidian, islands layout](obsidian/screenshots/islands.png)
 
 A dark theme for Obsidian 1.6 and later. It is not a recolor: panels, tabs, the status bar, properties, callouts, code blocks, menus and the settings window were all redrawn.
 
@@ -62,7 +62,7 @@ One class on `body` swaps the whole structure. The colors stay.
 
 | Contínuo | Foco |
 | --- | --- |
-| ![Continuous layout](obsidian/screenshots/continuo.png) | ![Focus layout](obsidian/screenshots/foco.png) |
+| ![Continuous layout](obsidian/screenshots/continuous.png) | ![Focus layout](obsidian/screenshots/focus.png) |
 
 Obsidian has no built-in control for `body` classes. With the [Style Settings](https://github.com/mgmeyers/obsidian-style-settings) plugin installed, an Ardentia section offers the layout selector along with the glow, the gap between islands and their corner radius.
 
@@ -70,7 +70,7 @@ Obsidian has no built-in control for `body` classes. With the [Style Settings](h
 
 Every halo and every haze goes through one variable, `--ardentia-brilho`: `0` turns it off, `1` is the original drawing, `2` doubles it. It drives the haze over the abyss (teal at the top right, violet at the bottom left), the halo of the active tab's light and the halo of the cursor when the editor draws its own.
 
-![Glow at 0, 1 and 2](obsidian/screenshots/brilho-0-1-2.png)
+![Glow at 0, 1 and 2](obsidian/screenshots/glow-0-1-2.png)
 
 To compare without a plugin, enable one of the snippets in [`obsidian/snippets/`](obsidian/snippets/): `ardentia-sem-brilho` sets it to 0, `ardentia-brilho-forte` to 2.
 
@@ -121,11 +121,11 @@ The sea at night: six depths, three levels of text and eight lights. Contrast ra
 | Borda | `#272D52` | border | dividers, outlines |
 | Borda forte | `#3A4273` | strong border | modals, checkboxes |
 
-| Text | Hex | Contrast | Use |
-| --- | --- | --- | --- |
-| Texto | `#DDE2FA` | 13.3:1 | reading for hours |
-| Suave | `#A8B0DB` | 8.1:1 | the interface |
-| Tênue | `#8791C2` | 5.6:1 | what can wait |
+| Text | Hex | Meaning | Contrast | Use |
+| --- | --- | --- | --- | --- |
+| Texto | `#DDE2FA` | text | 13.3:1 | hours of reading |
+| Suave | `#A8B0DB` | soft | 8.1:1 | the interface |
+| Tênue | `#8791C2` | faint | 5.6:1 | what can wait |
 
 | Light | Hex | Meaning | Contrast | Use |
 | --- | --- | --- | --- | --- |
