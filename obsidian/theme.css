@@ -1538,7 +1538,7 @@ body:not(.ardentia-continuo) .mod-left-split > .workspace-tabs:last-child > .wor
    7. Cabeçalho e propriedades da nota
    ========================================================================== */
 
-.workspace-split.mod-root .view-header {
+:where(body:not(.is-mobile)) .workspace-split.mod-root .view-header {
   flex: 0 0 auto;
   height: var(--ardentia-cabecalho-nota);
   padding: 0 14px;
@@ -1548,7 +1548,7 @@ body:not(.ardentia-continuo) .mod-left-split > .workspace-tabs:last-child > .wor
 }
 
 /* Voltar e avançar sempre à vista, à esquerda da trilha de pastas */
-.mod-root .view-header-left {
+:where(body:not(.is-mobile)) .mod-root .view-header-left {
   order: 0;
   margin-inline-start: -6px;
 }
@@ -1571,7 +1571,7 @@ body:not(.ardentia-continuo) .mod-left-split > .workspace-tabs:last-child > .wor
   gap: 0;
 }
 
-.mod-root .view-actions {
+:where(body:not(.is-mobile)) .mod-root .view-actions {
   order: 3;
   gap: 4px;
   padding: 0;
@@ -1580,8 +1580,8 @@ body:not(.ardentia-continuo) .mod-left-split > .workspace-tabs:last-child > .wor
   backdrop-filter: none;
 }
 
-.mod-root .view-actions::before,
-.mod-root .view-actions::after {
+:where(body:not(.is-mobile)) .mod-root .view-actions::before,
+:where(body:not(.is-mobile)) .mod-root .view-actions::after {
   display: none;
 }
 
@@ -1615,7 +1615,7 @@ body:not(.ardentia-continuo) .mod-left-split > .workspace-tabs:last-child > .wor
   color: var(--ardentia-texto);
 }
 
-.view-header .clickable-icon {
+:where(body:not(.is-mobile)) .view-header .clickable-icon {
   box-sizing: border-box;
   width: 28px;
   height: 28px;
@@ -1731,9 +1731,11 @@ input.metadata-property-key-input {
   align-items: center;
 }
 
-/* Data em monoespaçada; o seletor de calendário vai para depois do valor */
-.metadata-property-value input.mod-date,
-.metadata-property-value input.mod-datetime {
+/* Data em monoespaçada; o seletor de calendário vai para depois do valor.
+   O seletor é longo de propósito: fora do iOS e do Android o Obsidian reserva
+   24 px à esquerda para o ícone, com uma regra que só perde para esta. */
+.metadata-container .metadata-property .metadata-property-value input.metadata-input.mod-date,
+.metadata-container .metadata-property .metadata-property-value input.metadata-input.mod-datetime {
   padding-inline: 0 24px;
   font-family: var(--font-monospace);
   font-size: 12.5px;
@@ -2477,7 +2479,7 @@ li[data-task="-"] > p > input[type="checkbox"]::after {
   box-shadow: var(--ardentia-sombra-modal);
 }
 
-.modal {
+:where(body:not(.is-mobile)) .modal {
   border-radius: var(--ardentia-raio);
 }
 
@@ -2498,14 +2500,14 @@ li[data-task="-"] > p > input[type="checkbox"]::after {
   overflow: hidden;
 }
 
-.prompt-input-container {
+:where(body:not(.is-mobile)) .prompt-input-container {
   position: relative;
   box-sizing: border-box;
   height: 44px;
   border-bottom: 1px solid var(--ardentia-borda);
 }
 
-.prompt-input-container::before {
+:where(body:not(.is-mobile)) .prompt-input-container::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -2519,7 +2521,7 @@ li[data-task="-"] > p > input[type="checkbox"]::after {
   pointer-events: none;
 }
 
-input.prompt-input {
+:where(body:not(.is-mobile)) input.prompt-input {
   height: 44px;
   padding: 0 44px 0 39px;
   border: 0;
@@ -2529,9 +2531,9 @@ input.prompt-input {
   caret-color: var(--ardentia-acento);
 }
 
-input.prompt-input:focus,
-input.prompt-input:hover,
-input.prompt-input:active {
+:where(body:not(.is-mobile)) input.prompt-input:focus,
+:where(body:not(.is-mobile)) input.prompt-input:hover,
+:where(body:not(.is-mobile)) input.prompt-input:active {
   border: 0;
   box-shadow: none;
 }
@@ -3011,54 +3013,54 @@ body.ardentia-continuo .status-bar {
    cabeçalho da nota e barra de status ficam invisíveis até o mouse chegar perto.
    ========================================================================== */
 
-body.ardentia-foco .workspace-split.mod-sidedock,
-body.ardentia-foco .workspace-ribbon,
-body.ardentia-foco .sidebar-toggle-button {
+body.ardentia-foco:not(.is-mobile) .workspace-split.mod-sidedock,
+body.ardentia-foco:not(.is-mobile) .workspace-ribbon,
+body.ardentia-foco:not(.is-mobile) .sidebar-toggle-button {
   display: none;
 }
 
 /* Sem a faixa de ícones, os botões da janela precisam do espaço inteiro */
-body.ardentia-foco {
+body.ardentia-foco:not(.is-mobile) {
   --frame-ribbon-left: 0px;
   --frame-ribbon-right: 0px;
 }
 
 /* O Obsidian só reserva esse espaço no grupo de abas que ele sabe estar no canto.
    Com as laterais escondidas por CSS, o canto passa a ser a área das notas. */
-body.ardentia-foco.is-hidden-frameless:not(.is-fullscreen) .mod-root > .workspace-tabs.mod-top:not(.workspace-tabs ~ .workspace-tabs) > .workspace-tab-header-container {
+body.ardentia-foco:not(.is-mobile).is-hidden-frameless:not(.is-fullscreen) .mod-root > .workspace-tabs.mod-top:not(.workspace-tabs ~ .workspace-tabs) > .workspace-tab-header-container {
   padding-left: calc(var(--size-4-2) + var(--frame-left-space));
 }
 
-body.ardentia-foco.is-hidden-frameless:not(.is-fullscreen) .mod-root > .workspace-tabs.mod-top:not(:has(~ .workspace-tabs)) > .workspace-tab-header-container {
+body.ardentia-foco:not(.is-mobile).is-hidden-frameless:not(.is-fullscreen) .mod-root > .workspace-tabs.mod-top:not(:has(~ .workspace-tabs)) > .workspace-tab-header-container {
   padding-right: calc(var(--size-4-2) + var(--frame-right-space));
 }
 
-body.ardentia-foco .workspace-tab-header-container,
-body.ardentia-foco .mod-root .view-header,
-body.ardentia-foco .status-bar,
-body.ardentia-foco .titlebar-button-container {
+body.ardentia-foco:not(.is-mobile) .workspace-tab-header-container,
+body.ardentia-foco:not(.is-mobile) .mod-root .view-header,
+body.ardentia-foco:not(.is-mobile) .status-bar,
+body.ardentia-foco:not(.is-mobile) .titlebar-button-container {
   opacity: 0;
   transition: opacity 0.2s ease-in-out 0.3s;
 }
 
-body.ardentia-foco .workspace-tab-header-container:hover,
-body.ardentia-foco .workspace-tab-header-container:focus-within,
-body.ardentia-foco .mod-root .view-header:hover,
-body.ardentia-foco .mod-root .view-header:focus-within,
-body.ardentia-foco .status-bar:hover,
-body.ardentia-foco .titlebar-button-container:hover,
-body.ardentia-foco .workspace-tab-header-container:has(.has-active-menu),
-body.ardentia-foco .mod-root .view-header:has(.has-active-menu) {
+body.ardentia-foco:not(.is-mobile) .workspace-tab-header-container:hover,
+body.ardentia-foco:not(.is-mobile) .workspace-tab-header-container:focus-within,
+body.ardentia-foco:not(.is-mobile) .mod-root .view-header:hover,
+body.ardentia-foco:not(.is-mobile) .mod-root .view-header:focus-within,
+body.ardentia-foco:not(.is-mobile) .status-bar:hover,
+body.ardentia-foco:not(.is-mobile) .titlebar-button-container:hover,
+body.ardentia-foco:not(.is-mobile) .workspace-tab-header-container:has(.has-active-menu),
+body.ardentia-foco:not(.is-mobile) .mod-root .view-header:has(.has-active-menu) {
   opacity: 1;
   transition-delay: 0s;
 }
 
 /* A nota ocupa a janela inteira, sem moldura de ilha */
-body.ardentia-foco .app-container {
+body.ardentia-foco:not(.is-mobile) .app-container {
   background-color: var(--ardentia-nota);
 }
 
-body.ardentia-foco .mod-root .workspace-tab-container {
+body.ardentia-foco:not(.is-mobile) .mod-root .workspace-tab-container {
   border-color: transparent;
   box-shadow: none;
   background-color: transparent;
@@ -3108,4 +3110,110 @@ body.ardentia-foco .app-container:has(.workspace:not(.is-left-sidedock-open):not
 .markdown-source-view.mod-cm6 .cm-cursor {
   border-inline-start: 2px solid var(--ardentia-acento);
   box-shadow: 0 0 8px var(--ardentia-halo);
+}
+
+/* ==========================================================================
+   14. Celular e tablet
+   No toque não existe hover e a tela é pequena: a estrutura volta a ser a
+   nativa do Obsidian (cabeçalho flutuante, gavetas, folhas) e o tema entra
+   com cores, tipografia e os elementos da nota. Os layouts em ilhas e foco
+   são coisa do desktop.
+   ========================================================================== */
+
+/* O Obsidian troca a base por preto e cinza no celular e mistura branco nas
+   superfícies secundárias. Aqui elas voltam para as profundidades do tema. */
+.is-mobile.theme-dark,
+.is-mobile.theme-light {
+  --color-base-00: var(--ardentia-nota);
+  --color-base-10: var(--ardentia-relevo);
+  --color-base-20: var(--ardentia-fundo);
+  --color-base-100: var(--ardentia-texto);
+  --color-secondary-2: var(--ardentia-nota);
+  --color-secondary-3: var(--ardentia-borda);
+  --color-secondary-4: var(--ardentia-relevo);
+  --color-secondary-5: var(--ardentia-borda);
+  --color-secondary-6: var(--ardentia-borda-forte);
+}
+
+body.is-mobile {
+  /* Margens da nota e forma dos botões: as do sistema, pensadas para o dedo */
+  --file-margins: var(--file-margins-y) var(--file-margins-x);
+  --button-radius: var(--input-radius);
+}
+
+/* Sem moldura de ilha: a nota vai de borda a borda */
+body.is-mobile .workspace,
+body.is-mobile:not(.show-ribbon) .workspace {
+  padding: 0;
+}
+
+body.is-mobile .workspace .workspace-tabs {
+  overflow: hidden;
+}
+
+body.is-mobile .workspace .workspace-split .workspace-tab-container {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body.is-mobile .workspace-split.mod-vertical > :not(:last-child):not(hr),
+body.is-mobile .workspace-split.mod-horizontal > .workspace-tabs:not(:last-child),
+body.is-mobile .workspace-split.mod-horizontal > .workspace-split:not(:last-child) {
+  padding: 0;
+}
+
+/* O esfumaçado ficaria escondido atrás da nota */
+body.is-phone .app-container::before {
+  display: none;
+}
+
+/* Propriedades: a mesma faixa entre duas linhas do desktop, sem o cartão que
+   o Obsidian desenha no celular, e com linhas na altura do dedo */
+body.is-mobile .metadata-content {
+  width: 100%;
+  padding: 4px 0;
+  border-radius: 0;
+  background-color: transparent;
+  transform: none;
+}
+
+body.is-mobile .metadata-property,
+body.is-mobile .metadata-property-key,
+body.is-mobile .metadata-property-value,
+body.is-mobile .metadata-property-value .multi-select-container {
+  min-height: 34px;
+}
+
+body.is-mobile input.metadata-property-key-input {
+  height: 34px;
+}
+
+body.is-mobile .metadata-property-icon {
+  top: 7px;
+}
+
+/* Sem hover, o que o desktop esconde em repouso precisa estar à mão */
+body.is-mobile .metadata-property-value > .clickable-icon,
+body.is-mobile .metadata-property-value input.mod-date::-webkit-calendar-picker-indicator,
+body.is-mobile .metadata-property-value input.mod-datetime::-webkit-calendar-picker-indicator {
+  opacity: 0.6;
+}
+
+body.is-mobile .metadata-container .metadata-add-button {
+  max-height: 34px;
+  margin-top: 2px;
+  padding-block: 6px;
+  opacity: 1;
+}
+
+/* Botões seguem os campos do sistema: cápsula, sem contorno */
+body.is-mobile button:not(.clickable-icon) {
+  border-width: 0;
+}
+
+/* Listas de sugestão com alvo de toque maior */
+body.is-mobile .suggestion-item {
+  min-height: 40px;
+  padding: 8px 12px;
 }

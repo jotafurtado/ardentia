@@ -57,6 +57,15 @@ Os avisos de copyright das quatro famílias estão em [`snippets/FONTS.md`](snip
 
 `demo/` é um cofre com as notas dos quadros do design (Ardentia, Paleta, Tipografia, Layout, Elementos) e o tema ligado por links simbólicos. Abra a pasta como cofre para ver cada elemento e editar o `theme.css` com resultado imediato. `demo-en/` é o mesmo cofre em inglês. No Windows, clone com links simbólicos habilitados ou use o `install.sh`.
 
+## Celular e tablet
+
+No aplicativo móvel o tema mantém a estrutura nativa do Obsidian (cabeçalho flutuante, gavetas laterais, folhas que sobem de baixo) e entra com as cores, a tipografia e os elementos da nota. Não há ilhas nem foco: a nota vai de borda a borda, e a classe `.ardentia-foco` é ignorada, porque sem mouse o cabeçalho nunca voltaria.
+
+- As propriedades continuam como faixa entre duas linhas, sem o cartão que o Obsidian desenha no celular, e as linhas ganham 34 px de altura para o dedo.
+- "Adicionar propriedade", o seletor de data e os botões de cada valor ficam sempre visíveis, já que não existe hover.
+- As superfícies que o Obsidian mistura com branco no celular (menus, barra de navegação, grupos das configurações) voltam para as profundidades da paleta.
+- Margens da nota, altura do cabeçalho, campos e botões seguem as medidas de toque do sistema.
+
 ## Notas de implementação
 
 - Os rótulos das barras laterais ("Cofre", "Sumário", "Grafo local") vêm de variáveis `--ardentia-rotulo-*`, em português quando o Obsidian está em português e em inglês nos demais idiomas. O Obsidian não expõe o nome da vista dentro do painel.

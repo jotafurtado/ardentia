@@ -57,6 +57,15 @@ Copyright notices for the four families are in [`snippets/FONTS.md`](snippets/FO
 
 `demo-en/` is a vault with the notes from the design boards (Ardentia, Palette, Typography, Layout, Elements) and the theme wired in through symbolic links. Open the folder as a vault to see every element and to edit `theme.css` with immediate results. `demo/` is the same vault in Portuguese. On Windows, clone with symlinks enabled or use `install.sh` instead.
 
+## Phone and tablet
+
+On the mobile app the theme keeps Obsidian's native structure (floating header, side drawers, sheets that rise from the bottom) and brings the colors, the typography and the note elements. There are no islands and no focus layout: the note runs edge to edge, and the `.ardentia-foco` class is ignored, because without a mouse the header would never come back.
+
+- Properties stay as a strip between two lines, without the card Obsidian draws on phones, and rows grow to 34 px for the finger.
+- "Add property", the date picker and the buttons of each value are always visible, since there is no hover.
+- The surfaces Obsidian mixes with white on mobile (menus, navigation bar, settings groups) go back to the depths of the palette.
+- Note margins, header height, fields and buttons follow the system's touch measurements.
+
 ## Implementation notes
 
 - The sidebar labels ("Cofre", "Sumário", "Grafo local") come from `--ardentia-rotulo-*` variables, in Portuguese when Obsidian is in Portuguese and in English otherwise. Obsidian does not expose the view name inside the panel.
