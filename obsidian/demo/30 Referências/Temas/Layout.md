@@ -14,4 +14,4 @@ A estrutura nativa do Obsidian, painéis colados e divisores de 1 px.
 
 ## Foco
 
-Faixa de ícones, abas, cabeçalho da nota e barra de status apagam até o mouse chegar perto.
+Só a nota. Barras laterais e faixa de ícones saem da tela; abas, cabeçalho da nota e barra de status ficam invisíveis até o mouse chegar perto.

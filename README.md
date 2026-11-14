@@ -26,7 +26,7 @@ It is one palette, four typefaces and a handful of shapes, ported app by app.
 
 A dark theme for Obsidian 1.6 and later. It is not a recolor: panels, tabs, the status bar, properties, callouts, code blocks, menus and the settings window were all redrawn.
 
-- **Three layouts over the same colors.** Floating islands by default, a continuous layout for those who prefer everything joined, and a focus layout that dims the chrome until the mouse gets near.
+- **Three layouts over the same colors.** Floating islands by default, a continuous layout for those who prefer everything joined, and a focus layout that leaves only the note on screen.
 - **A heading spectrum.** Each heading level steps one color down, from Água-viva pink at H1 to Lanterna yellow at H6.
 - **One typeface per job.** Bricolage Grotesque for headings, Atkinson Hyperlegible Next for reading, Geist for the interface, Cascadia Code for code.
 - **Glow on a single dial.** Every halo in the theme answers to one variable, from off to double.
@@ -58,7 +58,7 @@ One class on `body` swaps the whole structure. The colors stay.
 | --- | --- | --- |
 | Ilhas (islands) | default, no class | Rounded panels floating over the abyss, pill tabs, status bar in a capsule |
 | Contínuo (continuous) | `.ardentia-continuo` | Obsidian's native structure, panels joined, 1 px dividers |
-| Foco (focus) | `.ardentia-foco` | Ribbon, tabs, note header and status bar fade out until the mouse comes close |
+| Foco (focus) | `.ardentia-foco` | Only the note. Sidebars and ribbon leave the screen; tabs, note header and status bar stay invisible until the mouse comes close |
 
 | Contínuo | Foco |
 | --- | --- |

@@ -2875,6 +2875,12 @@ body:not(.is-phone) .horizontal-tab-nav-item.is-active {
    10. Rolagem, seleção e foco de teclado
    ========================================================================== */
 
+/* No macOS a barra é a nativa do sistema e recebe só duas cores. A trilha fica
+   transparente, como no padrão do Obsidian, senão vira uma faixa sólida. */
+body:not(.styled-scrollbars) {
+  --scrollbar-bg: transparent;
+}
+
 body.styled-scrollbars ::-webkit-scrollbar-track {
   border: 3px solid transparent;
   border-radius: 6px;
@@ -3001,11 +3007,32 @@ body.ardentia-continuo .status-bar {
 
 /* ==========================================================================
    12. Layout foco (.ardentia-foco)
-   Faixa de ícones, abas, cabeçalho da nota e barra de status apagam até o
-   mouse chegar perto. Com as laterais recolhidas, fica só a coluna de texto.
+   Só a nota. As barras laterais e a faixa de ícones saem da tela; abas,
+   cabeçalho da nota e barra de status ficam invisíveis até o mouse chegar perto.
    ========================================================================== */
 
+body.ardentia-foco .workspace-split.mod-sidedock,
 body.ardentia-foco .workspace-ribbon,
+body.ardentia-foco .sidebar-toggle-button {
+  display: none;
+}
+
+/* Sem a faixa de ícones, os botões da janela precisam do espaço inteiro */
+body.ardentia-foco {
+  --frame-ribbon-left: 0px;
+  --frame-ribbon-right: 0px;
+}
+
+/* O Obsidian só reserva esse espaço no grupo de abas que ele sabe estar no canto.
+   Com as laterais escondidas por CSS, o canto passa a ser a área das notas. */
+body.ardentia-foco.is-hidden-frameless:not(.is-fullscreen) .mod-root > .workspace-tabs.mod-top:not(.workspace-tabs ~ .workspace-tabs) > .workspace-tab-header-container {
+  padding-left: calc(var(--size-4-2) + var(--frame-left-space));
+}
+
+body.ardentia-foco.is-hidden-frameless:not(.is-fullscreen) .mod-root > .workspace-tabs.mod-top:not(:has(~ .workspace-tabs)) > .workspace-tab-header-container {
+  padding-right: calc(var(--size-4-2) + var(--frame-right-space));
+}
+
 body.ardentia-foco .workspace-tab-header-container,
 body.ardentia-foco .mod-root .view-header,
 body.ardentia-foco .status-bar,
@@ -3014,27 +3041,24 @@ body.ardentia-foco .titlebar-button-container {
   transition: opacity 0.2s ease-in-out 0.3s;
 }
 
-body.ardentia-foco .workspace-ribbon:hover,
-body.ardentia-foco .workspace-ribbon:focus-within,
 body.ardentia-foco .workspace-tab-header-container:hover,
 body.ardentia-foco .workspace-tab-header-container:focus-within,
 body.ardentia-foco .mod-root .view-header:hover,
 body.ardentia-foco .mod-root .view-header:focus-within,
 body.ardentia-foco .status-bar:hover,
 body.ardentia-foco .titlebar-button-container:hover,
-body.ardentia-foco .workspace-ribbon:has(.has-active-menu),
 body.ardentia-foco .workspace-tab-header-container:has(.has-active-menu),
 body.ardentia-foco .mod-root .view-header:has(.has-active-menu) {
   opacity: 1;
   transition-delay: 0s;
 }
 
-/* Laterais recolhidas: a nota ocupa a janela inteira, sem moldura */
-body.ardentia-foco .app-container:has(.workspace:not(.is-left-sidedock-open):not(.is-right-sidedock-open)) {
+/* A nota ocupa a janela inteira, sem moldura de ilha */
+body.ardentia-foco .app-container {
   background-color: var(--ardentia-nota);
 }
 
-body.ardentia-foco .workspace:not(.is-left-sidedock-open):not(.is-right-sidedock-open) .mod-root .workspace-tab-container {
+body.ardentia-foco .mod-root .workspace-tab-container {
   border-color: transparent;
   box-shadow: none;
   background-color: transparent;

@@ -26,7 +26,7 @@ Ardentia é o brilho que o mar acende à noite, quando o plâncton se agita na �
 
 Tema escuro para o Obsidian 1.6 ou mais novo. Não é uma troca de cores: painéis, abas, barra de status, propriedades, callouts, blocos de código, menus e a janela de configurações foram redesenhados.
 
-- **Três layouts sobre as mesmas cores.** Ilhas flutuantes por padrão, um layout contínuo para quem prefere tudo colado e um layout de foco, que apaga a moldura até o mouse chegar perto.
+- **Três layouts sobre as mesmas cores.** Ilhas flutuantes por padrão, um layout contínuo para quem prefere tudo colado e um layout de foco, que deixa só a nota na tela.
 - **Um espectro de títulos.** Cada nível de título desce uma cor, do rosa Água-viva no H1 ao amarelo Lanterna no H6.
 - **Uma fonte para cada trabalho.** Bricolage Grotesque nos títulos, Atkinson Hyperlegible Next na leitura, Geist na interface, Cascadia Code no código.
 - **Brilho em um controle só.** Todo halo do tema responde a uma variável, de desligado a dobrado.
@@ -58,7 +58,7 @@ Uma classe no `body` troca a estrutura inteira. As cores não mudam.
 | --- | --- | --- |
 | Ilhas | padrão, sem classe | Painéis arredondados sobre o abismo, abas em pílula, barra de status em cápsula |
 | Contínuo | `.ardentia-continuo` | Estrutura nativa do Obsidian, painéis colados e divisores de 1 px |
-| Foco | `.ardentia-foco` | Faixa de ícones, abas, cabeçalho da nota e barra de status apagam até o mouse chegar perto |
+| Foco | `.ardentia-foco` | Só a nota. Barras laterais e faixa de ícones saem da tela; abas, cabeçalho da nota e barra de status ficam invisíveis até o mouse chegar perto |
 
 | Contínuo | Foco |
 | --- | --- |

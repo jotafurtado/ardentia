@@ -14,4 +14,4 @@ Obsidian's native structure, panels joined and 1 px dividers.
 
 ## Focus
 
-Ribbon, tabs, note header and status bar fade out until the mouse comes close.
+Only the note. Sidebars and ribbon leave the screen; tabs, note header and status bar stay invisible until the mouse comes close.
