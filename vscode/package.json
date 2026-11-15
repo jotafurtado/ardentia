@@ -1,0 +1,43 @@
+{
+  "name": "ardentia",
+  "displayName": "Ardentia",
+  "description": "A dark color theme after the glow the sea lights at night: an abyss for a background and color only where there is signal.",
+  "version": "1.0.0",
+  "publisher": "jotafurtado",
+  "author": {
+    "name": "Jota Furtado"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "ardentia",
+    "theme",
+    "color theme",
+    "dark theme",
+    "dark",
+    "bioluminescence"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jotafurtado/ardentia.git",
+    "directory": "vscode"
+  },
+  "homepage": "https://github.com/jotafurtado/ardentia/tree/main/vscode#readme",
+  "bugs": {
+    "url": "https://github.com/jotafurtado/ardentia/issues"
+  },
+  "contributes": {
+    "themes": [
+      {
+        "label": "Ardentia",
+        "uiTheme": "vs-dark",
+        "path": "./themes/ardentia-color-theme.json"
+      }
+    ]
+  }
+}
