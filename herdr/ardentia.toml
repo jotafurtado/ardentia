@@ -1,0 +1,48 @@
+# Ardentia para o herdr de terminal, versão 1.0.0
+# O brilho que o mar acende à noite. Tema escuro.
+# Autor: Jota Furtado. Licença: MIT.
+# https://github.com/jotafurtado/ardentia
+#
+# O herdr de terminal não tem arquivo de tema. Este trecho vai dentro do seu config.toml
+# (Linux e macOS: ~/.config/herdr/config.toml; `herdr --help` mostra o caminho em uso).
+# Cole no fim do arquivo. Se o config.toml já tem uma tabela [theme] ou [theme.custom],
+# apague-a antes: tabela repetida é erro de TOML.
+# Depois de colar, confira com `herdr config check` e recarregue com
+# `herdr server reload-config` ou pelo menu global do herdr, em "reload config".
+#
+# Tokens lidos no herdr 0.9.5. Este trecho pinta só a interface do herdr. As cores dos
+# programas dentro dos painéis (as 16 ANSI, o fundo e o texto) vêm do terminal hospedeiro:
+# use junto com o tema Ardentia do Ghostty, em ../ghostty/.
+
+[theme]
+# Tema embutido que serve de base. Os 19 tokens abaixo cobrem toda a paleta do herdr 0.9.5,
+# então a base só apareceria num token criado por uma versão mais nova.
+name = "tokyo-night"
+
+[theme.custom]
+# Acento: destaques e borda do painel ativo.
+accent = "#4de8d8"         # ardentia
+
+# Superfícies.
+panel_bg = "#101326"       # fundo: faixa de abas, painéis flutuantes, modais
+sidebar_bg = "#101326"     # fundo: barra lateral
+active_row_bg = "#1d2240"  # relevo: linha do espaço ativo e do agente em foco
+selection_bg = "#272d52"   # borda: linha do cursor no modo Navigate
+surface0 = "#1d2240"       # relevo: item selecionado ou em foco, abas fora de foco
+surface1 = "#272d52"       # borda: um degrau acima, como a linha que está sendo arrastada
+surface_dim = "#272d52"    # borda: separadores e trilho da rolagem do painel fora de foco
+
+# Texto, do mais apagado ao mais forte.
+overlay0 = "#8791c2"       # tênue: texto secundário, abas fora de foco, dicas, contorno de painel fora de foco
+overlay1 = "#a8b0db"       # suave: texto de apoio um degrau acima
+subtext0 = "#a8b0db"       # suave: nomes de espaço fora de foco, rótulos
+text = "#dde2fa"           # texto
+
+# Luzes. Cada token leva a luz do mesmo matiz.
+mauve = "#b9a0ff"          # anêmona: nome do ramo
+green = "#b4ee7c"          # sargaço: agente ocioso, conectado, instalado
+yellow = "#ffcc70"         # lanterna: agente trabalhando, conectando
+red = "#ff7383"            # coral: agente bloqueado, pede atenção, confirmação antes de remover ou fechar
+blue = "#7cb2ff"           # maré: notificação de trabalho concluído, agente que concluiu na visão compacta
+teal = "#4de8d8"           # ardentia: agente que concluiu, na barra lateral
+peach = "#ffa26b"          # estrela: interrompido, aviso (o 0.9.5 não pinta nada com este token)
