@@ -15,10 +15,14 @@ Ardentia é o brilho que o mar acende à noite, quando o plâncton se agita na �
 | Aplicativo | Situação | Onde |
 | --- | --- | --- |
 | Obsidian | Disponível | [`obsidian/`](obsidian/) |
-| Zed | Planejado | |
-| VS Code | Planejado | |
-| Ghostty | Planejado | |
-| herdr | Planejado | |
+| Zed | Disponível | [`zed/`](zed/) |
+| VS Code | Disponível | [`vscode/`](vscode/) |
+| Ghostty | Disponível | [`ghostty/`](ghostty/) |
+| herdr | Disponível | [`herdr/`](herdr/) |
+| Rex | Disponível | [`rex/`](rex/) |
+| Status line do Claude Code | Disponível | [`cc-statusline/`](cc-statusline/) |
+
+Os portes para Zed, VS Code, Ghostty, herdr, Rex e a status line do Claude Code se instalam a partir deste repositório. Nenhum deles está publicado em registro de extensões nem vem com o aplicativo ainda.
 
 ## Obsidian
 
@@ -102,6 +106,92 @@ Tema não cria botão. O plugin [Ardentia Largura](https://github.com/jotafurtad
 ### Mais
 
 Variáveis, medidas, o cofre de demonstração e as notas de implementação estão em [`obsidian/README.pt-BR.md`](obsidian/README.pt-BR.md).
+
+## Zed
+
+Tema escuro para o Zed, escrito contra o schema de temas v0.2.0 do Zed. O editor e o terminal ficam em Nota, os painéis em Fundo, a barra de título e a barra de status em Abismo. A sintaxe segue os blocos de código do porte do Obsidian: palavras-chave em Água-viva, funções em Maré, strings em Sargaço, comentários em Tênue.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/zed/install.sh
+```
+
+O script copia o tema para a pasta de temas locais do Zed. Escolha Ardentia no seletor de temas na próxima vez que o Zed carregar. A pasta também é uma extensão de tema do Zed, que carrega com `Install Dev Extension`.
+
+O mapeamento de cores e as notas do porte estão em [`zed/README.pt-BR.md`](zed/README.pt-BR.md).
+
+## VS Code
+
+Extensão de tema de cores para o VS Code: cores do workbench, regras TextMate e realce semântico, com as mesmas superfícies e as mesmas cores de sintaxe do porte do Zed.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/vscode/install.sh
+```
+
+O script copia a extensão para `~/.vscode/extensions`. Reinicie o VS Code e escolha Ardentia com `Preferences: Color Theme`.
+
+A instalação por `.vsix`, o mapeamento de cores e as notas do porte estão em [`vscode/README.pt-BR.md`](vscode/README.pt-BR.md).
+
+## Ghostty
+
+Arquivo de tema para o Ghostty que define só cores: fundo, texto, cursor, seleção, as 16 cores da paleta do terminal e as cores de divisão.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/ghostty/install.sh
+```
+
+O script copia o tema para a pasta de temas do Ghostty. Para ativar, ponha `theme = Ardentia` na sua configuração do Ghostty.
+
+As 16 cores e as notas do porte estão em [`ghostty/README.pt-BR.md`](ghostty/README.pt-BR.md).
+
+## herdr
+
+Dois produtos atendem pelo nome herdr, e o porte tem um arquivo para cada um. O app desktop Herdr recebe um arquivo de tema, `ardentia.json`. O herdr de terminal não tem arquivo de tema: recebe `ardentia.toml`, um bloco para colar no `config.toml` dele.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/herdr/install.sh
+```
+
+O script copia o tema do app para a pasta de temas dele e mostra onde está o bloco do terminal. Ele não edita nenhum `config.toml`. No app, escolha `ardentia` em Settings, Look, Theme.
+
+Os dois mapeamentos e as notas do porte estão em [`herdr/README.pt-BR.md`](herdr/README.pt-BR.md).
+
+## Rex
+
+O Rex importa tema no formato do Ghostty, então o porte é o mesmo arquivo de cores com instalador próprio.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/rex/install.sh
+```
+
+O script importa o tema pelo CLI do Rex, que precisa do Remote Control ligado. Com ele desligado, o script imprime os passos manuais (Settings, Themes, Import Theme). Não troca o tema ativo.
+
+As notas estão em [`rex/README.pt-BR.md`](rex/README.pt-BR.md).
+
+## Status line do Claude Code
+
+Status line para o Claude Code: um script Bash que desenha a pasta, o ramo do Git, as alterações, o modelo, o contexto em uso e o nome da sessão em uma cápsula quieta. O fundo fica em Relevo e o texto leva as luzes da paleta; o contexto e as alterações trocam de cor conforme o valor. Precisa de `jq`, de `git` e de uma fonte de terminal com glifos Nerd Font.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/cc-statusline/install.sh
+```
+
+O script copia a status line para `~/.claude/ardentia-statusline.sh` e mostra a entrada `statusLine` que vai no `settings.json` do Claude Code. Ele não edita o `settings.json`.
+
+Os segmentos, as cores de cada um e as notas do porte estão em [`cc-statusline/README.pt-BR.md`](cc-statusline/README.pt-BR.md).
+
+## Uma paleta em todos os portes
+
+Os portes do Zed, do VS Code, do Ghostty, do herdr e do Rex tiram as cores da paleta do tema do Obsidian, mais uma mistura já calculada para a seleção onde o formato não tem alfa. As 16 cores de terminal são as mesmas nos cinco. Um comando confere as duas regras, com o [Bun](https://bun.sh):
+
+```bash
+bun scripts/check-themes.ts
+```
 
 ## Paleta
 

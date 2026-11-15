@@ -15,10 +15,14 @@ It is one palette, four typefaces and a handful of shapes, ported app by app.
 | App | Status | Where |
 | --- | --- | --- |
 | Obsidian | Available | [`obsidian/`](obsidian/) |
-| Zed | Planned | |
-| VS Code | Planned | |
-| Ghostty | Planned | |
-| herdr | Planned | |
+| Zed | Available | [`zed/`](zed/) |
+| VS Code | Available | [`vscode/`](vscode/) |
+| Ghostty | Available | [`ghostty/`](ghostty/) |
+| herdr | Available | [`herdr/`](herdr/) |
+| Rex | Available | [`rex/`](rex/) |
+| Claude Code status line | Available | [`cc-statusline/`](cc-statusline/) |
+
+The ports for Zed, VS Code, Ghostty, herdr, Rex and the Claude Code status line install from this repository. None of them is published in an extension registry or ships with its app yet.
 
 ## Obsidian
 
@@ -102,6 +106,92 @@ A theme cannot add buttons. The companion plugin [Ardentia Largura](https://gith
 ### More
 
 Variables, measurements, the demo vault and implementation notes are in [`obsidian/README.md`](obsidian/README.md).
+
+## Zed
+
+A dark theme for Zed, written against Zed's theme schema v0.2.0. The editor and the terminal sit on Nota, the panels on Fundo, the title bar and the status bar on Abismo. Syntax follows the code blocks of the Obsidian port: keywords in Água-viva, functions in Maré, strings in Sargaço, comments in Tênue.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/zed/install.sh
+```
+
+The script copies the theme into Zed's local themes folder. Pick Ardentia in the theme selector the next time Zed loads. The folder is also a Zed theme extension, which loads with `Install Dev Extension`.
+
+The color mapping and the port notes are in [`zed/README.md`](zed/README.md).
+
+## VS Code
+
+A color theme extension for VS Code: workbench colors, TextMate rules and semantic highlighting, with the same surfaces and the same syntax colors as the Zed port.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/vscode/install.sh
+```
+
+The script copies the extension into `~/.vscode/extensions`. Restart VS Code and pick Ardentia with `Preferences: Color Theme`.
+
+Installing from a `.vsix`, the color mapping and the port notes are in [`vscode/README.md`](vscode/README.md).
+
+## Ghostty
+
+A theme file for Ghostty that sets only colors: background, text, cursor, selection, the 16 colors of the terminal palette and the split colors.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/ghostty/install.sh
+```
+
+The script copies the theme into Ghostty's themes folder. To turn it on, add `theme = Ardentia` to your Ghostty configuration.
+
+The 16 colors and the port notes are in [`ghostty/README.md`](ghostty/README.md).
+
+## herdr
+
+Two products answer to the name herdr, and the port has one file for each. The Herdr desktop app takes a theme file, `ardentia.json`. The terminal herdr has no theme files: it takes `ardentia.toml`, a block to paste into its `config.toml`.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/herdr/install.sh
+```
+
+The script copies the app theme into the app's themes folder and prints where the terminal block is. It does not edit any `config.toml`. In the app, pick `ardentia` in Settings, Look, Theme.
+
+Both mappings and the port notes are in [`herdr/README.md`](herdr/README.md).
+
+## Rex
+
+Rex imports themes in the Ghostty format, so the port is the same color file with its own installer.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/rex/install.sh
+```
+
+The script imports the theme through the Rex CLI, which needs Remote Control on. With it off, the script prints the manual steps (Settings, Themes, Import Theme). It does not switch the active theme.
+
+The notes are in [`rex/README.md`](rex/README.md).
+
+## Claude Code status line
+
+A status line for Claude Code: a Bash script that draws the folder, the Git branch, the changes, the model, the context in use and the session name in one quiet capsule. The background stays in Relevo and the text takes the lights of the palette; the context and the changes switch color with their values. It needs `jq`, `git` and a terminal font with Nerd Font glyphs.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/cc-statusline/install.sh
+```
+
+The script copies the status line to `~/.claude/ardentia-statusline.sh` and prints the `statusLine` entry to add to the `settings.json` of Claude Code. It does not edit `settings.json`.
+
+The segments, their colors and the port notes are in [`cc-statusline/README.md`](cc-statusline/README.md).
+
+## One palette in every port
+
+The Zed, VS Code, Ghostty, herdr and Rex ports take their colors from the palette of the Obsidian theme, plus one precomputed mix for the selection where the format has no alpha. The 16 terminal colors are the same in all five. One command checks both rules, with [Bun](https://bun.sh):
+
+```bash
+bun scripts/check-themes.ts
+```
 
 ## Palette
 
