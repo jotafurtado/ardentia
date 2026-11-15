@@ -1,0 +1,7 @@
+id = "ardentia-theme"
+name = "Ardentia"
+version = "1.0.0"
+schema_version = 1
+authors = ["Jota Furtado"]
+description = "A dark theme named after the glow the sea lights at night, when plankton stirs."
+repository = "https://github.com/jotafurtado/ardentia"
