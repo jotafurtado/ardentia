@@ -10,3 +10,7 @@ obsidian/demo-en/.obsidian/workspace*.json
 obsidian/demo-en/.obsidian/plugins/
 obsidian/demo-en/.obsidian/community-plugins.json
 obsidian/demo-en/.trash/
+
+# memória de trabalho local dos agentes de código
+AGENTS.md
+on-track/
