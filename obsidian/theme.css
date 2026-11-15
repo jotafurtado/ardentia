@@ -1238,8 +1238,7 @@ body {
 }
 
 .mod-sidedock .workspace-leaf-content:hover .nav-buttons-container,
-.mod-sidedock .workspace-leaf-content:focus-within .nav-buttons-container,
-.mod-sidedock .nav-buttons-container:has(.is-active, .has-active-menu) {
+.mod-sidedock .workspace-leaf-content:focus-within .nav-buttons-container {
   opacity: 1;
 }
 
@@ -1298,10 +1297,17 @@ body {
 }
 
 /* O Obsidian estica cada item até a borda do painel com margem negativa inline.
-   O recorte devolve o fundo ao lugar do desenho: depois da guia de recuo. */
+   A máscara devolve o fundo ao lugar do desenho: depois da guia de recuo. */
 .tree-item-self[style*="margin-inline-start"] {
   --ardentia-recuo: calc(var(--nav-item-children-margin-start) + var(--nav-item-children-padding-start) + 1px);
-  clip-path: inset(0 0 0 calc(var(--ardentia-nivel, 0) * var(--ardentia-recuo)) round var(--radius-s));
+  -webkit-mask-image: linear-gradient(#000, #000);
+  mask-image: linear-gradient(#000, #000);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: right top;
+  mask-position: right top;
+  -webkit-mask-size: calc(100% - var(--ardentia-nivel, 0) * var(--ardentia-recuo)) 100%;
+  mask-size: calc(100% - var(--ardentia-nivel, 0) * var(--ardentia-recuo)) 100%;
 }
 
 .tree-item-children .tree-item-self { --ardentia-nivel: 1; }
@@ -1844,12 +1850,12 @@ a,
 .markdown-rendered .internal-link,
 .cm-s-obsidian span.cm-hmd-internal-link,
 .cm-s-obsidian span.cm-hmd-internal-link .cm-underline {
-  text-decoration-color: var(--ardentia-acento-45);
+  text-decoration: underline var(--ardentia-acento-45);
 }
 
 .markdown-rendered .internal-link:hover,
 .cm-s-obsidian span.cm-hmd-internal-link:hover .cm-underline {
-  text-decoration-color: currentColor;
+  text-decoration: underline currentColor;
 }
 
 .markdown-rendered .external-link,
@@ -1857,14 +1863,13 @@ a,
 .cm-s-obsidian span.cm-link .cm-underline,
 .cm-s-obsidian span.cm-url,
 .cm-s-obsidian span.cm-url .cm-underline {
-  text-decoration-color: rgba(var(--ardentia-mare-rgb), 0.45);
+  text-decoration: underline rgba(var(--ardentia-mare-rgb), 0.45);
 }
 
 .markdown-rendered .internal-link.is-unresolved,
 .cm-s-obsidian span.cm-hmd-internal-link .is-unresolved,
 .cm-s-obsidian span.cm-hmd-internal-link .is-unresolved .cm-underline {
-  text-decoration-style: dashed;
-  text-decoration-color: var(--ardentia-borda-forte);
+  text-decoration: underline dashed var(--ardentia-borda-forte);
 }
 
 /* Link externo: seta de 12 px em maré */
@@ -1889,7 +1894,7 @@ a,
 .markdown-rendered s,
 .cm-s-obsidian span.cm-strikethrough {
   color: var(--ardentia-tenue);
-  text-decoration-color: var(--ardentia-borda-forte);
+  text-decoration: line-through var(--ardentia-borda-forte);
 }
 
 /* Marcação */
@@ -1986,7 +1991,7 @@ input[type="checkbox"]:checked::after {
 
 .markdown-rendered .task-list-item.is-checked,
 .markdown-source-view.mod-cm6 .HyperMD-task-line[data-task]:not([data-task=" "]) {
-  text-decoration-color: var(--ardentia-borda-forte);
+  text-decoration: line-through var(--ardentia-borda-forte);
 }
 
 /* [/] Em andamento: metade cheia em lanterna */
@@ -2069,13 +2074,12 @@ li[data-task="-"] > p > input[type="checkbox"]::after {
 .markdown-rendered .task-list-item[data-task="-"],
 .markdown-source-view.mod-cm6 .HyperMD-task-line[data-task="-"] {
   color: var(--ardentia-tenue);
-  text-decoration: line-through;
-  text-decoration-color: var(--ardentia-borda-forte);
+  text-decoration: line-through var(--ardentia-borda-forte);
 }
 
 /* Só as tarefas feitas e canceladas ficam riscadas */
 .markdown-rendered .task-list-item.is-checked:is([data-task="/"], [data-task=">"], [data-task="!"], [data-task="?"]),
-.markdown-source-view.mod-cm6 .HyperMD-task-line:is([data-task="/"], [data-task=">"], [data-task="!"], [data-task="?"]) {
+.markdown-source-view.mod-cm6 .HyperMD-task-line[data-task]:is([data-task="/"], [data-task=">"], [data-task="!"], [data-task="?"]) {
   color: var(--ardentia-texto);
   text-decoration: none;
 }
@@ -2483,9 +2487,10 @@ li[data-task="-"] > p > input[type="checkbox"]::after {
   border-radius: var(--ardentia-raio);
 }
 
-.modal-bg {
+.modal-container .modal-bg,
+.modal-container.mod-dim .modal-bg {
   background-color: rgba(var(--ardentia-sombra-rgb), 0.6);
-  opacity: 1 !important;
+  opacity: 1;
 }
 
 .popover.hover-popover {
@@ -2778,7 +2783,7 @@ select.dropdown {
 .setting-item-description a,
 .setting-item-name a {
   color: var(--ardentia-acento);
-  text-decoration-color: var(--ardentia-acento-45);
+  text-decoration: underline var(--ardentia-acento-45);
 }
 
 .setting-item-description a:hover,
@@ -2877,23 +2882,39 @@ body:not(.is-phone) .horizontal-tab-nav-item.is-active {
    10. Rolagem, seleção e foco de teclado
    ========================================================================== */
 
-/* No macOS a barra é a nativa do sistema e recebe só duas cores. A trilha fica
-   transparente, como no padrão do Obsidian, senão vira uma faixa sólida. */
-body:not(.styled-scrollbars) {
-  --scrollbar-bg: transparent;
+/* Barra fina e discreta em qualquer sistema. No macOS o Obsidian usa a barra
+   nativa e passa a ela duas cores (scrollbar-color), o que desenha uma barra
+   larga e cinza. Voltar scrollbar-color para auto deixa valer o desenho abaixo. */
+body,
+body * {
+  scrollbar-color: auto;
+  scrollbar-width: auto;
 }
 
-body.styled-scrollbars ::-webkit-scrollbar-track {
+body ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background-color: transparent;
+}
+
+body ::-webkit-scrollbar-track,
+body ::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+body ::-webkit-scrollbar-thumb {
+  min-height: 40px;
+  min-width: 40px;
   border: 3px solid transparent;
   border-radius: 6px;
-  background-color: var(--scrollbar-bg);
+  background-color: var(--ardentia-borda-forte);
   background-clip: padding-box;
 }
 
-body.styled-scrollbars ::-webkit-scrollbar-thumb {
-  border-width: 3px;
-  border-radius: 6px;
-  min-height: 40px;
+body ::-webkit-scrollbar-thumb:hover,
+body ::-webkit-scrollbar-thumb:active {
+  background-color: var(--ardentia-tenue);
+  background-clip: padding-box;
 }
 
 ::selection {
@@ -3031,7 +3052,7 @@ body.ardentia-foco:not(.is-mobile).is-hidden-frameless:not(.is-fullscreen) .mod-
   padding-left: calc(var(--size-4-2) + var(--frame-left-space));
 }
 
-body.ardentia-foco:not(.is-mobile).is-hidden-frameless:not(.is-fullscreen) .mod-root > .workspace-tabs.mod-top:not(:has(~ .workspace-tabs)) > .workspace-tab-header-container {
+body.ardentia-foco:not(.is-mobile).is-hidden-frameless:not(.is-fullscreen) .mod-root > .workspace-tabs.mod-top:last-child > .workspace-tab-header-container {
   padding-right: calc(var(--size-4-2) + var(--frame-right-space));
 }
 
@@ -3048,9 +3069,7 @@ body.ardentia-foco:not(.is-mobile) .workspace-tab-header-container:focus-within,
 body.ardentia-foco:not(.is-mobile) .mod-root .view-header:hover,
 body.ardentia-foco:not(.is-mobile) .mod-root .view-header:focus-within,
 body.ardentia-foco:not(.is-mobile) .status-bar:hover,
-body.ardentia-foco:not(.is-mobile) .titlebar-button-container:hover,
-body.ardentia-foco:not(.is-mobile) .workspace-tab-header-container:has(.has-active-menu),
-body.ardentia-foco:not(.is-mobile) .mod-root .view-header:has(.has-active-menu) {
+body.ardentia-foco:not(.is-mobile) .titlebar-button-container:hover {
   opacity: 1;
   transition-delay: 0s;
 }
@@ -3085,19 +3104,16 @@ body {
 }
 
 /* Esfumaçado do abismo: ardentia no alto à direita, anêmona embaixo à esquerda */
-body:not(.ardentia-continuo) .app-container::before {
+body:not(.ardentia-continuo):not(.ardentia-foco) .app-container::before,
+body.ardentia-foco .workspace:is(.is-left-sidedock-open, .is-right-sidedock-open)::before {
   content: "";
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   background:
     radial-gradient(900px 380px at 78% -8%, var(--ardentia-nevoa-acento), transparent 70%),
     radial-gradient(700px 420px at 6% 108%, var(--ardentia-nevoa-anemona), transparent 70%);
-}
-
-body.ardentia-foco .app-container:has(.workspace:not(.is-left-sidedock-open):not(.is-right-sidedock-open))::before {
-  display: none;
 }
 
 /* Halo do ponto da aba ativa */
@@ -3164,7 +3180,8 @@ body.is-mobile .workspace-split.mod-horizontal > .workspace-split:not(:last-chil
 }
 
 /* O esfumaçado ficaria escondido atrás da nota */
-body.is-phone .app-container::before {
+body.is-phone .app-container::before,
+body.is-phone .workspace::before {
   display: none;
 }
 
