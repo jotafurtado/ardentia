@@ -1,0 +1,45 @@
+# Ardentia para o Rex, versão 1.0.0
+# O brilho que o mar acende à noite. Tema escuro.
+# Autor: Jota Furtado. Licença: MIT.
+# https://github.com/jotafurtado/ardentia
+#
+# Este arquivo define só cores. Não mexe em fonte, opacidade nem estilo de cursor.
+# Importe pelo rex/install.sh, ou em Settings, Themes, Import Theme. O Rex lê o formato de tema do Ghostty.
+
+# Fundo em nota, texto em texto.
+background = #161a30
+foreground = #dde2fa
+
+# Cursor em ardentia, com o texto sob ele em abismo.
+cursor-color = #4de8d8
+cursor-text = #0b0d1a
+
+# Seleção: ardentia a 24% sobre nota, já misturada, porque o formato não aceita alfa.
+selection-background = #234b58
+selection-foreground = #dde2fa
+
+# Cores normais, de 0 a 7:
+# relevo, coral, sargaço, lanterna, maré, anêmona, ardentia, suave.
+palette = 0=#1d2240
+palette = 1=#ff7383
+palette = 2=#b4ee7c
+palette = 3=#ffcc70
+palette = 4=#7cb2ff
+palette = 5=#b9a0ff
+palette = 6=#4de8d8
+palette = 7=#a8b0db
+
+# Cores claras, de 8 a 15:
+# tênue, coral, sargaço, lanterna clara, maré clara, água-viva, ardentia clara, texto.
+palette = 8=#8791c2
+palette = 9=#ff7383
+palette = 10=#b4ee7c
+palette = 11=#ffe2a8
+palette = 12=#a9ccff
+palette = 13=#ff7ac6
+palette = 14=#8ff5ea
+palette = 15=#dde2fa
+
+# Divisões: linha em borda, painel sem foco escurecido com abismo.
+split-divider-color = #272d52
+unfocused-split-fill = #0b0d1a
