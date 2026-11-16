@@ -1,6 +1,7 @@
-// Confere os temas dos portes (Zed, VS Code, Ghostty, herdr, Rex) contra o contrato de porte:
-// toda cor pertence à paleta, as 16 cores ANSI são as do contrato e as cópias de LICENSE
-// são idênticas à da raiz. A paleta e a tabela ANSI abaixo foram copiadas do contrato.
+// Confere os temas dos portes (Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k) contra o
+// contrato de porte: toda cor pertence à paleta, as 16 cores ANSI são as do contrato, nos
+// portes que as definem, e as cópias de LICENSE são idênticas à da raiz. A paleta e a tabela
+// ANSI abaixo foram copiadas do contrato.
 // Uso: bun scripts/check-themes.ts [--root <pasta>]
 
 import { dirname, join, resolve } from "node:path";
@@ -298,6 +299,37 @@ function parseGhostty(text: string): ParsedTheme {
   return { colors, ansi, problems };
 }
 
+function parseP10k(text: string): ParsedTheme {
+  // O Powerlevel10k aceita cor por número (0 a 255), por nome e em #rrggbb. Aqui toda cor
+  // tem de vir em #rrggbb, nos dois lugares em que ela aparece: no valor das opções de cor
+  // e dentro de %F{...} e %K{...}. Comentário não conta.
+  const colors: ColorUse[] = [];
+  const problems: string[] = [];
+
+  text.split(/\r?\n/).forEach((rawLine, lineIndex) => {
+    const line = rawLine.trim();
+    if (line === "" || line.startsWith("#")) return;
+    const where = `linha ${lineIndex + 1}`;
+
+    const option = /^typeset -g (POWERLEVEL9K_[A-Za-z0-9_{},]*(?:FOREGROUND|BACKGROUND|COLOR))=(\S*)/.exec(line);
+    if (option) {
+      const name = option[1] ?? "";
+      const value = (option[2] ?? "").replace(/^'(.*)'$/, "$1");
+      // Valor vazio é opção sem cor: fundo transparente, por exemplo.
+      if (value !== "") colors.push({ path: `${where}, ${name}`, value });
+    }
+
+    for (const match of line.matchAll(/%([FK])\{([^}]*)\}/g)) {
+      colors.push({ path: `${where}, %${match[1] ?? ""}`, value: match[2] ?? "" });
+    }
+    for (const match of line.matchAll(/%\d+[FK]/g)) {
+      problems.push(`${where}: ${match[0]} é cor numerada, o porte pede #rrggbb`);
+    }
+  });
+
+  return { colors, ansi: [], problems };
+}
+
 const THEME_FILES: readonly ThemeFile[] = [
   {
     path: "zed/themes/ardentia.json",
@@ -341,6 +373,13 @@ const THEME_FILES: readonly ThemeFile[] = [
     allowsSelection: false,
     hasAnsi: false,
     parse: parseHerdrToml,
+  },
+  {
+    path: "p10k/ardentia.zsh",
+    allowsAlpha: () => false,
+    allowsSelection: false,
+    hasAnsi: false,
+    parse: parseP10k,
   },
 ];
 const ANSI_FILE_COUNT = THEME_FILES.filter((file) => file.hasAnsi).length;
