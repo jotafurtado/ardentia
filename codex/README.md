@@ -9,11 +9,12 @@ Reference for the Codex port. For the overview, the palette and the principles, 
 | Path | What it is |
 | --- | --- |
 | `ardentia.tmTheme` | The theme. Every color is one of the palette, written as `#rrggbb` |
+| `desktop.toml` | The block for the Codex desktop app, to paste into `config.toml` |
 | `install.sh` | Copies the theme to the folder where Codex reads themes |
 
 ## What it themes
 
-Codex lets a `.tmTheme` color the code blocks and the diffs it draws in the terminal. The colors of the rest of the interface come from the terminal, so pair this theme with the Ardentia theme of [Ghostty](../ghostty/) or [Rex](../rex/). The Codex desktop app does not read this file.
+Codex lets a `.tmTheme` color the code blocks and the diffs it draws in the terminal. The colors of the rest of the interface come from the terminal, so pair this theme with the Ardentia theme of [Ghostty](../ghostty/) or [Rex](../rex/). The Codex desktop app does not read this file; it has its own block, in the section below.
 
 ## Requirements
 
@@ -53,8 +54,14 @@ To go back, pick another theme, or remove the `theme` line: the file stays where
 | Markdown | Heading in Água-viva, link in Maré, code in Coral, quote in Suave, emphasis in Anêmona, strong in Lanterna, lists in Ardentia |
 | Diff | Added in Sargaço, removed in Coral, hunk header in Anêmona |
 
+## Desktop app
+
+The desktop app takes its window colors from `[desktop.appearanceDarkChromeTheme]` in `~/.codex/config.toml`. Paste `desktop.toml` there, replacing a table of the same name that already exists, since TOML does not accept the same table twice. The block sets the accent in Ardentia `#4de8d8`, the text in Texto, the background in Fundo, the diff in Sargaço and Coral, and skills in Anêmona. The fonts are Cascadia Code for code and Geist for the interface. The script does not touch this file.
+
+The code inside the app comes from `appearanceDarkCodeThemeId`, which takes the id of a theme built into the app. The port has no code theme for the app.
+
 ## Port notes
 
 - The diff has no tinted background, so an added line and a removed line differ by the color of the text. The palette has no dark green or dark red to tint it with.
 - Every color is `#rrggbb`. `bun scripts/check-themes.ts`, at the root of the repository, checks that and that each one belongs to the palette. It does not run Codex, so a theme the check accepts can still be refused by Codex, which then falls back to its default theme.
-- The theme was not tried on screen.
+- The keys of the desktop block were copied from an existing `config.toml`, not from a schema, because none was found. Neither the CLI theme nor the desktop block was tried on screen.

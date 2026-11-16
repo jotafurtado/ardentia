@@ -244,7 +244,7 @@ The colors by group and the port notes are in [`opencode/README.md`](opencode/RE
 
 ## Codex
 
-A syntax theme for the Codex terminal interface, a `.tmTheme` file. It colors the code blocks and the diffs Codex draws; the rest of the interface takes its colors from the terminal.
+A syntax theme for the Codex terminal interface, a `.tmTheme` file. It colors the code blocks and the diffs Codex draws; the rest of the interface takes its colors from the terminal. A block for the desktop app is included.
 
 ```bash
 ./ardentia/codex/install.sh

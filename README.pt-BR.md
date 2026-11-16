@@ -244,7 +244,7 @@ As cores de cada grupo e as notas do porte estão em [`opencode/README.pt-BR.md`
 
 ## Codex
 
-Tema de sintaxe para a interface de terminal do Codex, um arquivo `.tmTheme`. Ele colore os blocos de código e os diffs que o Codex desenha; o resto da interface toma as cores do terminal.
+Tema de sintaxe para a interface de terminal do Codex, um arquivo `.tmTheme`. Ele colore os blocos de código e os diffs que o Codex desenha; o resto da interface toma as cores do terminal. Há também um bloco para o aplicativo desktop.
 
 ```bash
 ./ardentia/codex/install.sh
