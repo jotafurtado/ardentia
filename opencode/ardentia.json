@@ -1,0 +1,268 @@
+{
+  "$schema": "https://opencode.ai/v2/theme.json",
+  "base": {
+    "categorical": [
+      "cyan",
+      "blue",
+      "purple",
+      "pink",
+      "yellow",
+      "green",
+      "orange",
+      "red"
+    ],
+    "text": {
+      "base": "#dde2fa",
+      "muted": "#a8b0db",
+      "faint": "#8791c2",
+      "action": {
+        "primary": {
+          "base": "#0b0d1a"
+        },
+        "secondary": {
+          "base": "#dde2fa"
+        },
+        "destructive": {
+          "base": "#0b0d1a"
+        }
+      },
+      "formfield": {
+        "base": "#dde2fa"
+      },
+      "feedback": {
+        "error": {
+          "base": "#ff7383",
+          "muted": "#ff7383"
+        },
+        "warning": {
+          "base": "#ffcc70",
+          "muted": "#ffcc70"
+        },
+        "success": {
+          "base": "#b4ee7c",
+          "muted": "#b4ee7c"
+        },
+        "info": {
+          "base": "#7cb2ff",
+          "muted": "#7cb2ff"
+        }
+      }
+    },
+    "background": {
+      "base": "#161a30",
+      "raised": {
+        "base": "#1d2240",
+        "high": "#272d52",
+        "max": "#3a4273"
+      },
+      "action": {
+        "primary": {
+          "base": "#4de8d8",
+          "$hovered": "#8ff5ea",
+          "$focused": "#8ff5ea",
+          "$pressed": "#4de8d8",
+          "$selected": "#4de8d8",
+          "$disabled": "#3a4273"
+        },
+        "secondary": {
+          "base": "#1d2240",
+          "$hovered": "#272d52",
+          "$focused": "#272d52",
+          "$pressed": "#3a4273",
+          "$selected": "#3a4273",
+          "$disabled": "#1d2240"
+        },
+        "destructive": {
+          "base": "#ff7383",
+          "$hovered": "#ff7383",
+          "$focused": "#ff7383",
+          "$pressed": "#ff7383",
+          "$selected": "#ff7383",
+          "$disabled": "#3a4273"
+        }
+      },
+      "formfield": {
+        "base": "#101326",
+        "$focused": "#1d2240",
+        "$selected": "#1d2240"
+      },
+      "feedback": {
+        "error": {
+          "base": "#1d2240"
+        },
+        "warning": {
+          "base": "#1d2240"
+        },
+        "success": {
+          "base": "#1d2240"
+        },
+        "info": {
+          "base": "#1d2240"
+        }
+      }
+    },
+    "border": {
+      "base": "#272d52"
+    },
+    "scrollbar": {
+      "base": "#3a4273"
+    },
+    "diff": {
+      "text": {
+        "added": "#b4ee7c",
+        "removed": "#ff7383",
+        "context": "#8791c2",
+        "hunkHeader": "#b9a0ff"
+      },
+      "background": {
+        "added": "#1d2240",
+        "removed": "#1d2240",
+        "context": "#1d2240"
+      },
+      "highlight": {
+        "added": "#b4ee7c",
+        "removed": "#ff7383"
+      },
+      "lineNumber": {
+        "text": "#8791c2",
+        "background": {
+          "added": "#1d2240",
+          "removed": "#1d2240"
+        }
+      }
+    },
+    "syntax": {
+      "comment": "#8791c2",
+      "keyword": "#ff7ac6",
+      "function": "#7cb2ff",
+      "variable": "#dde2fa",
+      "string": "#b4ee7c",
+      "number": "#ffa26b",
+      "type": "#ffcc70",
+      "operator": "#b9a0ff",
+      "punctuation": "#a8b0db"
+    },
+    "markdown": {
+      "text": "#dde2fa",
+      "heading": "#ff7ac6",
+      "link": "#7cb2ff",
+      "linkText": "#4de8d8",
+      "code": "#ff7383",
+      "blockQuote": "#a8b0db",
+      "emphasis": "#b9a0ff",
+      "strong": "#ffcc70",
+      "horizontalRule": "#8791c2",
+      "listItem": "#4de8d8",
+      "listEnumeration": "#4de8d8",
+      "image": "#7cb2ff",
+      "imageText": "#4de8d8",
+      "codeBlock": "#dde2fa"
+    }
+  },
+  "dark": {
+    "hue": {
+      "neutral": {
+        "100": "#dde2fa",
+        "200": "#a8b0db",
+        "300": "#8791c2",
+        "400": "#4a5388",
+        "500": "#3a4273",
+        "600": "#272d52",
+        "700": "#1d2240",
+        "800": "#161a30",
+        "900": "#101326"
+      },
+      "accent": "$hue.cyan",
+      "interactive": "$hue.cyan",
+      "gray": "$hue.neutral",
+      "cyan": {
+        "100": "#8ff5ea",
+        "200": "#4de8d8",
+        "300": "#4de8d8",
+        "400": "#4de8d8",
+        "500": "#4de8d8",
+        "600": "#4de8d8",
+        "700": "#4de8d8",
+        "800": "#4de8d8",
+        "900": "#4de8d8"
+      },
+      "blue": {
+        "100": "#a9ccff",
+        "200": "#7cb2ff",
+        "300": "#7cb2ff",
+        "400": "#7cb2ff",
+        "500": "#7cb2ff",
+        "600": "#7cb2ff",
+        "700": "#7cb2ff",
+        "800": "#7cb2ff",
+        "900": "#7cb2ff"
+      },
+      "yellow": {
+        "100": "#ffe2a8",
+        "200": "#ffcc70",
+        "300": "#ffcc70",
+        "400": "#ffcc70",
+        "500": "#ffcc70",
+        "600": "#ffcc70",
+        "700": "#ffcc70",
+        "800": "#ffcc70",
+        "900": "#ffcc70"
+      },
+      "red": {
+        "100": "#ff7383",
+        "200": "#ff7383",
+        "300": "#ff7383",
+        "400": "#ff7383",
+        "500": "#ff7383",
+        "600": "#ff7383",
+        "700": "#ff7383",
+        "800": "#ff7383",
+        "900": "#ff7383"
+      },
+      "orange": {
+        "100": "#ffa26b",
+        "200": "#ffa26b",
+        "300": "#ffa26b",
+        "400": "#ffa26b",
+        "500": "#ffa26b",
+        "600": "#ffa26b",
+        "700": "#ffa26b",
+        "800": "#ffa26b",
+        "900": "#ffa26b"
+      },
+      "green": {
+        "100": "#b4ee7c",
+        "200": "#b4ee7c",
+        "300": "#b4ee7c",
+        "400": "#b4ee7c",
+        "500": "#b4ee7c",
+        "600": "#b4ee7c",
+        "700": "#b4ee7c",
+        "800": "#b4ee7c",
+        "900": "#b4ee7c"
+      },
+      "purple": {
+        "100": "#b9a0ff",
+        "200": "#b9a0ff",
+        "300": "#b9a0ff",
+        "400": "#b9a0ff",
+        "500": "#b9a0ff",
+        "600": "#b9a0ff",
+        "700": "#b9a0ff",
+        "800": "#b9a0ff",
+        "900": "#b9a0ff"
+      },
+      "pink": {
+        "100": "#ff7ac6",
+        "200": "#ff7ac6",
+        "300": "#ff7ac6",
+        "400": "#ff7ac6",
+        "500": "#ff7ac6",
+        "600": "#ff7ac6",
+        "700": "#ff7ac6",
+        "800": "#ff7ac6",
+        "900": "#ff7ac6"
+      }
+    }
+  }
+}
