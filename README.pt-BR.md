@@ -24,8 +24,9 @@ Ardentia é o brilho que o mar acende à noite, quando o plâncton se agita na �
 | Powerlevel10k | Disponível | [`p10k/`](p10k/) |
 | Kiro CLI | Disponível | [`kiro-cli/`](kiro-cli/) |
 | eza | Disponível | [`eza/`](eza/) |
+| OpenCode | Disponível | [`opencode/`](opencode/) |
 
-Os portes para Zed, VS Code, Ghostty, herdr, Rex, a status line do Claude Code, o Powerlevel10k, o Kiro CLI e o eza se instalam a partir deste repositório. Nenhum deles está publicado em registro de extensões nem vem com o aplicativo ainda.
+Os portes para Zed, VS Code, Ghostty, herdr, Rex, a status line do Claude Code, o Powerlevel10k, o Kiro CLI, o eza e o OpenCode se instalam a partir deste repositório. Nenhum deles está publicado em registro de extensões nem vem com o aplicativo ainda.
 
 ## Obsidian
 
@@ -227,9 +228,22 @@ O script copia `theme.yml` para a pasta onde o eza o lê, guarda uma cópia de u
 
 As cores de cada campo e as notas do porte estão em [`eza/README.pt-BR.md`](eza/README.pt-BR.md).
 
+## OpenCode
+
+Tema para a interface de terminal do OpenCode, no formato V2 de temas e só com o modo escuro. O fundo fica em Nota, o texto em Texto, e a cor só aparece onde diz alguma coisa: Ardentia nas ações, Sargaço e Coral no diff, a paleta na sintaxe e no markdown.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/opencode/install.sh
+```
+
+O script copia `ardentia.json` para a pasta de temas do OpenCode, guarda uma cópia de um diferente que já estivesse ali e mostra a linha `theme.name` que vai no `cli.json`. Ele não edita nenhum arquivo de configuração.
+
+As cores de cada grupo e as notas do porte estão em [`opencode/README.pt-BR.md`](opencode/README.pt-BR.md).
+
 ## Uma paleta em todos os portes
 
-Os portes do Zed, do VS Code, do Ghostty, do herdr, do Rex, do Powerlevel10k e do eza tiram as cores da paleta do tema do Obsidian, mais uma mistura já calculada para a seleção onde o formato não tem alfa. As 16 cores de terminal são as mesmas nos cinco portes que as definem. O porte do Kiro CLI não tem cores próprias. Um comando confere as duas regras, com o [Bun](https://bun.sh):
+Os portes do Zed, do VS Code, do Ghostty, do herdr, do Rex, do Powerlevel10k, do eza e do OpenCode tiram as cores da paleta do tema do Obsidian, mais uma mistura já calculada para a seleção onde o formato não tem alfa. As 16 cores de terminal são as mesmas nos cinco portes que as definem. O porte do Kiro CLI não tem cores próprias. Um comando confere as duas regras, com o [Bun](https://bun.sh):
 
 ```bash
 bun scripts/check-themes.ts

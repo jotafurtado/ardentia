@@ -24,8 +24,9 @@ It is one palette, four typefaces and a handful of shapes, ported app by app.
 | Powerlevel10k | Available | [`p10k/`](p10k/) |
 | Kiro CLI | Available | [`kiro-cli/`](kiro-cli/) |
 | eza | Available | [`eza/`](eza/) |
+| OpenCode | Available | [`opencode/`](opencode/) |
 
-The ports for Zed, VS Code, Ghostty, herdr, Rex, the Claude Code status line, Powerlevel10k, Kiro CLI and eza install from this repository. None of them is published in an extension registry or ships with its app yet.
+The ports for Zed, VS Code, Ghostty, herdr, Rex, the Claude Code status line, Powerlevel10k, Kiro CLI, eza and OpenCode install from this repository. None of them is published in an extension registry or ships with its app yet.
 
 ## Obsidian
 
@@ -227,9 +228,22 @@ The script copies `theme.yml` to the folder where eza reads it, keeps a copy of 
 
 The colors by field and the port notes are in [`eza/README.md`](eza/README.md).
 
+## OpenCode
+
+A theme for the OpenCode terminal interface, in the V2 theme format and with dark mode only. The background stays in Nota, the text in Texto, and color shows only where it tells something: Ardentia for actions, Sargaço and Coral in the diff, the palette in syntax and markdown.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/opencode/install.sh
+```
+
+The script copies `ardentia.json` to the OpenCode themes folder, keeps a copy of a different one that was already there and prints the `theme.name` line to put in `cli.json`. It does not edit any configuration file.
+
+The colors by group and the port notes are in [`opencode/README.md`](opencode/README.md).
+
 ## One palette in every port
 
-The Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k and eza ports take their colors from the palette of the Obsidian theme, plus one precomputed mix for the selection where the format has no alpha. The 16 terminal colors are the same in the five ports that set them. The Kiro CLI port has no colors of its own. One command checks both rules, with [Bun](https://bun.sh):
+The Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k, eza and OpenCode ports take their colors from the palette of the Obsidian theme, plus one precomputed mix for the selection where the format has no alpha. The 16 terminal colors are the same in the five ports that set them. The Kiro CLI port has no colors of its own. One command checks both rules, with [Bun](https://bun.sh):
 
 ```bash
 bun scripts/check-themes.ts
