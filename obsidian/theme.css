@@ -551,7 +551,11 @@ body {
   --scrollbar-height: 12px;
   --scrollbar-border-width: 3px;
   --scrollbar-radius: 6px;
-  --scrollbar-bg: var(--ardentia-borda);
+  /* Sem valor de propósito. O Obsidian pinta a barra nativa com a propriedade
+     scrollbar-color, usando esta variável e a do polegar. Com esta variável
+     inválida a declaração inteira cai, a propriedade volta a auto e vale a
+     barra fina desenhada na seção 10. */
+  --scrollbar-bg: initial;
   --scrollbar-thumb-bg: var(--ardentia-borda-forte);
   --scrollbar-active-thumb-bg: var(--ardentia-tenue);
 
@@ -1847,29 +1851,42 @@ a,
   text-underline-offset: 3px;
 }
 
+/* O sublinhado dos links da nota é uma borda inferior, e não text-decoration:
+   é o jeito de dar ao traço uma cor mais suave que a do texto sem
+   text-decoration-color, que a revisão do diretório da comunidade aponta.
+   No editor a borda fica no elemento de fora; o .cm-underline de dentro
+   fica sem traço, para não desenhar dois. */
 .markdown-rendered .internal-link,
-.cm-s-obsidian span.cm-hmd-internal-link,
-.cm-s-obsidian span.cm-hmd-internal-link .cm-underline {
-  text-decoration: underline var(--ardentia-acento-45);
-}
-
-.markdown-rendered .internal-link:hover,
-.cm-s-obsidian span.cm-hmd-internal-link:hover .cm-underline {
-  text-decoration: underline currentColor;
-}
-
 .markdown-rendered .external-link,
+.cm-s-obsidian span.cm-hmd-internal-link,
+.cm-s-obsidian span.cm-hmd-internal-link .cm-underline,
 .cm-s-obsidian span.cm-link,
 .cm-s-obsidian span.cm-link .cm-underline,
 .cm-s-obsidian span.cm-url,
 .cm-s-obsidian span.cm-url .cm-underline {
-  text-decoration: underline rgba(var(--ardentia-mare-rgb), 0.45);
+  text-decoration: none;
 }
 
+.markdown-rendered .internal-link,
+.cm-s-obsidian span.cm-hmd-internal-link {
+  border-bottom: 1px solid var(--ardentia-acento-45);
+}
+
+.markdown-rendered .internal-link:hover,
+.cm-s-obsidian span.cm-hmd-internal-link:hover {
+  border-bottom-color: currentColor;
+}
+
+.markdown-rendered .external-link,
+.cm-s-obsidian span.cm-link,
+.cm-s-obsidian span.cm-url {
+  border-bottom: 1px solid rgba(var(--ardentia-mare-rgb), 0.45);
+}
+
+/* Link para nota que ainda não existe: traço tracejado */
 .markdown-rendered .internal-link.is-unresolved,
-.cm-s-obsidian span.cm-hmd-internal-link .is-unresolved,
-.cm-s-obsidian span.cm-hmd-internal-link .is-unresolved .cm-underline {
-  text-decoration: underline dashed var(--ardentia-borda-forte);
+.cm-s-obsidian span.cm-hmd-internal-link .is-unresolved {
+  border-bottom: 1px dashed var(--ardentia-borda-forte);
 }
 
 /* Link externo: seta de 12 px em maré */
@@ -1894,7 +1911,7 @@ a,
 .markdown-rendered s,
 .cm-s-obsidian span.cm-strikethrough {
   color: var(--ardentia-tenue);
-  text-decoration: line-through var(--ardentia-borda-forte);
+  text-decoration: line-through;
 }
 
 /* Marcação */
@@ -1991,7 +2008,7 @@ input[type="checkbox"]:checked::after {
 
 .markdown-rendered .task-list-item.is-checked,
 .markdown-source-view.mod-cm6 .HyperMD-task-line[data-task]:not([data-task=" "]) {
-  text-decoration: line-through var(--ardentia-borda-forte);
+  text-decoration: line-through;
 }
 
 /* [/] Em andamento: metade cheia em lanterna */
@@ -2074,7 +2091,7 @@ li[data-task="-"] > p > input[type="checkbox"]::after {
 .markdown-rendered .task-list-item[data-task="-"],
 .markdown-source-view.mod-cm6 .HyperMD-task-line[data-task="-"] {
   color: var(--ardentia-tenue);
-  text-decoration: line-through var(--ardentia-borda-forte);
+  text-decoration: line-through;
 }
 
 /* Só as tarefas feitas e canceladas ficam riscadas */
@@ -2782,8 +2799,9 @@ select.dropdown {
 /* Link dentro das configurações segue a regra do tema: link é ardentia */
 .setting-item-description a,
 .setting-item-name a {
+  border-bottom: 1px solid var(--ardentia-acento-45);
   color: var(--ardentia-acento);
-  text-decoration: underline var(--ardentia-acento-45);
+  text-decoration: none;
 }
 
 .setting-item-description a:hover,
@@ -2884,12 +2902,9 @@ body:not(.is-phone) .horizontal-tab-nav-item.is-active {
 
 /* Barra fina e discreta em qualquer sistema. No macOS o Obsidian usa a barra
    nativa e passa a ela duas cores (scrollbar-color), o que desenha uma barra
-   larga e cinza. Voltar scrollbar-color para auto deixa valer o desenho abaixo. */
-body,
-body * {
-  scrollbar-color: auto;
-  scrollbar-width: auto;
-}
+   larga e cinza. A variável --scrollbar-bg sem valor, lá em cima, derruba essa
+   declaração e deixa valer o desenho abaixo. A largura fica com o Obsidian,
+   que esconde a barra onde ela não deve aparecer (--scrollbar-native-width). */
 
 body ::-webkit-scrollbar {
   width: 10px;
