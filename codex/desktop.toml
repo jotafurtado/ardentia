@@ -1,0 +1,17 @@
+# Ardentia para o app desktop do Codex. Cole este bloco no ~/.codex/config.toml, no lugar
+# de um [desktop.appearanceDarkChromeTheme] que já exista (a tabela não pode aparecer duas vezes).
+[desktop.appearanceDarkChromeTheme]
+accent = "#4de8d8"
+contrast = 50
+ink = "#dde2fa"
+opaqueWindows = true
+surface = "#101326"
+
+[desktop.appearanceDarkChromeTheme.fonts]
+code = '"Cascadia Code", ui-monospace, "SFMono-Regular"'
+ui = "Geist, Inter"
+
+[desktop.appearanceDarkChromeTheme.semanticColors]
+diffAdded = "#b4ee7c"
+diffRemoved = "#ff7383"
+skill = "#b9a0ff"
