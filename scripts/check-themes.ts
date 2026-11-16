@@ -1,4 +1,4 @@
-// Confere os temas dos portes (Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k, eza, OpenCode) contra o
+// Confere os temas dos portes (Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k, eza, OpenCode, Codex) contra o
 // contrato de porte: toda cor pertence à paleta, as 16 cores ANSI são as do contrato, nos
 // portes que as definem, e as cópias de LICENSE são idênticas à da raiz. A paleta e a tabela
 // ANSI abaixo foram copiadas do contrato.
@@ -499,6 +499,27 @@ function parseOpencode(text: string): ParsedTheme {
   return { colors, ansi: [], problems };
 }
 
+function parseCodex(text: string): ParsedTheme {
+  // O Codex lê o .tmTheme com a biblioteca syntect, que é um plist. Só as chaves de cor
+  // contam como cor; o resto (name, scope, fontStyle) é texto livre.
+  if (!text.includes("<plist")) throw new Error("não é um plist");
+  const colorKeys = new Set([
+    "background", "foreground", "caret", "selection", "selectionForeground", "lineHighlight",
+    "gutter", "gutterForeground", "invisibles", "findHighlight", "findHighlightForeground",
+    "bracketsForeground", "guide", "activeGuide",
+  ]);
+  const colors: ColorUse[] = [];
+  const pattern = /<key>([^<]+)<\/key>\s*<string>([^<]*)<\/string>/g;
+  let index = 0;
+  for (const match of text.matchAll(pattern)) {
+    const key = match[1] ?? "";
+    const value = match[2] ?? "";
+    index += 1;
+    if (colorKeys.has(key)) colors.push({ path: `${key}#${index}`, value });
+  }
+  return { colors, ansi: [] };
+}
+
 const THEME_FILES: readonly ThemeFile[] = [
   {
     path: "zed/themes/ardentia.json",
@@ -563,6 +584,13 @@ const THEME_FILES: readonly ThemeFile[] = [
     allowsSelection: false,
     hasAnsi: false,
     parse: parseOpencode,
+  },
+  {
+    path: "codex/ardentia.tmTheme",
+    allowsAlpha: () => false,
+    allowsSelection: false,
+    hasAnsi: false,
+    parse: parseCodex,
   },
 ];
 const ANSI_FILE_COUNT = THEME_FILES.filter((file) => file.hasAnsi).length;
