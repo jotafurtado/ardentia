@@ -1,4 +1,4 @@
-// Confere os temas dos portes (Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k) contra o
+// Confere os temas dos portes (Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k, eza) contra o
 // contrato de porte: toda cor pertence à paleta, as 16 cores ANSI são as do contrato, nos
 // portes que as definem, e as cópias de LICENSE são idênticas à da raiz. A paleta e a tabela
 // ANSI abaixo foram copiadas do contrato.
@@ -330,6 +330,33 @@ function parseP10k(text: string): ParsedTheme {
   return { colors, ansi: [], problems };
 }
 
+function parseEza(text: string): ParsedTheme {
+  // O eza descarta o tema inteiro, sem aviso, quando uma cor é inválida. Por isso toda cor
+  // tem de vir em #rrggbb, e só em foreground e background. Texto em qualquer outro lugar
+  // (um nome de cor, por exemplo) é defeito, não cor.
+  const root: unknown = Bun.YAML.parse(text);
+  if (!isRecord(root)) throw new Error("a raiz do tema não é um mapa");
+
+  const colors: ColorUse[] = [];
+  const problems: string[] = [];
+  const walk = (value: unknown, path: string): void => {
+    if (isRecord(value)) {
+      for (const [key, item] of Object.entries(value)) {
+        const itemPath = path === "" ? key : `${path}.${key}`;
+        if ((key === "foreground" || key === "background") && typeof item === "string") {
+          colors.push({ path: itemPath, value: item });
+        } else if (typeof item === "string") {
+          problems.push(`${itemPath} = ${item} é texto fora de foreground e background`);
+        } else {
+          walk(item, itemPath);
+        }
+      }
+    }
+  };
+  walk(root, "");
+  return { colors, ansi: [], problems };
+}
+
 const THEME_FILES: readonly ThemeFile[] = [
   {
     path: "zed/themes/ardentia.json",
@@ -380,6 +407,13 @@ const THEME_FILES: readonly ThemeFile[] = [
     allowsSelection: false,
     hasAnsi: false,
     parse: parseP10k,
+  },
+  {
+    path: "eza/theme.yml",
+    allowsAlpha: () => false,
+    allowsSelection: false,
+    hasAnsi: false,
+    parse: parseEza,
   },
 ];
 const ANSI_FILE_COUNT = THEME_FILES.filter((file) => file.hasAnsi).length;
