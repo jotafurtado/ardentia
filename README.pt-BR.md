@@ -21,8 +21,10 @@ Ardentia é o brilho que o mar acende à noite, quando o plâncton se agita na �
 | herdr | Disponível | [`herdr/`](herdr/) |
 | Rex | Disponível | [`rex/`](rex/) |
 | Status line do Claude Code | Disponível | [`cc-statusline/`](cc-statusline/) |
+| Powerlevel10k | Disponível | [`p10k/`](p10k/) |
+| Kiro CLI | Disponível | [`kiro-cli/`](kiro-cli/) |
 
-Os portes para Zed, VS Code, Ghostty, herdr, Rex e a status line do Claude Code se instalam a partir deste repositório. Nenhum deles está publicado em registro de extensões nem vem com o aplicativo ainda.
+Os portes para Zed, VS Code, Ghostty, herdr, Rex, a status line do Claude Code, o Powerlevel10k e o Kiro CLI se instalam a partir deste repositório. Nenhum deles está publicado em registro de extensões nem vem com o aplicativo ainda.
 
 ## Obsidian
 
@@ -185,9 +187,35 @@ O script copia a status line para `~/.claude/ardentia-statusline.sh` e mostra a 
 
 Os segmentos, as cores de cada um e as notas do porte estão em [`cc-statusline/README.pt-BR.md`](cc-statusline/README.pt-BR.md).
 
+## Powerlevel10k
+
+Configuração completa do Powerlevel10k para o prompt do zsh, desenhada como a status line: a pasta, o estado do Git, o resultado do último comando, a duração dele e as tarefas em segundo plano em uma cápsula quieta, e o caractere de prompt na linha de baixo. O fundo fica em Relevo e a cor só aparece onde diz alguma coisa. Precisa do Powerlevel10k, de um terminal com cor de 24 bits e de uma fonte de terminal com glifos Nerd Font.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/p10k/install.sh
+```
+
+O script copia a configuração para `~/.p10k-ardentia.zsh` e mostra a linha do `~/.zshrc` a trocar. Ele não edita o `~/.zshrc` e não toca no `~/.p10k.zsh`.
+
+Os segmentos, as cores de cada um e as notas do porte estão em [`p10k/README.pt-BR.md`](p10k/README.pt-BR.md).
+
+## Kiro CLI
+
+O Kiro CLI não aceita cores próprias, então este porte não traz nenhuma. Ele faz a interface desenhar com as 16 cores do terminal: num terminal com o Ardentia, como o Ghostty ou o Rex, o Kiro CLI sai na paleta. A cor vem do terminal.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/kiro-cli/install.sh
+```
+
+O script grava as preferências de tema em `~/.kiro/settings/`, guarda uma cópia das que estavam lá e mostra a linha `KIRO_TERMINAL_THEME=safe` que vai na configuração do seu shell. Ele não edita nenhum arquivo do shell.
+
+O que muda e as notas do porte estão em [`kiro-cli/README.pt-BR.md`](kiro-cli/README.pt-BR.md).
+
 ## Uma paleta em todos os portes
 
-Os portes do Zed, do VS Code, do Ghostty, do herdr e do Rex tiram as cores da paleta do tema do Obsidian, mais uma mistura já calculada para a seleção onde o formato não tem alfa. As 16 cores de terminal são as mesmas nos cinco. Um comando confere as duas regras, com o [Bun](https://bun.sh):
+Os portes do Zed, do VS Code, do Ghostty, do herdr, do Rex e do Powerlevel10k tiram as cores da paleta do tema do Obsidian, mais uma mistura já calculada para a seleção onde o formato não tem alfa. As 16 cores de terminal são as mesmas nos cinco portes que as definem. O porte do Kiro CLI não tem cores próprias. Um comando confere as duas regras, com o [Bun](https://bun.sh):
 
 ```bash
 bun scripts/check-themes.ts

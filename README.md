@@ -21,8 +21,10 @@ It is one palette, four typefaces and a handful of shapes, ported app by app.
 | herdr | Available | [`herdr/`](herdr/) |
 | Rex | Available | [`rex/`](rex/) |
 | Claude Code status line | Available | [`cc-statusline/`](cc-statusline/) |
+| Powerlevel10k | Available | [`p10k/`](p10k/) |
+| Kiro CLI | Available | [`kiro-cli/`](kiro-cli/) |
 
-The ports for Zed, VS Code, Ghostty, herdr, Rex and the Claude Code status line install from this repository. None of them is published in an extension registry or ships with its app yet.
+The ports for Zed, VS Code, Ghostty, herdr, Rex, the Claude Code status line, Powerlevel10k and Kiro CLI install from this repository. None of them is published in an extension registry or ships with its app yet.
 
 ## Obsidian
 
@@ -185,9 +187,35 @@ The script copies the status line to `~/.claude/ardentia-statusline.sh` and prin
 
 The segments, their colors and the port notes are in [`cc-statusline/README.md`](cc-statusline/README.md).
 
+## Powerlevel10k
+
+A complete Powerlevel10k configuration for the zsh prompt, drawn like the status line: the folder, the Git status, the result of the last command, its duration and the background jobs in one quiet capsule, and the prompt character on the line below. The background stays in Relevo and color shows only where it tells something. It needs Powerlevel10k, a terminal with 24-bit color and a terminal font with Nerd Font glyphs.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/p10k/install.sh
+```
+
+The script copies the configuration to `~/.p10k-ardentia.zsh` and prints the line of `~/.zshrc` to change. It does not edit `~/.zshrc` and leaves `~/.p10k.zsh` alone.
+
+The segments, their colors and the port notes are in [`p10k/README.md`](p10k/README.md).
+
+## Kiro CLI
+
+Kiro CLI does not take colors of your own, so this port carries none. It makes the interface draw with the 16 colors of the terminal: on a terminal that runs Ardentia, such as Ghostty or Rex, Kiro CLI comes out in the palette. The color comes from the terminal.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/kiro-cli/install.sh
+```
+
+The script writes the theme preferences into `~/.kiro/settings/`, keeps a copy of the ones that were there and prints the `KIRO_TERMINAL_THEME=safe` line to add to your shell configuration. It does not edit any shell file.
+
+What changes and the port notes are in [`kiro-cli/README.md`](kiro-cli/README.md).
+
 ## One palette in every port
 
-The Zed, VS Code, Ghostty, herdr and Rex ports take their colors from the palette of the Obsidian theme, plus one precomputed mix for the selection where the format has no alpha. The 16 terminal colors are the same in all five. One command checks both rules, with [Bun](https://bun.sh):
+The Zed, VS Code, Ghostty, herdr, Rex and Powerlevel10k ports take their colors from the palette of the Obsidian theme, plus one precomputed mix for the selection where the format has no alpha. The 16 terminal colors are the same in the five ports that set them. The Kiro CLI port has no colors of its own. One command checks both rules, with [Bun](https://bun.sh):
 
 ```bash
 bun scripts/check-themes.ts
