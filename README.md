@@ -23,8 +23,9 @@ It is one palette, four typefaces and a handful of shapes, ported app by app.
 | Claude Code status line | Available | [`cc-statusline/`](cc-statusline/) |
 | Powerlevel10k | Available | [`p10k/`](p10k/) |
 | Kiro CLI | Available | [`kiro-cli/`](kiro-cli/) |
+| eza | Available | [`eza/`](eza/) |
 
-The ports for Zed, VS Code, Ghostty, herdr, Rex, the Claude Code status line, Powerlevel10k and Kiro CLI install from this repository. None of them is published in an extension registry or ships with its app yet.
+The ports for Zed, VS Code, Ghostty, herdr, Rex, the Claude Code status line, Powerlevel10k, Kiro CLI and eza install from this repository. None of them is published in an extension registry or ships with its app yet.
 
 ## Obsidian
 
@@ -213,9 +214,22 @@ The script writes the theme preferences into `~/.kiro/settings/`, keeps a copy o
 
 What changes and the port notes are in [`kiro-cli/README.md`](kiro-cli/README.md).
 
+## eza
+
+A theme for the `eza` file listing. It quiets the metadata of a long listing, which is permissions, size, owner and date, in Tênue, and leaves color for what tells something: folders in Maré, symbolic links in Ardentia, executables in Sargaço and the Git state in its own colors.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/eza/install.sh
+```
+
+The script copies `theme.yml` to the folder where eza reads it, keeps a copy of a different one that was already there and prints where the file went. It does not edit any shell file.
+
+The colors by field and the port notes are in [`eza/README.md`](eza/README.md).
+
 ## One palette in every port
 
-The Zed, VS Code, Ghostty, herdr, Rex and Powerlevel10k ports take their colors from the palette of the Obsidian theme, plus one precomputed mix for the selection where the format has no alpha. The 16 terminal colors are the same in the five ports that set them. The Kiro CLI port has no colors of its own. One command checks both rules, with [Bun](https://bun.sh):
+The Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k and eza ports take their colors from the palette of the Obsidian theme, plus one precomputed mix for the selection where the format has no alpha. The 16 terminal colors are the same in the five ports that set them. The Kiro CLI port has no colors of its own. One command checks both rules, with [Bun](https://bun.sh):
 
 ```bash
 bun scripts/check-themes.ts

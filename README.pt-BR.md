@@ -23,8 +23,9 @@ Ardentia é o brilho que o mar acende à noite, quando o plâncton se agita na �
 | Status line do Claude Code | Disponível | [`cc-statusline/`](cc-statusline/) |
 | Powerlevel10k | Disponível | [`p10k/`](p10k/) |
 | Kiro CLI | Disponível | [`kiro-cli/`](kiro-cli/) |
+| eza | Disponível | [`eza/`](eza/) |
 
-Os portes para Zed, VS Code, Ghostty, herdr, Rex, a status line do Claude Code, o Powerlevel10k e o Kiro CLI se instalam a partir deste repositório. Nenhum deles está publicado em registro de extensões nem vem com o aplicativo ainda.
+Os portes para Zed, VS Code, Ghostty, herdr, Rex, a status line do Claude Code, o Powerlevel10k, o Kiro CLI e o eza se instalam a partir deste repositório. Nenhum deles está publicado em registro de extensões nem vem com o aplicativo ainda.
 
 ## Obsidian
 
@@ -213,9 +214,22 @@ O script grava as preferências de tema em `~/.kiro/settings/`, guarda uma cópi
 
 O que muda e as notas do porte estão em [`kiro-cli/README.pt-BR.md`](kiro-cli/README.pt-BR.md).
 
+## eza
+
+Tema para a listagem de arquivos do `eza`. Ele silencia o metadado de uma listagem longa, que é permissão, tamanho, dono e data, em Tênue, e deixa a cor para o que diz alguma coisa: pastas em Maré, links simbólicos em Ardentia, executáveis em Sargaço e o estado do Git nas cores dele.
+
+```bash
+git clone https://github.com/jotafurtado/ardentia.git
+./ardentia/eza/install.sh
+```
+
+O script copia `theme.yml` para a pasta onde o eza o lê, guarda uma cópia de um diferente que já estivesse ali e mostra onde o arquivo foi parar. Ele não edita nenhum arquivo do shell.
+
+As cores de cada campo e as notas do porte estão em [`eza/README.pt-BR.md`](eza/README.pt-BR.md).
+
 ## Uma paleta em todos os portes
 
-Os portes do Zed, do VS Code, do Ghostty, do herdr, do Rex e do Powerlevel10k tiram as cores da paleta do tema do Obsidian, mais uma mistura já calculada para a seleção onde o formato não tem alfa. As 16 cores de terminal são as mesmas nos cinco portes que as definem. O porte do Kiro CLI não tem cores próprias. Um comando confere as duas regras, com o [Bun](https://bun.sh):
+Os portes do Zed, do VS Code, do Ghostty, do herdr, do Rex, do Powerlevel10k e do eza tiram as cores da paleta do tema do Obsidian, mais uma mistura já calculada para a seleção onde o formato não tem alfa. As 16 cores de terminal são as mesmas nos cinco portes que as definem. O porte do Kiro CLI não tem cores próprias. Um comando confere as duas regras, com o [Bun](https://bun.sh):
 
 ```bash
 bun scripts/check-themes.ts
