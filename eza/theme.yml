@@ -1,0 +1,98 @@
+# Ardentia para o eza, versão 1.0.0
+# O brilho que o mar acende à noite. Tema escuro.
+# Autor: Jota Furtado. Licença: MIT.
+# https://github.com/jotafurtado/ardentia
+#
+# Metadado em tênue, para a cor sobrar só onde diz alguma coisa. Todo campo que não aparece
+# aqui fica com o padrão do eza. Copie para a pasta de configuração do eza, ou use o install.sh.
+
+filekinds:
+  normal: {foreground: "#dde2fa"}
+  directory: {foreground: "#7cb2ff", is_bold: false, is_underline: false}
+  symlink: {foreground: "#4de8d8"}
+  executable: {foreground: "#b4ee7c", is_bold: true, is_underline: false}
+  pipe: {foreground: "#b9a0ff"}
+  socket: {foreground: "#b9a0ff"}
+  block_device: {foreground: "#b9a0ff"}
+  char_device: {foreground: "#b9a0ff"}
+  special: {foreground: "#b9a0ff"}
+  mount_point: {foreground: "#7cb2ff", is_bold: false, is_underline: false}
+
+file_type:
+  image: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+  video: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+  music: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+  lossless: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+  crypto: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+  document: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+  compressed: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+  temp: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+  compiled: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+  build: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+  source: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+  immediate: {foreground: "#dde2fa", is_bold: false, is_underline: false}
+
+perms:
+  user_read: {foreground: "#8791c2", is_bold: false}
+  user_write: {foreground: "#8791c2", is_bold: false}
+  user_execute_file: {foreground: "#8791c2", is_bold: false, is_underline: false}
+  user_execute_other: {foreground: "#8791c2", is_bold: false, is_underline: false}
+  group_read: {foreground: "#8791c2", is_bold: false}
+  group_write: {foreground: "#8791c2", is_bold: false}
+  group_execute: {foreground: "#8791c2", is_bold: false}
+  other_read: {foreground: "#8791c2", is_bold: false}
+  other_write: {foreground: "#8791c2", is_bold: false}
+  other_execute: {foreground: "#8791c2", is_bold: false}
+  attribute: {foreground: "#8791c2", is_bold: false}
+  special_user_file: {foreground: "#ffcc70"}
+  special_other: {foreground: "#ffcc70"}
+
+size:
+  major: {foreground: "#8791c2", is_bold: false}
+  minor: {foreground: "#8791c2", is_bold: false}
+  number_byte: {foreground: "#8791c2", is_bold: false}
+  number_kilo: {foreground: "#8791c2", is_bold: false}
+  number_mega: {foreground: "#8791c2", is_bold: false}
+  number_giga: {foreground: "#8791c2", is_bold: false}
+  number_huge: {foreground: "#8791c2", is_bold: false}
+  unit_byte: {foreground: "#8791c2", is_bold: false}
+  unit_kilo: {foreground: "#8791c2", is_bold: false}
+  unit_mega: {foreground: "#8791c2", is_bold: false}
+  unit_giga: {foreground: "#8791c2", is_bold: false}
+  unit_huge: {foreground: "#8791c2", is_bold: false}
+
+users:
+  user_you: {foreground: "#8791c2", is_bold: false}
+  user_root: {foreground: "#ff7383"}
+  user_other: {foreground: "#8791c2", is_bold: false}
+  group_yours: {foreground: "#8791c2", is_bold: false}
+  group_other: {foreground: "#8791c2", is_bold: false}
+  group_root: {foreground: "#ff7383"}
+
+links:
+  normal: {foreground: "#8791c2", is_bold: false}
+  multi_link_file: {foreground: "#ffcc70"}
+
+git:
+  new: {foreground: "#b4ee7c"}
+  modified: {foreground: "#ffcc70"}
+  deleted: {foreground: "#ff7383"}
+  renamed: {foreground: "#4de8d8"}
+  ignored: {foreground: "#8791c2"}
+  conflicted: {foreground: "#ff7383"}
+
+git_repo:
+  branch_main: {foreground: "#4de8d8"}
+  branch_other: {foreground: "#ffcc70"}
+  git_clean: {foreground: "#b4ee7c"}
+  git_dirty: {foreground: "#ffcc70"}
+
+punctuation: {foreground: "#8791c2", is_bold: false}
+date: {foreground: "#8791c2", is_bold: false}
+inode: {foreground: "#8791c2", is_bold: false}
+blocks: {foreground: "#8791c2", is_bold: false}
+octal: {foreground: "#8791c2", is_bold: false}
+flags: {foreground: "#8791c2", is_bold: false}
+header: {foreground: "#dde2fa", is_bold: false, is_underline: true}
+broken_symlink: {foreground: "#ff7383"}
+broken_path_overlay: {foreground: "#ff7383"}
