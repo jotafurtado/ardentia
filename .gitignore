@@ -14,3 +14,13 @@ obsidian/demo-en/.trash/
 # memória de trabalho local dos agentes de código
 AGENTS.md
 on-track/
+
+# habilidades e agentes locais
+.agents/
+.claude/
+.kiro/
+skills-lock.json
+.codegraph/
+.codex/
+.mcp.json
+opencode.jsonc
