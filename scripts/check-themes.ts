@@ -520,6 +520,32 @@ function parseCodex(text: string): ParsedTheme {
   return { colors, ansi: [] };
 }
 
+function parseCodexDesktop(text: string): ParsedTheme {
+  // As chaves vêm do config.toml do app desktop do Codex. Só accent, ink, surface e
+  // semanticColors são cor; contrast, opaqueWindows e fonts não são.
+  const root: unknown = Bun.TOML.parse(text);
+  const desktop = isRecord(root) ? root.desktop : undefined;
+  const chrome = isRecord(desktop) ? desktop.appearanceDarkChromeTheme : undefined;
+  if (!isRecord(chrome)) throw new Error("[desktop.appearanceDarkChromeTheme] ausente");
+
+  const colors: ColorUse[] = [];
+  const problems: string[] = [];
+  for (const key of ["accent", "ink", "surface"]) {
+    const value = chrome[key];
+    if (typeof value === "string") colors.push({ path: `appearanceDarkChromeTheme.${key}`, value });
+    else problems.push(`appearanceDarkChromeTheme.${key} ausente`);
+  }
+  const semantic = chrome.semanticColors;
+  if (isRecord(semantic)) {
+    for (const [key, value] of Object.entries(semantic)) {
+      if (typeof value === "string") colors.push({ path: `semanticColors.${key}`, value });
+    }
+  } else {
+    problems.push("appearanceDarkChromeTheme.semanticColors ausente");
+  }
+  return { colors, ansi: [], problems };
+}
+
 const THEME_FILES: readonly ThemeFile[] = [
   {
     path: "zed/themes/ardentia.json",
@@ -591,6 +617,13 @@ const THEME_FILES: readonly ThemeFile[] = [
     allowsSelection: false,
     hasAnsi: false,
     parse: parseCodex,
+  },
+  {
+    path: "codex/desktop.toml",
+    allowsAlpha: () => false,
+    allowsSelection: false,
+    hasAnsi: false,
+    parse: parseCodexDesktop,
   },
 ];
 const ANSI_FILE_COUNT = THEME_FILES.filter((file) => file.hasAnsi).length;
