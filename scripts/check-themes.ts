@@ -1,4 +1,4 @@
-// Confere os temas dos portes (Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k, eza) contra o
+// Confere os temas dos portes (Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k, eza, OpenCode) contra o
 // contrato de porte: toda cor pertence à paleta, as 16 cores ANSI são as do contrato, nos
 // portes que as definem, e as cópias de LICENSE são idênticas à da raiz. A paleta e a tabela
 // ANSI abaixo foram copiadas do contrato.
@@ -357,6 +357,148 @@ function parseEza(text: string): ParsedTheme {
   return { colors, ansi: [], problems };
 }
 
+// Chaves que o OpenCode exige em "base" de um tema V2 (schema.ts, ramo dev do repositório
+// anomalyco/opencode). Sem uma delas o OpenCode recusa o tema.
+const OPENCODE_STATES = ["primary", "secondary", "destructive"];
+const OPENCODE_FEEDBACK = ["error", "warning", "success", "info"];
+const OPENCODE_BASE_PATHS: readonly string[] = [
+  "categorical",
+  "text.base",
+  "text.muted",
+  ...OPENCODE_STATES.map((name) => `text.action.${name}.base`),
+  "text.formfield.base",
+  ...OPENCODE_FEEDBACK.map((name) => `text.feedback.${name}.base`),
+  "background.base",
+  "background.raised.base",
+  "background.raised.high",
+  "background.raised.max",
+  ...OPENCODE_STATES.map((name) => `background.action.${name}.base`),
+  "background.formfield.base",
+  ...OPENCODE_FEEDBACK.map((name) => `background.feedback.${name}.base`),
+  "border.base",
+  "scrollbar.base",
+  "diff.text.added",
+  "diff.text.removed",
+  "diff.text.context",
+  "diff.text.hunkHeader",
+  "diff.background.added",
+  "diff.background.removed",
+  "diff.background.context",
+  "diff.highlight.added",
+  "diff.highlight.removed",
+  "diff.lineNumber.text",
+  "diff.lineNumber.background.added",
+  "diff.lineNumber.background.removed",
+  ...["comment", "keyword", "function", "variable", "string", "number", "type", "operator", "punctuation"].map(
+    (name) => `syntax.${name}`,
+  ),
+  ...[
+    "text",
+    "heading",
+    "link",
+    "linkText",
+    "code",
+    "blockQuote",
+    "emphasis",
+    "strong",
+    "horizontalRule",
+    "listItem",
+    "listEnumeration",
+    "image",
+    "imageText",
+    "codeBlock",
+  ].map((name) => `markdown.${name}`),
+];
+const OPENCODE_HUE_STEPS = ["100", "200", "300", "400", "500", "600", "700", "800", "900"];
+const OPENCODE_SEMANTIC_HUES = ["accent", "interactive", "neutral"];
+
+function valueAt(root: unknown, path: string): unknown {
+  let current: unknown = root;
+  for (const key of path.split(".")) {
+    if (!isRecord(current)) return undefined;
+    current = current[key];
+  }
+  return current;
+}
+
+function parseOpencode(text: string): ParsedTheme {
+  // O tema V2 do OpenCode: "base" completo e um modo, "dark", com a escala "hue". Cor é toda
+  // string que não é "$schema", nome de matiz em "categorical" nem referência ("$..."). O
+  // OpenCode aceita hex curto, alfa e "transparent"; aqui nada disso passa, só #rrggbb.
+  const root: unknown = JSON.parse(text);
+  if (!isRecord(root)) throw new Error("a raiz do tema não é um objeto");
+
+  const colors: ColorUse[] = [];
+  const problems: string[] = [];
+
+  for (const key of Object.keys(root)) {
+    if (!["$schema", "base", "dark"].includes(key)) {
+      problems.push(`${key}: o porte tem só base e dark${key === "light" ? ", sem modo claro" : ""}`);
+    }
+  }
+  const base = root.base;
+  const hue = isRecord(root.dark) ? root.dark.hue : undefined;
+  if (!isRecord(base)) throw new Error("base ausente");
+  if (!isRecord(hue)) throw new Error("dark.hue ausente");
+
+  for (const path of OPENCODE_BASE_PATHS) {
+    if (valueAt(base, path) === undefined) problems.push(`base.${path} ausente`);
+  }
+  for (const name of OPENCODE_SEMANTIC_HUES) {
+    if (hue[name] === undefined) problems.push(`dark.hue.${name} ausente`);
+  }
+
+  for (const [name, scale] of Object.entries(hue)) {
+    const where = `dark.hue.${name}`;
+    if (typeof scale === "string") {
+      const target = /^\$hue\.([^.]+)$/.exec(scale)?.[1];
+      if (target === undefined || hue[target] === undefined) problems.push(`${where} = ${scale} não aponta para uma escala que existe`);
+    } else if (isRecord(scale)) {
+      for (const step of OPENCODE_HUE_STEPS) {
+        if (typeof scale[step] !== "string") problems.push(`${where}.${step} ausente`);
+      }
+      for (const step of Object.keys(scale)) {
+        if (!OPENCODE_HUE_STEPS.includes(step)) problems.push(`${where}.${step} não é um passo de 100 a 900`);
+      }
+    } else {
+      problems.push(`${where} não é uma escala nem uma referência`);
+    }
+  }
+
+  const categorical = isRecord(base) ? base.categorical : undefined;
+  if (Array.isArray(categorical)) {
+    categorical.forEach((name: unknown, index) => {
+      if (typeof name !== "string" || hue[name] === undefined) problems.push(`base.categorical[${index}] = ${String(name)} não é um matiz de dark.hue`);
+    });
+  }
+
+  const walk = (value: unknown, path: string): void => {
+    if (typeof value === "string") {
+      if (path === "$schema" || path.startsWith("base.categorical[")) return;
+      if (value.startsWith("$")) {
+        const ref = /^\$hue\.([^.]+)\.(\d{3})$/.exec(value);
+        if (ref !== null) {
+          const scale = hue[ref[1] ?? ""];
+          if (scale === undefined || (isRecord(scale) && scale[ref[2] ?? ""] === undefined)) {
+            problems.push(`${path} = ${value} não aponta para um passo que existe`);
+          }
+        } else if (!value.startsWith("$hue.") && valueAt(base, value.slice(1)) === undefined) {
+          problems.push(`${path} = ${value} não aponta para um valor de base`);
+        }
+        return;
+      }
+      colors.push({ path, value });
+    } else if (Array.isArray(value)) {
+      value.forEach((item: unknown, index) => walk(item, `${path}[${index}]`));
+    } else if (isRecord(value)) {
+      for (const [key, item] of Object.entries(value)) walk(item, path === "" ? key : `${path}.${key}`);
+    }
+  };
+  walk(root, "");
+
+  return { colors, ansi: [], problems };
+}
+
 const THEME_FILES: readonly ThemeFile[] = [
   {
     path: "zed/themes/ardentia.json",
@@ -414,6 +556,13 @@ const THEME_FILES: readonly ThemeFile[] = [
     allowsSelection: false,
     hasAnsi: false,
     parse: parseEza,
+  },
+  {
+    path: "opencode/ardentia.json",
+    allowsAlpha: () => false,
+    allowsSelection: false,
+    hasAnsi: false,
+    parse: parseOpencode,
   },
 ];
 const ANSI_FILE_COUNT = THEME_FILES.filter((file) => file.hasAnsi).length;
