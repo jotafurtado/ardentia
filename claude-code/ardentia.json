@@ -1,0 +1,12 @@
+{
+  "name": "Ardentia",
+  "base": "dark-ansi",
+  "overrides": {
+    "userMessageBackground": "#1d2240",
+    "userMessageBackgroundHover": "#272d52",
+    "composerSidebarBackground": "#1d2240",
+    "memoryBackgroundColor": "#1d2240",
+    "bashMessageBackgroundColor": "#1d2240",
+    "rate_limit_empty": "#272d52"
+  }
+}
