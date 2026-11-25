@@ -306,8 +306,10 @@ body {
   /* Links */
   --link-color: var(--ardentia-acento);
   --link-color-hover: var(--ardentia-acento-claro);
-  --link-decoration: underline;
-  --link-decoration-hover: underline;
+  --link-decoration: none;
+  --link-decoration-hover: none;
+  --link-external-decoration: none;
+  --link-external-decoration-hover: none;
   --link-external-color: var(--ardentia-mare);
   --link-external-color-hover: var(--ardentia-mare-clara);
   --link-unresolved-color: var(--ardentia-tenue);
