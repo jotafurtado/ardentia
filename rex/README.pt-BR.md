@@ -47,3 +47,4 @@ Para tingir a interface com as cores do tema, ligue Tint with Theme em Settings,
 - As 16 cores e as demais chaves são as da [referência do Ghostty](../ghostty/README.pt-BR.md).
 - `split-divider-color` e `unfocused-split-fill` são chaves do Ghostty. O Rex provavelmente as ignora, e isso não foi testado. O destaque do painel ativo é uma configuração do Rex (Settings, Interface, Active Pane).
 - `scripts/check-themes.ts` confere este arquivo com as mesmas regras do arquivo do Ghostty.
+- Se você usa o Claude Code, instale também o porte [`claude-code/`](../claude-code/README.pt-BR.md): ele leva a caixa do prompt enviado a Relevo.

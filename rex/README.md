@@ -47,3 +47,4 @@ To tint the interface with the theme colors, turn on Tint with Theme in Settings
 - The 16 colors and the other keys are the ones in the [Ghostty reference](../ghostty/README.md).
 - `split-divider-color` and `unfocused-split-fill` are Ghostty keys. Rex probably ignores them, and this was not tested. The active pane highlight is a Rex setting (Settings, Interface, Active Pane).
 - `scripts/check-themes.ts` checks this file with the same rules as the Ghostty one.
+- If you use Claude Code, install the [`claude-code/`](../claude-code/README.md) port too: it brings the box of a sent prompt down to Relevo.

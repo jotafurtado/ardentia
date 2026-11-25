@@ -20,6 +20,7 @@ It is one palette, four typefaces and a handful of shapes, ported app by app.
 | Ghostty | Available | [`ghostty/`](ghostty/) |
 | herdr | Available | [`herdr/`](herdr/) |
 | Rex | Available | [`rex/`](rex/) |
+| Claude Code | Available | [`claude-code/`](claude-code/) |
 | Claude Code status line | Available | [`cc-statusline/`](cc-statusline/) |
 | Powerlevel10k | Available | [`p10k/`](p10k/) |
 | Kiro CLI | Available | [`kiro-cli/`](kiro-cli/) |
@@ -27,7 +28,7 @@ It is one palette, four typefaces and a handful of shapes, ported app by app.
 | OpenCode | Available | [`opencode/`](opencode/) |
 | Codex | Available | [`codex/`](codex/) |
 
-The ports for Zed, VS Code, Ghostty, herdr, Rex, the Claude Code status line, Powerlevel10k, Kiro CLI, eza, OpenCode and Codex install from this repository. None of them is published in an extension registry or ships with its app yet.
+The ports for Zed, VS Code, Ghostty, herdr, Rex, Claude Code, the Claude Code status line, Powerlevel10k, Kiro CLI, eza, OpenCode and Codex install from this repository. None of them is published in an extension registry or ships with its app yet.
 
 ## Obsidian
 
@@ -177,6 +178,18 @@ The script imports the theme through the Rex CLI, which needs Remote Control on.
 
 The notes are in [`rex/README.md`](rex/README.md).
 
+## Claude Code
+
+A custom theme for the Claude Code terminal interface. It sits on top of the built-in `dark-ansi` theme, so Claude Code draws with the 16 colors of the terminal, and it brings the box of a sent prompt and the other input backgrounds down to Relevo. It needs a terminal that runs Ardentia.
+
+```bash
+./ardentia/claude-code/install.sh
+```
+
+The script copies `ardentia.json` to `~/.claude/themes`, keeps a copy of a different one that was already there and prints the two ways to turn the theme on: pick Ardentia in `/theme`, or set `"theme": "custom:ardentia"` in `settings.json`. It does not edit `settings.json`.
+
+The colors by key and the port notes are in [`claude-code/README.md`](claude-code/README.md).
+
 ## Claude Code status line
 
 A status line for Claude Code: a Bash script that draws the folder, the Git branch, the changes, the model, the context in use and the session name in one quiet capsule. The background stays in Relevo and the text takes the lights of the palette; the context and the changes switch color with their values. It needs `jq`, `git` and a terminal font with Nerd Font glyphs.
@@ -256,7 +269,7 @@ The colors by group and the port notes are in [`codex/README.md`](codex/README.m
 
 ## One palette in every port
 
-The Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k, eza, OpenCode and Codex ports take their colors from the palette of the Obsidian theme, plus one precomputed mix for the selection where the format has no alpha. The 16 terminal colors are the same in the five ports that set them. The Kiro CLI port has no colors of its own. One command checks both rules, with [Bun](https://bun.sh):
+The Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k, eza, OpenCode, Codex and Claude Code ports take their colors from the palette of the Obsidian theme, plus one precomputed mix for the selection where the format has no alpha. The 16 terminal colors are the same in the five ports that set them. The Kiro CLI port has no colors of its own. One command checks both rules, with [Bun](https://bun.sh):
 
 ```bash
 bun scripts/check-themes.ts

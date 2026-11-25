@@ -102,7 +102,8 @@ font-family = Cascadia Code
 - The file sets only color keys. Ghostty's documentation warns that a theme can set any configuration option and should be reviewed before use. This one has no font, no opacity and no cursor style: the keys are the ones in the two tables above. It is a short file, so read it before installing.
 - The terminal background is Nota, the surface the contrast ratios in the main README were measured against.
 - Black is Relevo, almost the color of the background. It works as a background and as text over a colored background. A program that writes in black over the default background is unreadable, and `minimum-contrast = 1.1` in your Ghostty configuration fixes that.
-- Bright black is Tênue, at 5.6:1 over Nota. It is the color of shell suggestions and of comments in many terminal programs, so it has to be legible.
+- Bright black is Tênue, at 5.6:1 over Nota. It is the color of shell suggestions and of comments in many terminal programs, so it has to be legible. Claude Code in its `dark-ansi` theme uses it as the background of the box of a sent prompt, where Texto measures 2.4:1.
+- If you use Claude Code, install the [`claude-code/`](../claude-code/README.md) port too: it fixes that box by bringing it down to Relevo.
 - Red and green repeat the normal color in bright. The palette has no lighter variant of those two, and inventing one would break the rule that every color comes from the palette.
 - Bright magenta is Água-viva, the light that did not fit in the six normal hues.
 - The selection is a mix computed ahead of time. Ghostty colors are `#RRGGBB`, `RRGGBB` or a named X11 color, with no alpha, so `selection-background` is Ardentia at 24% over Nota, which gives `#234b58`. It is the same selection the Obsidian port draws, and the only color in the file that is not one of the palette's own. Texto over it measures 7.4:1.

@@ -140,6 +140,8 @@ They are the `ansi` list of `ardentia.json`, in this order.
 | 14 | bright cyan | Ardentia clara | `#8ff5ea` |
 | 15 | bright white | Texto | `#dde2fa` |
 
+If you use Claude Code, install the [`claude-code/`](../claude-code/README.md) port too: it brings the box of a sent prompt down to Relevo.
+
 ## Color map of the terminal block
 
 The base theme is `tokyo-night`. The 19 tokens below are the whole palette of herdr 0.9.5, so nothing of the base shows.

@@ -102,7 +102,8 @@ font-family = Cascadia Code
 - O arquivo define só chaves de cor. A documentação do Ghostty avisa que um tema pode definir qualquer opção de configuração e deve ser revisado antes do uso. Este não tem fonte, opacidade nem estilo de cursor: as chaves são as das duas tabelas acima. É um arquivo curto, então leia antes de instalar.
 - O fundo do terminal é Nota, a superfície contra a qual os contrastes do README principal foram medidos.
 - O preto (black) é Relevo, quase a cor do fundo. Serve de fundo e de texto sobre fundo colorido. Um programa que escreve em preto sobre o fundo padrão fica ilegível, e `minimum-contrast = 1.1` na sua configuração do Ghostty resolve.
-- O preto brilhante (bright black) é Tênue, a 5,6:1 sobre Nota. É a cor de sugestão de shell e de comentário em muito programa de terminal, então precisa ser legível.
+- O preto brilhante (bright black) é Tênue, a 5,6:1 sobre Nota. É a cor de sugestão de shell e de comentário em muito programa de terminal, então precisa ser legível. O Claude Code no tema `dark-ansi` a usa como fundo da caixa do prompt enviado, onde Texto mede 2,4:1.
+- Se você usa o Claude Code, instale também o porte [`claude-code/`](../claude-code/README.pt-BR.md): ele corrige essa caixa, levando-a a Relevo.
 - O vermelho e o verde brilhantes repetem a cor normal. A paleta não tem variante clara dessas duas, e inventar uma quebraria a regra de que toda cor vem da paleta.
 - O magenta brilhante (bright magenta) é Água-viva, a luz que não cabia nos seis matizes normais.
 - A seleção é uma mistura já calculada. As cores do Ghostty são `#RRGGBB`, `RRGGBB` ou um nome de cor X11, sem alfa, então `selection-background` é o Ardentia a 24% sobre Nota, o que dá `#234b58`. É a mesma seleção que o porte do Obsidian desenha, e a única cor do arquivo que não é uma das cores da paleta. Texto sobre ela mede 7,4:1.

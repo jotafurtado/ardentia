@@ -20,6 +20,7 @@ Ardentia é o brilho que o mar acende à noite, quando o plâncton se agita na �
 | Ghostty | Disponível | [`ghostty/`](ghostty/) |
 | herdr | Disponível | [`herdr/`](herdr/) |
 | Rex | Disponível | [`rex/`](rex/) |
+| Claude Code | Disponível | [`claude-code/`](claude-code/) |
 | Status line do Claude Code | Disponível | [`cc-statusline/`](cc-statusline/) |
 | Powerlevel10k | Disponível | [`p10k/`](p10k/) |
 | Kiro CLI | Disponível | [`kiro-cli/`](kiro-cli/) |
@@ -27,7 +28,7 @@ Ardentia é o brilho que o mar acende à noite, quando o plâncton se agita na �
 | OpenCode | Disponível | [`opencode/`](opencode/) |
 | Codex | Disponível | [`codex/`](codex/) |
 
-Os portes para Zed, VS Code, Ghostty, herdr, Rex, a status line do Claude Code, o Powerlevel10k, o Kiro CLI, o eza, o OpenCode e o Codex se instalam a partir deste repositório. Nenhum deles está publicado em registro de extensões nem vem com o aplicativo ainda.
+Os portes para Zed, VS Code, Ghostty, herdr, Rex, o Claude Code, a status line do Claude Code, o Powerlevel10k, o Kiro CLI, o eza, o OpenCode e o Codex se instalam a partir deste repositório. Nenhum deles está publicado em registro de extensões nem vem com o aplicativo ainda.
 
 ## Obsidian
 
@@ -177,6 +178,18 @@ O script importa o tema pelo CLI do Rex, que precisa do Remote Control ligado. C
 
 As notas estão em [`rex/README.pt-BR.md`](rex/README.pt-BR.md).
 
+## Claude Code
+
+Tema personalizado para a interface de terminal do Claude Code. Ele fica por cima do tema nativo `dark-ansi`, então o Claude Code desenha com as 16 cores do terminal, e leva a caixa do prompt enviado e os demais fundos de entrada a Relevo. Precisa de um terminal com o Ardentia.
+
+```bash
+./ardentia/claude-code/install.sh
+```
+
+O script copia `ardentia.json` para `~/.claude/themes`, guarda uma cópia de um diferente que já estivesse ali e mostra as duas formas de ligar o tema: escolher Ardentia em `/theme`, ou pôr `"theme": "custom:ardentia"` no `settings.json`. Ele não edita o `settings.json`.
+
+As cores de cada chave e as notas do porte estão em [`claude-code/README.pt-BR.md`](claude-code/README.pt-BR.md).
+
 ## Status line do Claude Code
 
 Status line para o Claude Code: um script Bash que desenha a pasta, o ramo do Git, as alterações, o modelo, o contexto em uso e o nome da sessão em uma cápsula quieta. O fundo fica em Relevo e o texto leva as luzes da paleta; o contexto e as alterações trocam de cor conforme o valor. Precisa de `jq`, de `git` e de uma fonte de terminal com glifos Nerd Font.
@@ -256,7 +269,7 @@ As cores de cada grupo e as notas do porte estão em [`codex/README.pt-BR.md`](c
 
 ## Uma paleta em todos os portes
 
-Os portes do Zed, do VS Code, do Ghostty, do herdr, do Rex, do Powerlevel10k, do eza, do OpenCode e do Codex tiram as cores da paleta do tema do Obsidian, mais uma mistura já calculada para a seleção onde o formato não tem alfa. As 16 cores de terminal são as mesmas nos cinco portes que as definem. O porte do Kiro CLI não tem cores próprias. Um comando confere as duas regras, com o [Bun](https://bun.sh):
+Os portes do Zed, do VS Code, do Ghostty, do herdr, do Rex, do Powerlevel10k, do eza, do OpenCode, do Codex e do Claude Code tiram as cores da paleta do tema do Obsidian, mais uma mistura já calculada para a seleção onde o formato não tem alfa. As 16 cores de terminal são as mesmas nos cinco portes que as definem. O porte do Kiro CLI não tem cores próprias. Um comando confere as duas regras, com o [Bun](https://bun.sh):
 
 ```bash
 bun scripts/check-themes.ts
