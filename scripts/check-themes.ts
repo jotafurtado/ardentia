@@ -1,4 +1,4 @@
-// Confere os temas dos portes (Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k, eza, OpenCode, Codex) contra o
+// Confere os temas dos portes (Zed, VS Code, Ghostty, herdr, Rex, Powerlevel10k, eza, OpenCode, Codex, Claude Code) contra o
 // contrato de porte: toda cor pertence à paleta, as 16 cores ANSI são as do contrato, nos
 // portes que as definem, e as cópias de LICENSE são idênticas à da raiz. A paleta e a tabela
 // ANSI abaixo foram copiadas do contrato.
@@ -97,6 +97,87 @@ const HERDR_TOKENS: readonly string[] = [
 
 // O app Herdr recusa o tema sem estas três chaves.
 const HERDR_REQUIRED_KEYS: readonly string[] = ["background", "foreground", "selection"];
+
+// Chaves do tema dark-ansi no Claude Code 2.1.332, tiradas do programa: o formato dos temas
+// personalizados não tem documentação pública. O Claude Code descarta em silêncio o override
+// de uma chave que o tema base não tem, por isso a chave fora desta lista é erro aqui.
+const CLAUDE_CODE_THEME_KEYS: readonly string[] = [
+  "autoAccept",
+  "autoAcceptShimmer",
+  "skill",
+  "bashBorder",
+  "claude",
+  "claudeShimmer",
+  "claudeBlue_FOR_SYSTEM_SPINNER",
+  "claudeBlueShimmer_FOR_SYSTEM_SPINNER",
+  "permission",
+  "permissionShimmer",
+  "planMode",
+  "ide",
+  "promptBorder",
+  "promptBorderShimmer",
+  "text",
+  "inverseText",
+  "inactive",
+  "inactiveShimmer",
+  "subtle",
+  "suggestion",
+  "remember",
+  "background",
+  "success",
+  "error",
+  "warning",
+  "merged",
+  "warningShimmer",
+  "diffAdded",
+  "diffRemoved",
+  "diffAddedDimmed",
+  "diffRemovedDimmed",
+  "diffAddedWord",
+  "diffRemovedWord",
+  "red_FOR_SUBAGENTS_ONLY",
+  "blue_FOR_SUBAGENTS_ONLY",
+  "green_FOR_SUBAGENTS_ONLY",
+  "yellow_FOR_SUBAGENTS_ONLY",
+  "purple_FOR_SUBAGENTS_ONLY",
+  "orange_FOR_SUBAGENTS_ONLY",
+  "pink_FOR_SUBAGENTS_ONLY",
+  "cyan_FOR_SUBAGENTS_ONLY",
+  "professionalBlue",
+  "chromeYellow",
+  "clawd_body",
+  "clawd_background",
+  "userMessageBackground",
+  "userMessageBackgroundHover",
+  "composerSidebarBackground",
+  "selectionBg",
+  "bashMessageBackgroundColor",
+  "memoryBackgroundColor",
+  "rate_limit_fill",
+  "rate_limit_empty",
+  "fastMode",
+  "fastModeShimmer",
+  "effortUltra",
+  "briefLabelYou",
+  "briefLabelClaude",
+  "rainbow_red",
+  "rainbow_orange",
+  "rainbow_yellow",
+  "rainbow_green",
+  "rainbow_blue",
+  "rainbow_indigo",
+  "rainbow_violet",
+  "rainbow_red_shimmer",
+  "rainbow_orange_shimmer",
+  "rainbow_yellow_shimmer",
+  "rainbow_green_shimmer",
+  "rainbow_blue_shimmer",
+  "rainbow_indigo_shimmer",
+  "rainbow_violet_shimmer",
+];
+
+// O porte só herda as 16 cores do terminal sobre este tema base.
+const CLAUDE_CODE_BASE = "dark-ansi";
 
 const LICENSE_COPIES = ["zed/LICENSE", "vscode/LICENSE"];
 
@@ -546,6 +627,31 @@ function parseCodexDesktop(text: string): ParsedTheme {
   return { colors, ansi: [], problems };
 }
 
+function parseClaudeCode(text: string): ParsedTheme {
+  const root: unknown = JSON.parse(text);
+  if (!isRecord(root)) throw new Error("a raiz não é um objeto");
+  const overrides = root.overrides;
+  if (!isRecord(overrides)) throw new Error("overrides ausente ou não é um objeto");
+
+  const problems: string[] = [];
+  if (typeof root.name !== "string" || root.name === "") problems.push("name ausente");
+  if (root.base !== CLAUDE_CODE_BASE) {
+    problems.push(`base = ${JSON.stringify(root.base)}, o porte pede "${CLAUDE_CODE_BASE}"`);
+  }
+
+  const colors: ColorUse[] = [];
+  for (const [key, value] of Object.entries(overrides)) {
+    if (!CLAUDE_CODE_THEME_KEYS.includes(key)) {
+      problems.push(`overrides.${key} não é chave do tema ${CLAUDE_CODE_BASE}`);
+    }
+    // O Claude Code aceita rgb(...), ansi:<nome> e ansi256(n); o porte só aceita hex da paleta,
+    // e checkColors recusa o resto.
+    if (typeof value === "string") colors.push({ path: `overrides.${key}`, value });
+    else problems.push(`overrides.${key} não é texto`);
+  }
+  return { colors, ansi: [], problems };
+}
+
 const THEME_FILES: readonly ThemeFile[] = [
   {
     path: "zed/themes/ardentia.json",
@@ -624,6 +730,13 @@ const THEME_FILES: readonly ThemeFile[] = [
     allowsSelection: false,
     hasAnsi: false,
     parse: parseCodexDesktop,
+  },
+  {
+    path: "claude-code/ardentia.json",
+    allowsAlpha: () => false,
+    allowsSelection: false,
+    hasAnsi: false,
+    parse: parseClaudeCode,
   },
 ];
 const ANSI_FILE_COUNT = THEME_FILES.filter((file) => file.hasAnsi).length;
